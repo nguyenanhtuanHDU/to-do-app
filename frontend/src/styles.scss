@@ -2,7 +2,7 @@
 @import "primeng/resources/primeng.css";
 
 $text-color: #2d4f62;
-$primary: #2fd298;
+$primary: #38d39f;
 $secondary: #f7fafc;
 $success: #2ecc71;
 $warning: #f1b016;
@@ -13,6 +13,7 @@ $custom-colors: (
   "orange-light": #ffeab8,
 );
 
+// Merge the maps
 @import "../node_modules/bootstrap/scss/functions";
 @import "../node_modules/bootstrap/scss/variables";
 $theme-colors: map-merge($theme-colors, $custom-colors);
@@ -25,8 +26,12 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
   box-sizing: border-box;
 }
 
+body {
+  font-family: "Inter", sans-serif !important;
+}
+
 .br {
-  &-rounded {
+  &-round {
     border-radius: 50px;
   }
 
@@ -58,5 +63,40 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
   &-y {
     display: flex !important;
     align-items: center !important;
+  }
+}
+
+.btn-primary {
+  color: white;
+  &:hover {
+    color: var(--bs-btn-hover-color) !important;
+    background-color: var(--bs-btn-hover-bg) !important;
+    border-color: var(--bs-btn-hover-border-color) !important;
+    color: var(--bs-white) !important;
+  }
+}
+
+// .p-button.p-button-success {
+//   background: var(--bs-primary);
+//   border: 1px solid var(--bs-primary);
+//   &:enabled:hover {
+//     background-color: red;
+//     border: 1px solid var(--bs-primary);
+//   }
+// }
+
+.p-button {
+  width: 100%;
+}
+
+.p-inputwrapper {
+  width: 100%;
+  display: block;
+}
+
+.p-float-label {
+  width: 100%;
+  input {
+    width: 100%;
   }
 }

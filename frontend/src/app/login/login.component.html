@@ -1,1 +1,60 @@
-<button class="btn btn-primary">btn</button>
+<div class="login flex-center-y">
+  <!-- <img src="../../assets/images/backgrounds/background_2.svg" alt="" class="login-background"> -->
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6 login-left flex-center">
+        <div class="login-left-background">
+          <img src="../../assets/images/background.svg" alt="" />
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 login-right">
+        <form
+          action=""
+          class="login-right-form gap-3 br-12 p-3 text-center d-flex flex-column m-auto"
+          autocomplete="off"
+        >
+          <h2 class="text-uppercase fw-7 mb-5">to do app login</h2>
+          <div class="login-right-form-avatar mx-auto mb-3">
+            <img src="../../assets/images/avatars/avatar.svg" alt="" />
+          </div>
+          <form class="login-right-form-item flex-center-x my-3">
+            <span class="p-float-label p-input-icon-right">
+              <i class="pi pi-user"></i>
+              <input pInputText id="username" />
+              <label htmlFor="username">Username or Email</label>
+              <input id="username" class="d-none" />
+            </span>
+          </form>
+
+          <form class="login-right-form-item flex-center-x">
+            <span class="p-float-label">
+              <p-password [feedback]="false" [toggleMask]="true"></p-password>
+              <label for="password">Password</label>
+            </span>
+          </form>
+
+          <a href="" class="ms-auto mb-3">Forgot password ?</a>
+          <button
+            routerLink="login"
+            pButton
+            pRipple
+            label="Login Now"
+            class="btn btn-primary login-right-form-submit"
+            [loading]="loading"
+            (click)="load()"
+            type="button"
+          ></button>
+
+          <button
+            routerLink="login"
+            pButton
+            pRipple
+            label="Or Sign Up"
+            class="p-button"
+            type="button"
+          ></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
