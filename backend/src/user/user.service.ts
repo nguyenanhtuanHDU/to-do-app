@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDTO, UpdateUserDTO, UserDTO } from './user.dto';
+import {
+  CreateUserDTO,
+  LoginUserDTO,
+  UpdateUserDTO,
+  UserDTO,
+} from './user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.schema';
 import { Model } from 'mongoose';
@@ -24,6 +29,15 @@ export class UserService {
     } catch (error) {
       console.log(`🚀 ~ error:`, error);
     }
+  }
+
+  async getByUsername(username: string): Promise<LoginUserDTO> {
+    const user = await this.userModel.findOne({ username });
+    if (!user) return null;
+    else
+      return plainToClass(LoginUserDTO, user, {
+        excludeExtraneousValues: true,
+      });
   }
 
   async create(userDTO: UserDTO): Promise<UserDTO> {

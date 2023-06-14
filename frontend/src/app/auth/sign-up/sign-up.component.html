@@ -1,0 +1,57 @@
+<form
+  [formGroup]="loginForm"
+  class="login-right-form gap-3 br-12 p-3 text-center d-flex flex-column m-auto"
+>
+  <h2 class="text-uppercase fw-7 mb-5">to do app sign up</h2>
+  <div class="login-right-form-avatar mx-auto mb-3">
+    <img src="../../assets/images/avatars/avatar.svg" alt="" />
+  </div>
+  <form
+    class="login-right-form-item flex-center-x my-3"
+    [formGroup]="loginForm"
+  >
+    <span class="p-float-label p-input-icon-right">
+      <i class="pi pi-user"></i>
+      <input pInputText id="username" formControlName="username" />
+      <label htmlFor="username">Username</label>
+      <input id="username" class="d-none" />
+    </span>
+  </form>
+
+  <form class="login-right-form-item flex-center-x" [formGroup]="loginForm">
+    <span class="p-float-label">
+      <p-password
+        [feedback]="false"
+        [toggleMask]="true"
+        formControlName="password"
+      ></p-password>
+      <label for="password">Password</label>
+    </span>
+  </form>
+
+  <a href="" class="ms-auto mb-3">Forgot password ?</a>
+  <button
+    pButton
+    pRipple
+    label="Login Now"
+    class="btn btn-primary login-right-form-submit"
+    [loading]="loading"
+    type="button"
+    (click)="handleLogin()"
+  ></button>
+
+  <button
+    routerLink="/auth/sign-up"
+    pButton
+    pRipple
+    label="Or Sign Up"
+    class="p-button"
+    type="button"
+  ></button>
+</form>
+<p-toast
+  [breakpoints]="{
+    '920px': { width: '80%', left: '50%', transform: 'translateX(-50%)' }
+  }"
+></p-toast>
+

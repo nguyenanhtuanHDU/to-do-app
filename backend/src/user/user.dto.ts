@@ -35,3 +35,8 @@ export class CreateUserDTO extends OmitType(UserDTO, ['password'] as const) {
 export class UpdateUserDTO extends OmitType(CreateUserDTO, [
   'admin',
 ] as const) {}
+
+export class LoginUserDTO extends PickType(CreateUserDTO, [
+  'username',
+  'password' as const,
+]) {}
