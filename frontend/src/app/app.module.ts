@@ -13,6 +13,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ToastModule } from 'primeng/toast';
 import { AuthComponent } from './auth/auth.component';
 import { SignUpComponent } from './auth/sign-up/sign-up.component';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CookieService } from 'ngx-cookie-service';
+import { AutoFocusModule } from 'primeng/autofocus';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, AuthComponent, SignUpComponent],
@@ -28,8 +31,10 @@ import { SignUpComponent } from './auth/sign-up/sign-up.component';
     PasswordModule,
     RippleModule,
     ToastModule,
+    RadioButtonModule,
+    AutoFocusModule,
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

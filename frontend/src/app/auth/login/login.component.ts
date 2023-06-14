@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -16,24 +17,20 @@ import { MessageService } from 'primeng/api';
 })
 export class LoginComponent {
   loginForm = new FormGroup({
-    username: new FormControl('', Validators.minLength(6)),
+    username: new FormControl(
+      this.cookieService.get('todo_new_username'),
+      Validators.minLength(6)
+    ),
     password: new FormControl('', Validators.minLength(6)),
   });
 
   constructor(
     private readonly authService: AuthService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly cookieService: CookieService
   ) {}
 
   loading: boolean = false;
-
-  loginLoad() {
-    this.loading = true;
-
-    setTimeout(() => {
-      this.loading = false;
-    }, 2000);
-  }
 
   handleLogin() {
     console.log('run');
@@ -65,6 +62,7 @@ export class LoginComponent {
       .subscribe(
         (data: any) => {
           this.loading = false;
+          this.cookieService.set('todo_new_username', '');
           this.messageService.add({
             severity: 'success',
             summary: data.message,
@@ -82,13 +80,5 @@ export class LoginComponent {
           });
         }
       );
-  }
-
-  show() {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Message Content',
-    });
   }
 }

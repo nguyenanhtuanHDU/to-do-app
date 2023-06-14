@@ -1,9 +1,11 @@
 import {
+  BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginUserDTO } from 'src/user/user.dto';
+import { CreateUserDTO, LoginUserDTO } from 'src/user/user.dto';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { plainToClass } from 'class-transformer';
@@ -20,6 +22,18 @@ export class AuthService {
       user.password,
     );
     if (!comparePassword) throw new UnauthorizedException('Invalid password');
+    return true;
+  }
+
+  async signUp(createUserDTO: CreateUserDTO): Promise<boolean> {
+    console.log(`🚀 ~ createUserDTO 1:`, createUserDTO)
+
+    const userFind = await this.userService.getByUsername(
+      createUserDTO.username,
+    );
+    if (userFind) throw new ConflictException('Username already exists');
+    const user = await this.userService.create(createUserDTO);
+    if (!user) throw new BadRequestException();
     return true;
   }
 }

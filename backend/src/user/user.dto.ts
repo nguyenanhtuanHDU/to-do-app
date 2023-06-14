@@ -12,7 +12,6 @@ export class UserDTO {
   email: string;
 
   // avatar: string
-
   @Exclude()
   @Length(6)
   password: string;
@@ -20,23 +19,20 @@ export class UserDTO {
   @Expose()
   @IsIn(['Male', 'Female'])
   gender: string;
-
-  @Expose()
-  @IsBooleanString()
-  admin: boolean;
 }
 
-export class CreateUserDTO extends OmitType(UserDTO, ['password'] as const) {
+export class CreateUserDTO extends OmitType(UserDTO, [
+  'password',
+  'email',
+] as const) {
   @Expose()
   @Length(6)
   password: string;
 }
 
-export class UpdateUserDTO extends OmitType(CreateUserDTO, [
-  'admin',
-] as const) {}
+export class UpdateUserDTO extends CreateUserDTO {}
 
 export class LoginUserDTO extends PickType(CreateUserDTO, [
   'username',
-  'password' as const,
-]) {}
+  'password',
+] as const) {}

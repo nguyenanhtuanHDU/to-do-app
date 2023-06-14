@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -7,65 +9,92 @@ import { AuthService } from 'src/app/services/auth.service';
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['../auth.component.scss'],
+  providers: [MessageService],
 })
 export class SignUpComponent {
-  loginForm = new FormGroup({
-    username: new FormControl('', Validators.minLength(6)),
-    password: new FormControl('', Validators.minLength(6)),
+  signUpForm = new FormGroup({
+    username: new FormControl('', [
+      Validators.minLength(6),
+      Validators.required,
+    ]),
+    gender: new FormControl('', Validators.required),
+    password: new FormControl('', [
+      Validators.minLength(6),
+      Validators.required,
+    ]),
+    confirmPassword: new FormControl('', Validators.required),
   });
 
   constructor(
     private readonly authService: AuthService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly router: Router,
+    private readonly cookieService: CookieService
   ) {}
 
   loading: boolean = false;
 
-  loginLoad() {
-    this.loading = true;
+  handleSignUp() {
+    console.log(this.signUpForm.value);
 
-    setTimeout(() => {
-      this.loading = false;
-    }, 2000);
-  }
-
-  handleLogin() {
-    console.log('run');
-
-    const username = this.loginForm.value.username!;
-    const password = this.loginForm.value.password!;
-
-    if (username === '' || password === '') {
+    if (
+      this.signUpForm.get('username')?.hasError('required') ||
+      this.signUpForm.get('gender')?.hasError('required') ||
+      this.signUpForm.get('password')?.hasError('required') ||
+      this.signUpForm.get('confirmPassword')?.hasError('required')
+    ) {
       this.messageService.add({
-        severity: 'error',
-        summary: 'Username and Password can not be empty',
+        severity: 'warn',
+        summary: 'Please fill all fields',
+      });
+      return;
+    }
+    if (this.signUpForm.get('username')?.hasError('minlength')) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Username must have at least 6 characters',
+      });
+      return;
+    }
+    if (this.signUpForm.get('password')?.hasError('minlength')) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Password must have at least 6 characters',
+      });
+      return;
+    }
+    if (
+      this.signUpForm.value.password !== this.signUpForm.value.confirmPassword
+    ) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Confirm Password is not the same as password',
       });
       return;
     }
 
-    if (username.length < 6 || password.length < 6) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Username and Password must be at least 6 characters',
-      });
-      return;
-    }
-    this.loading = true;
+    this.cookieService.set(
+      'todo_new_username',
+      this.signUpForm.value.username!
+    );
+
     this.authService
-      .login({
-        username,
-        password,
+      .signUp({
+        username: this.signUpForm.value.username!,
+        password: this.signUpForm.value.password!,
+        gender: this.signUpForm.value.gender!,
       })
       .subscribe(
         (data: any) => {
-          this.loading = false;
+          console.log(`🚀 ~ data:`, data);
           this.messageService.add({
             severity: 'success',
             summary: data.message,
           });
+          this.router.navigate(['/auth/login']);
         },
         (error) => {
-          this.loading = false;
+          console.log(`🚀 ~ error:`, error);
           error.error.message = [error.error.message];
           error.error.message.map((msg: string) => {
             this.messageService.add({
@@ -76,13 +105,5 @@ export class SignUpComponent {
           });
         }
       );
-  }
-
-  show() {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Message Content',
-    });
   }
 }

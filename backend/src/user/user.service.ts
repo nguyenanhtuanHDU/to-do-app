@@ -40,11 +40,14 @@ export class UserService {
       });
   }
 
-  async create(userDTO: UserDTO): Promise<UserDTO> {
-    const user = await plainToClass(
-      CreateUserDTO,
-      plainToClass(CreateUserDTO, userDTO, { excludeExtraneousValues: true }),
-    );
+  async create(createUserDTO: CreateUserDTO): Promise<CreateUserDTO> {
+    console.log(`🚀 ~ createUserDTO:`, createUserDTO);
+
+    const user = await plainToClass(CreateUserDTO, createUserDTO, {
+      excludeExtraneousValues: true,
+    });
+    console.log(`🚀 ~ user:`, user);
+
     user.password = await bcrypt.hash(user.password, 10);
     return await this.userModel.create(user);
   }
@@ -75,5 +78,9 @@ export class UserService {
     } catch (error) {
       console.log(`🚀 ~ error:`, error);
     }
+  }
+
+  async deleteAll() {
+    await this.userModel.deleteMany();
   }
 }

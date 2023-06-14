@@ -1,27 +1,50 @@
 <form
-  [formGroup]="loginForm"
+  [formGroup]="signUpForm"
   class="login-right-form gap-3 br-12 p-3 text-center d-flex flex-column m-auto"
 >
-  <h2 class="text-uppercase fw-7 mb-5">to do app sign up</h2>
+  <h2 class="text-uppercase fw-7 mb-2">to do app sign up</h2>
   <div class="login-right-form-avatar mx-auto mb-3">
     <img src="../../assets/images/avatars/avatar.svg" alt="" />
   </div>
   <form
     class="login-right-form-item flex-center-x my-3"
-    [formGroup]="loginForm"
+    [formGroup]="signUpForm"
   >
     <span class="p-float-label p-input-icon-right">
       <i class="pi pi-user"></i>
-      <input pInputText id="username" formControlName="username" />
-      <label htmlFor="username">Username</label>
+      <input pInputText pAutoFocus [autofocus]="true" id="username" formControlName="username" />
+      <label class="fw-5" for="username">Username</label>
+
       <input id="username" class="d-none" />
     </span>
   </form>
 
-  <form class="login-right-form-item flex-center-x" [formGroup]="loginForm">
+  <div class="d-flex flex-wrap gap-3 mb-3">
+    <div class="d-flex align-items-center">
+      <p-radioButton
+        name="gender"
+        value="Male"
+        inputId="male"
+        formControlName="gender"
+      ></p-radioButton>
+      <label class="fw-5" for="male" class="ms-2">Male</label>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <p-radioButton
+        name="gender"
+        value="Female"
+        inputId="female"
+        formControlName="gender"
+      ></p-radioButton>
+      <label for="female" class="ms-2">Female</label>
+    </div>
+  </div>
+
+  <form class="login-right-form-item flex-center-x" [formGroup]="signUpForm">
     <span class="p-float-label">
       <p-password
-        [feedback]="false"
+        [feedback]="true"
         [toggleMask]="true"
         formControlName="password"
       ></p-password>
@@ -29,29 +52,37 @@
     </span>
   </form>
 
-  <a href="" class="ms-auto mb-3">Forgot password ?</a>
+  <form
+    class="login-right-form-item flex-center-x mt-3"
+    [formGroup]="signUpForm"
+  >
+    <span class="p-float-label">
+      <p-password
+        [feedback]="false"
+        [toggleMask]="true"
+        formControlName="confirmPassword"
+      ></p-password>
+      <label for="password">Confirm password</label>
+    </span>
+  </form>
+
   <button
     pButton
     pRipple
-    label="Login Now"
+    label="Sign Up Now"
     class="btn btn-primary login-right-form-submit"
     [loading]="loading"
     type="button"
-    (click)="handleLogin()"
+    (click)="handleSignUp()"
   ></button>
 
-  <button
-    routerLink="/auth/sign-up"
-    pButton
-    pRipple
-    label="Or Sign Up"
-    class="p-button"
-    type="button"
-  ></button>
+  <span class="text-primary fw-5">Or Sign Up With Gmail</span>
+  <div class="login-right-form-gmail br-round p-2">
+    <img src="../../../assets/images/icons/gnmail.png" alt="" />
+  </div>
 </form>
 <p-toast
   [breakpoints]="{
     '920px': { width: '80%', left: '50%', transform: 'translateX(-50%)' }
   }"
 ></p-toast>
-

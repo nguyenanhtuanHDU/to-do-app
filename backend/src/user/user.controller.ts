@@ -62,4 +62,10 @@ export class UserController {
     else
       res.status(HttpStatus.OK).json({ message: 'Delete user successfully' });
   }
+
+  @Delete()
+  async deleteAllUsers(@Res() res: Response) {
+    await this.userService.deleteAll();
+    res.status(HttpStatus.OK).json({ message: 'Delete all user successfully' });
+  }
 }
