@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDTO, UpdateUserDTO, UserDTO } from './user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.schema';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -30,6 +31,7 @@ export class UserService {
       CreateUserDTO,
       plainToClass(CreateUserDTO, userDTO, { excludeExtraneousValues: true }),
     );
+    user.password = await bcrypt.hash(user.password, 10);
     return await this.userModel.create(user);
   }
 
