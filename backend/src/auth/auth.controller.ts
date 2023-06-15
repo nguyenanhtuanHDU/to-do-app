@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { CreateUserDTO, LoginUserDTO } from 'src/user/user.dto';
 import { AuthService } from './auth.service';
@@ -19,11 +19,16 @@ export class AuthController {
 
   @Post('sign-up')
   async signUp(@Body() createUserDTO: CreateUserDTO, @Res() res: Response) {
-    console.log(`🚀 ~ createUserDTO:`, createUserDTO)
+    console.log(`🚀 ~ createUserDTO:`, createUserDTO);
 
     await this.authService.signUp(createUserDTO);
     res.status(HttpStatus.OK).json({
       message: 'Sign Up successfully',
     });
+  }
+
+  @Get('mail')
+  async senMail() {
+    return await this.authService.sendMail();
   }
 }
