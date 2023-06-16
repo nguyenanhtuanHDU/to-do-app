@@ -108,8 +108,10 @@ export class SignUpComponent {
   }
 
   handleSignUpGoogle() {
-    this.authService.signUpGooogle().subscribe((data) => {
+    this.authService.signUpGooogle().subscribe((data) => {});
+  }
 
-    });
+  handleSignUpFacebook() {
+    this.authService.signUpFacebook().subscribe((data) => {});
   }
 }

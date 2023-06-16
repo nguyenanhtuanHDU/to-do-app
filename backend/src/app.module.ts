@@ -10,6 +10,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { PassportModule } from '@nestjs/passport';
 import { GoogleStrategy } from './google.strategy'; // Định nghĩa Google Strategy
 import { AuthService } from './auth/auth.service';
+import { FacebookStrategy } from "./facebook.strategy";
 
 @Module({
   imports: [
@@ -50,6 +51,6 @@ import { AuthService } from './auth/auth.service';
     PassportModule.register({ defaultStrategy: 'google' }),
   ],
   controllers: [AppController],
-  providers: [AppService, GoogleStrategy, AuthService],
+  providers: [AppService, GoogleStrategy, FacebookStrategy, AuthService],
 })
 export class AppModule {}
