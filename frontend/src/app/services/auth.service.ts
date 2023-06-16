@@ -18,4 +18,8 @@ export class AuthService {
   signUp(user: UserCreate) {
     return this.http.post(this.apiAuth + 'sign-up', user);
   }
+
+  signUpGooogle() {
+    return this.http.get(this.apiAuth + 'google/proxy');
+  }
 }

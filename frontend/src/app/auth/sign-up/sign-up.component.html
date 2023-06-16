@@ -12,7 +12,13 @@
   >
     <span class="p-float-label p-input-icon-right">
       <i class="pi pi-user"></i>
-      <input pInputText pAutoFocus [autofocus]="true" id="username" formControlName="username" />
+      <input
+        pInputText
+        pAutoFocus
+        [autofocus]="true"
+        id="username"
+        formControlName="username"
+      />
       <label class="fw-5" for="username">Username</label>
 
       <input id="username" class="d-none" />
@@ -77,8 +83,21 @@
   ></button>
 
   <span class="text-primary fw-5">Or Sign Up With Gmail</span>
-  <div class="login-right-form-gmail br-round p-2">
-    <img src="../../../assets/images/icons/gnmail.png" alt="" />
+  <div class="d-flex px-lg-5 px-3 w-75 m-auto">
+    <div
+      pRipple
+      class="login-right-form-gmail br-round p-2"
+      (click)="handleSignUpGoogle()"
+    >
+      <img src="../../../assets/images/icons/google.svg" alt="" />
+    </div>
+    <div
+      pRipple
+      class="login-right-form-gmail br-round p-2"
+      (click)="handleSignUpGoogle()"
+    >
+      <img src="../../../assets/images/icons/facebook.svg" alt="" />
+    </div>
   </div>
 </form>
 <p-toast

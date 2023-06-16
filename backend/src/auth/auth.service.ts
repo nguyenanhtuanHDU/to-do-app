@@ -52,4 +52,10 @@ export class AuthService {
       html: '<b>Welcome to my application !</b>', // HTML body content
     });
   }
+
+  async findOrCreate(profile: any): Promise<any> {
+    // Xử lý logic đăng ký tại đây
+    // Ví dụ: tạo người dùng mới hoặc trả về thông tin người dùng đã có
+    return profile;
+  }
 }

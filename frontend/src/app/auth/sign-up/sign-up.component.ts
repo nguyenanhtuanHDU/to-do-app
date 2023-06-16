@@ -106,4 +106,10 @@ export class SignUpComponent {
         }
       );
   }
+
+  handleSignUpGoogle() {
+    this.authService.signUpGooogle().subscribe((data) => {
+
+    });
+  }
 }

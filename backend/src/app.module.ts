@@ -1,17 +1,21 @@
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { PassportModule } from '@nestjs/passport';
+import { GoogleStrategy } from './google.strategy'; // Định nghĩa Google Strategy
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
+
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
@@ -43,8 +47,9 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
         },
       },
     }),
+    PassportModule.register({ defaultStrategy: 'google' }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GoogleStrategy, AuthService],
 })
 export class AppModule {}
