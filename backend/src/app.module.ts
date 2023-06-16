@@ -1,6 +1,12 @@
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  HttpCode,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -10,7 +16,9 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { PassportModule } from '@nestjs/passport';
 import { GoogleStrategy } from './google.strategy'; // Định nghĩa Google Strategy
 import { AuthService } from './auth/auth.service';
-import { FacebookStrategy } from "./facebook.strategy";
+import { FacebookStrategy } from './facebook.strategy';
+import { ProxyMiddleware } from './proxy.middleware';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
@@ -53,4 +61,11 @@ import { FacebookStrategy } from "./facebook.strategy";
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, FacebookStrategy, AuthService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ProxyMiddleware)
+      // .forRoutes({ path: 'auth', method: RequestMethod.GET });
+      .forRoutes(AuthController);
+  }
+}

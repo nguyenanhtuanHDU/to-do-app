@@ -32,6 +32,14 @@ export class AuthController {
   @Get('facebook')
   @UseGuards(AuthGuard('facebook'))
   async facebookLogin(): Promise<any> {
+    console.log('fb login');
+
+    return HttpStatus.OK;
+  }
+
+  @Get('facebook/proxy')
+  @UseGuards(AuthGuard('facebook'))
+  async facebookLoginProxy(@Res() res: Response): Promise<any> {
     return HttpStatus.OK;
   }
 

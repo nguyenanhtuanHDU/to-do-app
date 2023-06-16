@@ -24,6 +24,6 @@ export class AuthService {
   }
 
   signUpFacebook() {
-    return this.http.get(this.apiAuth + 'facebook');
+    return this.http.get(this.apiAuth + 'facebook/proxy');
   }
 }
