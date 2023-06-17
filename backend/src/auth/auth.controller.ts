@@ -17,7 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('google/login')
+  @Get('google')
   @UseGuards(AuthGuard('google'))
   async googleAuth(@Req() req, @Res() res) {
     res.send('run login google');
@@ -33,14 +33,12 @@ export class AuthController {
   @UseGuards(AuthGuard('facebook'))
   async facebookLogin(): Promise<any> {
     console.log('fb login');
-
-    return HttpStatus.OK;
   }
 
   @Get('facebook/proxy')
   @UseGuards(AuthGuard('facebook'))
   async facebookLoginProxy(@Res() res: Response): Promise<any> {
-    return HttpStatus.OK;
+    console.log('fb proxy');
   }
 
   @Get('facebook/redirect')

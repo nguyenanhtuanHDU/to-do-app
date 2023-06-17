@@ -17,7 +17,6 @@ import { PassportModule } from '@nestjs/passport';
 import { GoogleStrategy } from './google.strategy'; // Định nghĩa Google Strategy
 import { AuthService } from './auth/auth.service';
 import { FacebookStrategy } from './facebook.strategy';
-import { ProxyMiddleware } from './proxy.middleware';
 import { AuthController } from './auth/auth.controller';
 
 @Module({
@@ -61,11 +60,4 @@ import { AuthController } from './auth/auth.controller';
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, FacebookStrategy, AuthService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ProxyMiddleware)
-      // .forRoutes({ path: 'auth', method: RequestMethod.GET });
-      .forRoutes(AuthController);
-  }
-}
+export class AppModule {}

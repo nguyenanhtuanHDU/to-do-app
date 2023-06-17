@@ -12,7 +12,7 @@ async function bootstrap() {
     credentials: true,
     // preflightContinue: false,
   });
-  app.setGlobalPrefix('v1/api', {});
+  app.setGlobalPrefix('api/v1', {});
   app.useGlobalPipes(new ValidationPipe());
   const PORT = process.env.PORT || 8888;
   await app.listen(PORT, () => {
