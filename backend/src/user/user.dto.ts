@@ -30,6 +30,14 @@ export class CreateUserDTO extends OmitType(UserDTO, [
   password: string;
 }
 
+export class CreateUserWithEmailDTO extends PickType(UserDTO, [
+  'email',
+] as const) {
+  @Expose()
+  @Length(6)
+  password: string;
+}
+
 export class UpdateUserDTO extends CreateUserDTO {}
 
 export class LoginUserDTO extends PickType(CreateUserDTO, [

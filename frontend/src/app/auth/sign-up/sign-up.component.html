@@ -12,7 +12,13 @@
   >
     <span class="p-float-label p-input-icon-right">
       <i class="pi pi-user"></i>
-      <input pInputText pAutoFocus [autofocus]="true" id="username" formControlName="username" />
+      <input
+        pInputText
+        pAutoFocus
+        [autofocus]="true"
+        id="username"
+        formControlName="username"
+      />
       <label class="fw-5" for="username">Username</label>
 
       <input id="username" class="d-none" />
@@ -76,10 +82,71 @@
     (click)="handleSignUp()"
   ></button>
 
-  <span class="text-primary fw-5">Or Sign Up With Gmail</span>
-  <div class="login-right-form-gmail br-round p-2">
+  <span class="text-primary fw-5">Or Sign Up With Email</span>
+  <div
+    class="login-right-form-gmail br-round p-2"
+    (click)="openDialogSignUpEmail()"
+  >
     <img src="../../../assets/images/icons/gnmail.png" alt="" />
   </div>
+  <p-dialog
+    header="Header"
+    [(visible)]="visibleEmail"
+    [style]="{ width: '50vw' }"
+    class="login-right-form-dialog mb-4"
+  >
+    <ng-template pTemplate="header" class="d-block">
+      <strong class="text-capitalize">sign up with email</strong>
+    </ng-template>
+    <div class="body">
+      <p-steps
+        [model]="items"
+        [readonly]="false"
+        [activeIndex]="index"
+      ></p-steps>
+      <div *ngIf="index === 0">
+        <span class="p-float-label mt-5 mb-3">
+          <input pAutoFocus formControlName="email" pInputText id="email" />
+          <label htmlFor="email">Your email</label>
+        </span>
+        <p-button
+          icon="pi pi-check"
+          (click)="verifyEmail()"
+          label="Password"
+        ></p-button>
+      </div>
+      <div *ngIf="index === 1">
+        <span class="p-float-label mt-5 mb-3">
+          <input pAutoFocus formControlName="code" pInputText id="code" />
+          <label htmlFor="code">Your verify code</label>
+        </span>
+        <p-button
+          icon="pi pi-check"
+          (click)="verifyCode()"
+          label="Verify code"
+        ></p-button>
+      </div>
+
+      <div *ngIf="index === 2">
+        <span class="p-float-label mt-5 mb-3">
+          <input
+            pAutoFocus
+            formControlName="password_email"
+            pInputText
+            id="password_email"
+          />
+          <label htmlFor="password_email">Your password</label>
+        </span>
+
+        <p-button
+          icon="pi pi-check"
+          (click)="signUpWithEmail()"
+          label="Password"
+        ></p-button>
+      </div>
+    </div>
+    <ng-template pTemplate="footer"> </ng-template>
+  </p-dialog>
 </form>
 <p-toast
   [breakpoints]="{

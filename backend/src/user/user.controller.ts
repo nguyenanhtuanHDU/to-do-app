@@ -11,9 +11,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { CreateUserDTO, UpdateUserDTO, UserDTO } from './user.dto';
+import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { UserService } from './user.service';
-import { plainToClass } from 'class-transformer';
 
 @Controller('users')
 export class UserController {

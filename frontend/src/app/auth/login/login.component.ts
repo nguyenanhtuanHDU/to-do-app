@@ -18,7 +18,8 @@ import { CookieService } from 'ngx-cookie-service';
 export class LoginComponent {
   loginForm = new FormGroup({
     username: new FormControl(
-      this.cookieService.get('todo_new_username'),
+      this.cookieService.get('todo_new_username') ||
+        this.cookieService.get('todo_new_email'),
       Validators.minLength(6)
     ),
     password: new FormControl('', Validators.minLength(6)),

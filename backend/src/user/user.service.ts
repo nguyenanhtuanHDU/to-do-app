@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
   CreateUserDTO,
+  CreateUserWithEmailDTO,
   LoginUserDTO,
   UpdateUserDTO,
   UserDTO,
@@ -40,16 +41,32 @@ export class UserService {
       });
   }
 
-  async create(createUserDTO: CreateUserDTO): Promise<CreateUserDTO> {
-    console.log(`🚀 ~ createUserDTO:`, createUserDTO);
+  async getByEmail(email: string): Promise<CreateUserWithEmailDTO> {
+    const user = await this.userModel.findOne({ email });
+    if (!user) return null;
+    return plainToClass(CreateUserWithEmailDTO, user, {
+      excludeExtraneousValues: true,
+    });
+  }
 
-    const user = await plainToClass(CreateUserDTO, createUserDTO, {
+  async create(userInfo: CreateUserDTO): Promise<CreateUserDTO> {
+    console.log(`🚀 ~ createUserDTO:`, userInfo);
+
+    const user = await plainToClass(CreateUserDTO, userInfo, {
       excludeExtraneousValues: true,
     });
     console.log(`🚀 ~ user:`, user);
 
     user.password = await bcrypt.hash(user.password, 10);
     return await this.userModel.create(user);
+  }
+
+  async createWithEmail(
+    userInfo: CreateUserWithEmailDTO,
+  ): Promise<CreateUserWithEmailDTO> {
+    console.log(`🚀 ~ userInfo:`, userInfo);
+    const user = await this.userModel.create(userInfo);
+    return user;
   }
 
   async update(userID: string, userDTO: UpdateUserDTO): Promise<UpdateUserDTO> {

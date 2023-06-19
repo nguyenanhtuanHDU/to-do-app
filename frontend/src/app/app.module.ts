@@ -16,6 +16,9 @@ import { SignUpComponent } from './auth/sign-up/sign-up.component';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CookieService } from 'ngx-cookie-service';
 import { AutoFocusModule } from 'primeng/autofocus';
+import { DialogModule } from 'primeng/dialog';
+import { StepsModule } from 'primeng/steps';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, AuthComponent, SignUpComponent],
@@ -33,6 +36,9 @@ import { AutoFocusModule } from 'primeng/autofocus';
     ToastModule,
     RadioButtonModule,
     AutoFocusModule,
+    DialogModule,
+    StepsModule,
+    InputNumberModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

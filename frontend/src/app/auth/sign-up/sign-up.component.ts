@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -12,19 +12,6 @@ import { AuthService } from 'src/app/services/auth.service';
   providers: [MessageService],
 })
 export class SignUpComponent {
-  signUpForm = new FormGroup({
-    username: new FormControl('', [
-      Validators.minLength(6),
-      Validators.required,
-    ]),
-    gender: new FormControl('', Validators.required),
-    password: new FormControl('', [
-      Validators.minLength(6),
-      Validators.required,
-    ]),
-    confirmPassword: new FormControl('', Validators.required),
-  });
-
   constructor(
     private readonly authService: AuthService,
     private readonly messageService: MessageService,
@@ -32,7 +19,43 @@ export class SignUpComponent {
     private readonly cookieService: CookieService
   ) {}
 
+  ngOnInit(): void {
+    console.log(this.index);
+  }
+
+  signUpForm = new FormGroup({
+    username: new FormControl('', [
+      Validators.minLength(6),
+      Validators.required,
+    ]),
+    email: new FormControl('', [Validators.email, Validators.required]),
+    code: new FormControl('', [Validators.required]),
+    gender: new FormControl('', Validators.required),
+    password: new FormControl('', [
+      Validators.minLength(6),
+      Validators.required,
+    ]),
+    password_email: new FormControl('', [
+      Validators.minLength(6),
+      Validators.required,
+    ]),
+    confirmPassword: new FormControl('', Validators.required),
+  });
+  visibleEmail: boolean = false;
   loading: boolean = false;
+  index: number = 0;
+  items: MenuItem[] = [
+    {
+      label: 'Verify Email',
+    },
+    {
+      label: 'Confirm code',
+    },
+
+    {
+      label: 'Password',
+    },
+  ];
 
   handleSignUp() {
     console.log(this.signUpForm.value);
@@ -102,6 +125,104 @@ export class SignUpComponent {
               summary: msg,
               detail: error.statusText,
             });
+          });
+        }
+      );
+  }
+
+  openDialogSignUpEmail() {
+    this.visibleEmail = true;
+  }
+
+  handleSteps(event: number) {
+    console.log(`🚀 ~ event:`, event);
+    this.index = event;
+  }
+
+  verifyEmail() {
+    if (this.signUpForm.get('email')?.hasError('email')) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Email invalidate',
+      });
+      return;
+    }
+    this.authService.verifyEmail(this.signUpForm.value.email!).subscribe(
+      (data: any) => {
+        this.index = 1;
+        this.messageService.add({
+          severity: 'success',
+          summary: data.message,
+        });
+      },
+      (error) => {
+        console.log(`🚀 ~ error:`, error);
+        this.messageService.add({
+          severity: 'error',
+          summary: error.error.message,
+          detail: error.statusText,
+        });
+      }
+    );
+  }
+
+  verifyCode() {
+    const code = this.signUpForm.value.code;
+    console.log(`🚀 ~ code:`, code);
+    if (code?.toString().length !== 4) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'The length of must be 4 characters',
+      });
+      return;
+    }
+    this.authService.verifyCode(code).subscribe(
+      (data: any) => {
+        this.index = 2;
+        this.messageService.add({
+          severity: 'success',
+          summary: data.message,
+        });
+      },
+      (error) => {
+        console.log(`🚀 ~ error:`, error);
+        this.messageService.add({
+          severity: 'error',
+          summary: error.error.message,
+          detail: error.statusText,
+        });
+      }
+    );
+  }
+  signUpWithEmail() {
+    if (this.signUpForm.get('password_email')?.hasError('minlength')) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Password must have at least 6 characters',
+      });
+      return;
+    }
+
+    this.authService
+      .signUpWithEmail(this.signUpForm.value.password_email!)
+      .subscribe(
+        (data: any) => {
+          this.visibleEmail = false;
+          this.cookieService.set(
+            'todo_new_email',
+            this.signUpForm.value.email!
+          );
+          this.messageService.add({
+            severity: 'success',
+            summary: data.message,
+          });
+          this.router.navigate(['/auth/login']);
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: error.error.message,
+            detail: error.statusText,
           });
         }
       );

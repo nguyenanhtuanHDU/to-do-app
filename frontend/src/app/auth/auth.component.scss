@@ -55,6 +55,11 @@
           object-fit: cover;
         }
       }
+      &-dialog{
+        p-steps ul{
+          gap: 20px;
+        }
+      }
     }
   }
 }
