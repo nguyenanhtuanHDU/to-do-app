@@ -36,12 +36,29 @@ export class AuthService {
   }
 
   async login(loginUserDTO: LoginUserDTO): Promise<boolean> {
-    const user = await this.userService.getByUsername(loginUserDTO.username);
-    if (!user) throw new NotFoundException('User not found');
-    const comparePassword = await bcrypt.compare(
-      loginUserDTO.password,
-      user.password,
+    const userFindByUsername = await this.userService.getByUsername(
+      loginUserDTO.username,
     );
+    const userFindByEmail = await this.userService.getByEmail(
+      loginUserDTO.username,
+    );
+    if (!userFindByUsername && !userFindByEmail){
+      throw new NotFoundException('User not found');
+    }
+    let comparePassword = false;
+    if (userFindByUsername) {
+      comparePassword = await bcrypt.compare(
+        loginUserDTO.password,
+        userFindByUsername.password,
+      );
+      console.log(`🚀 ~ comparePassword username:`, comparePassword);
+    } else if (userFindByEmail) {
+      comparePassword = await bcrypt.compare(
+        loginUserDTO.password,
+        userFindByEmail.password,
+      );
+      console.log(`🚀 ~ comparePassword email:`, comparePassword);
+    }
     if (!comparePassword) throw new UnauthorizedException('Invalid password');
     return true;
   }

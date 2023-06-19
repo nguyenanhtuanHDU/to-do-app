@@ -8,6 +8,7 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly messageService: MessageService,
-    private readonly cookieService: CookieService
+    private readonly cookieService: CookieService,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
@@ -50,8 +52,6 @@ export class LoginComponent {
   loading: boolean = false;
 
   handleLogin() {
-    console.log('run');
-
     const username = this.loginForm.value.username!;
     const password = this.loginForm.value.password!;
 
@@ -84,6 +84,7 @@ export class LoginComponent {
             severity: 'success',
             summary: data.message,
           });
+          this.router.navigate([''])
         },
         (error) => {
           this.loading = false;

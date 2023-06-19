@@ -40,7 +40,10 @@ export class CreateUserWithEmailDTO extends PickType(UserDTO, [
 
 export class UpdateUserDTO extends CreateUserDTO {}
 
-export class LoginUserDTO extends PickType(CreateUserDTO, [
-  'username',
-  'password',
-] as const) {}
+export class LoginUserDTO extends PartialType(
+  PickType(UserDTO, ['username', 'email'] as const),
+) {
+  @Expose()
+  @Length(6)
+  password: string;
+}
