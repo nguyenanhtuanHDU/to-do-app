@@ -59,16 +59,19 @@ export class AuthService {
   }
 
   async signUpWithEmail(userInfo: CreateUserWithEmailDTO) {
+    userInfo.password = await bcrypt.hash(userInfo.password, 10);
+
     const user = await this.userService.createWithEmail(
       plainToClass(CreateUserWithEmailDTO, userInfo, {
         excludeExtraneousValues: true,
       }),
     );
+
     return user;
   }
 
   async verifyCode(data: any) {
-    console.log(`🚀 ~ data:`, data)
+    console.log(`🚀 ~ data:`, data);
     const registerEmail = await this.registerEmailModel
       .findOne({ email: data.email })
       .sort({ createdAt: -1 });

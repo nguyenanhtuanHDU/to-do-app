@@ -12,8 +12,14 @@
   >
     <span class="p-float-label p-input-icon-right">
       <i class="pi pi-user"></i>
-      <input pInputText id="username" formControlName="username" />
-      <label htmlFor="username">Username</label>
+      <input
+        pInputText
+        pAutoFocus
+        [autofocus]="isAutoFocusUsername"
+        id="username"
+        formControlName="username"
+      />
+      <label htmlFor="username">Username Or Email</label>
       <input id="username" class="d-none" />
     </span>
   </form>
@@ -25,7 +31,7 @@
         [toggleMask]="true"
         formControlName="password"
         pAutoFocus
-        [autofocus]="true"
+        [autofocus]="isAutoFocusPassword"
       ></p-password>
       <label for="password">Password</label>
     </span>

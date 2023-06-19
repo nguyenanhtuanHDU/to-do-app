@@ -24,22 +24,22 @@ export class AuthService {
   }
 
   verifyEmail(email: string) {
-    this.cookieService.set('email_sign_up', email);
+    this.cookieService.set('todo_new_email', email);
     return this.http.post(this.apiAuth + 'sign-up/verify-email', { email });
   }
 
   verifyCode(code: string) {
     return this.http.post(this.apiAuth + 'sign-up/verify-code', {
       code,
-      email: this.cookieService.get('email_sign_up'),
+      email: this.cookieService.get('todo_new_email'),
     });
   }
 
   signUpWithEmail(password: string) {
     return this.http.post(this.apiAuth + 'sign-up/email', {
-      email: this.cookieService.get('email_sign_up'),
+      email: this.cookieService.get('todo_new_email'),
       password,
-      abc: 'abc'
+      abc: 'abc',
     });
   }
 }

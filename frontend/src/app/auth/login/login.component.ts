@@ -16,6 +16,26 @@ import { CookieService } from 'ngx-cookie-service';
   providers: [MessageService],
 })
 export class LoginComponent {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly messageService: MessageService,
+    private readonly cookieService: CookieService
+  ) {}
+
+  ngOnInit(): void {
+    console.log('cookie', this.cookieService.getAll());
+    if (
+      !this.cookieService.get('todo_new_email') &&
+      !this.cookieService.get('todo_new_username')
+    ) {
+      console.log('username');
+      this.isAutoFocusUsername = true;
+    } else {
+      console.log('password');
+      this.isAutoFocusPassword = true;
+    }
+  }
+
   loginForm = new FormGroup({
     username: new FormControl(
       this.cookieService.get('todo_new_username') ||
@@ -24,12 +44,8 @@ export class LoginComponent {
     ),
     password: new FormControl('', Validators.minLength(6)),
   });
-
-  constructor(
-    private readonly authService: AuthService,
-    private readonly messageService: MessageService,
-    private readonly cookieService: CookieService
-  ) {}
+  isAutoFocusUsername: boolean = false;
+  isAutoFocusPassword: boolean = false;
 
   loading: boolean = false;
 

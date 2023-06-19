@@ -96,11 +96,6 @@ export class SignUpComponent {
       return;
     }
 
-    this.cookieService.set(
-      'todo_new_username',
-      this.signUpForm.value.username!
-    );
-
     this.authService
       .signUp({
         username: this.signUpForm.value.username!,
@@ -110,6 +105,11 @@ export class SignUpComponent {
       .subscribe(
         (data: any) => {
           console.log(`🚀 ~ data:`, data);
+          this.cookieService.set(
+            'todo_new_username',
+            this.signUpForm.value.username!
+          );
+          this.cookieService.set('todo_new_email', '');
           this.messageService.add({
             severity: 'success',
             summary: data.message,
@@ -212,6 +212,7 @@ export class SignUpComponent {
             'todo_new_email',
             this.signUpForm.value.email!
           );
+          this.cookieService.set('todo_new_username', '');
           this.messageService.add({
             severity: 'success',
             summary: data.message,
