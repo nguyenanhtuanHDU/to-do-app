@@ -19,9 +19,10 @@ import { AutoFocusModule } from 'primeng/autofocus';
 import { DialogModule } from 'primeng/dialog';
 import { StepsModule } from 'primeng/steps';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, AuthComponent, SignUpComponent],
+  declarations: [AppComponent, LoginComponent, AuthComponent, SignUpComponent, PageNotFoundComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
