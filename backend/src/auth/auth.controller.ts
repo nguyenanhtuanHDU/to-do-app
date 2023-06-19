@@ -21,6 +21,11 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Get('codes')
+  async getAllCode(@Res() res: Response) {
+    res.json(await this.authService.getAllCode());
+  }
+
   @Post('login')
   async login(@Body() loginUserDTO: LoginUserDTO, @Res() res: Response) {
     console.log(`🚀 ~ loginUserDTO:`, loginUserDTO);

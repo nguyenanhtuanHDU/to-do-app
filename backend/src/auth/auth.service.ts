@@ -35,6 +35,10 @@ export class AuthService {
     return paddedNumber;
   }
 
+  async getAllCode() {
+    return await this.registerEmailModel.find();
+  }
+
   async login(loginUserDTO: LoginUserDTO): Promise<boolean> {
     const userFindByUsername = await this.userService.getByUsername(
       loginUserDTO.username,
@@ -42,7 +46,7 @@ export class AuthService {
     const userFindByEmail = await this.userService.getByEmail(
       loginUserDTO.username,
     );
-    if (!userFindByUsername && !userFindByEmail){
+    if (!userFindByUsername && !userFindByEmail) {
       throw new NotFoundException('User not found');
     }
     let comparePassword = false;
@@ -92,6 +96,9 @@ export class AuthService {
     const registerEmail = await this.registerEmailModel
       .findOne({ email: data.email })
       .sort({ createdAt: -1 });
+    if (!registerEmail) {
+      return false;
+    }
     console.log(`🚀 ~ registerEmail:`, registerEmail);
     if (registerEmail.codeConfirm === data.code.toString()) {
       return true;
@@ -110,6 +117,8 @@ export class AuthService {
       subject: 'To Do App Created By Tuanna Send Code To You',
       text: 'welcome',
       html: `<span>Your code is: <b>${codeConfirm}</b>. <br>Use it to access your account 
+      <br>
+      You have 1 minute to use it before it expires
       <br>
       If you didn't request this, simply ignore this message.
       <br>

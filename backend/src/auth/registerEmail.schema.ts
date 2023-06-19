@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 export type RegisterEmailDocument = HydratedDocument<RegisterEmail>;
 
-@Schema({ timestamps: true, expireAfterSeconds: 10 })
+@Schema({ timestamps: true, expires: 60 })
 export class RegisterEmail {
   @Prop({ required: true })
   email: string;
