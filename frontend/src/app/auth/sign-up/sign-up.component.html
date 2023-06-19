@@ -20,11 +20,9 @@
         formControlName="username"
       />
       <label class="fw-5" for="username">Username</label>
-
       <input id="username" class="d-none" />
     </span>
   </form>
-
   <div class="d-flex flex-wrap gap-3 mb-3">
     <div class="d-flex align-items-center">
       <p-radioButton
@@ -93,20 +91,29 @@
     header="Header"
     [(visible)]="visibleEmail"
     [style]="{ width: '50vw' }"
+    [modal]="true"
+    [breakpoints]="{ '960px': '95vw' }"
     class="login-right-form-dialog mb-4"
   >
     <ng-template pTemplate="header" class="d-block">
       <strong class="text-capitalize">sign up with email</strong>
     </ng-template>
-    <div class="body">
+    <div class="body mt-2">
       <p-steps
+        class="mt-2"
         [model]="items"
         [readonly]="false"
-        [activeIndex]="index"
+        [activeIndex]="stepIndex"
       ></p-steps>
-      <div *ngIf="index === 0">
+      <div *ngIf="stepIndex === 0">
         <span class="p-float-label mt-5 mb-3">
-          <input pAutoFocus formControlName="email" pInputText id="email" />
+          <input
+            pAutoFocus
+            [autofocus]="isFocusStepEmail"
+            formControlName="email"
+            pInputText
+            id="email"
+          />
           <label htmlFor="email">Your email</label>
         </span>
         <p-button
@@ -115,9 +122,15 @@
           label="Password"
         ></p-button>
       </div>
-      <div *ngIf="index === 1">
+      <div *ngIf="stepIndex === 1">
         <span class="p-float-label mt-5 mb-3">
-          <input pAutoFocus formControlName="code" pInputText id="code" />
+          <input
+            pAutoFocus
+            [autofocus]="isFocusStepCode"
+            formControlName="code"
+            pInputText
+            id="code"
+          />
           <label htmlFor="code">Your verify code</label>
         </span>
         <p-button
@@ -126,18 +139,17 @@
           label="Verify code"
         ></p-button>
       </div>
-
-      <div *ngIf="index === 2">
+      <div *ngIf="stepIndex === 2">
         <span class="p-float-label mt-5 mb-3">
           <input
             pAutoFocus
             formControlName="password_email"
             pInputText
+            [autofocus]="isFocusStepPassword"
             id="password_email"
           />
           <label htmlFor="password_email">Your password</label>
         </span>
-
         <p-button
           icon="pi pi-check"
           (click)="signUpWithEmail()"
@@ -145,7 +157,14 @@
         ></p-button>
       </div>
     </div>
-    <ng-template pTemplate="footer"> </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-progressBar
+        mode="indeterminate"
+        [style]="{ height: '6px' }"
+        *ngIf="isShowProgressBar"
+      ></p-progressBar>
+    </ng-template>
   </p-dialog>
 </form>
 <p-toast

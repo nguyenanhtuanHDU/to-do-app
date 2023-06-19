@@ -112,7 +112,6 @@ export class AuthService {
     if (userFindByEmail) throw new ConflictException('Email already exists');
     const codeConfirm = this.generateRandomNumber();
     this.mailerService.sendMail({
-      // to: 'ledung160902@gmail.com',
       to: email,
       subject: 'To Do App Created By Tuanna Send Code To You',
       text: 'welcome',

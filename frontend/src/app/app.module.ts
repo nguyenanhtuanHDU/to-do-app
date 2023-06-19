@@ -20,9 +20,17 @@ import { DialogModule } from 'primeng/dialog';
 import { StepsModule } from 'primeng/steps';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { BlockUIModule } from 'primeng/blockui';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, AuthComponent, SignUpComponent, PageNotFoundComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    AuthComponent,
+    SignUpComponent,
+    PageNotFoundComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -39,7 +47,9 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     AutoFocusModule,
     DialogModule,
     StepsModule,
-    InputNumberModule
+    InputNumberModule,
+    ProgressBarModule,
+    BlockUIModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

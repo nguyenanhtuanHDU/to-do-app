@@ -20,7 +20,7 @@ export class SignUpComponent {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.index);
+    console.log(this.stepIndex);
   }
 
   signUpForm = new FormGroup({
@@ -43,7 +43,12 @@ export class SignUpComponent {
   });
   visibleEmail: boolean = false;
   loading: boolean = false;
-  index: number = 0;
+  stepIndex: number = 0;
+  isFocusStepEmail: boolean = false;
+  isFocusStepCode: boolean = false;
+  isFocusStepPassword: boolean = false;
+  isShowProgressBar: boolean = false;
+  blockedPanel: boolean = false;
   items: MenuItem[] = [
     {
       label: 'Verify Email',
@@ -51,7 +56,6 @@ export class SignUpComponent {
     {
       label: 'Confirm code',
     },
-
     {
       label: 'Password',
     },
@@ -104,7 +108,6 @@ export class SignUpComponent {
       })
       .subscribe(
         (data: any) => {
-          console.log(`🚀 ~ data:`, data);
           this.cookieService.set(
             'todo_new_username',
             this.signUpForm.value.username!
@@ -117,13 +120,11 @@ export class SignUpComponent {
           this.router.navigate(['/auth/login']);
         },
         (error) => {
-          console.log(`🚀 ~ error:`, error);
           error.error.message = [error.error.message];
           error.error.message.map((msg: string) => {
             this.messageService.add({
               severity: 'error',
               summary: msg,
-              detail: error.statusText,
             });
           });
         }
@@ -132,35 +133,44 @@ export class SignUpComponent {
 
   openDialogSignUpEmail() {
     this.visibleEmail = true;
-  }
-
-  handleSteps(event: number) {
-    console.log(`🚀 ~ event:`, event);
-    this.index = event;
+    setTimeout(() => {
+      this.isFocusStepEmail = true;
+    }, 500);
   }
 
   verifyEmail() {
     if (this.signUpForm.get('email')?.hasError('email')) {
       this.messageService.add({
-        severity: 'error',
+        severity: 'warn',
         summary: 'Email invalidate',
       });
       return;
     }
+    if (this.signUpForm.value.email === '') {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Enter your email',
+      });
+      return;
+    }
+    this.isShowProgressBar = true;
     this.authService.verifyEmail(this.signUpForm.value.email!).subscribe(
       (data: any) => {
-        this.index = 1;
+        this.isShowProgressBar = false;
+        this.stepIndex = 1;
+        setTimeout(() => {
+          this.isFocusStepCode = true;
+        }, 500);
         this.messageService.add({
           severity: 'success',
           summary: data.message,
         });
       },
       (error) => {
-        console.log(`🚀 ~ error:`, error);
+        this.isShowProgressBar = false;
         this.messageService.add({
           severity: 'error',
           summary: error.error.message,
-          detail: error.statusText,
         });
       }
     );
@@ -168,7 +178,6 @@ export class SignUpComponent {
 
   verifyCode() {
     const code = this.signUpForm.value.code;
-    console.log(`🚀 ~ code:`, code);
     if (code?.toString().length !== 4) {
       this.messageService.add({
         severity: 'error',
@@ -176,20 +185,24 @@ export class SignUpComponent {
       });
       return;
     }
+    this.isShowProgressBar = true;
     this.authService.verifyCode(code).subscribe(
       (data: any) => {
-        this.index = 2;
+        this.isShowProgressBar = false;
+        this.stepIndex = 2;
+        setTimeout(() => {
+          this.isFocusStepPassword = true;
+        }, 500);
         this.messageService.add({
           severity: 'success',
           summary: data.message,
         });
       },
       (error) => {
-        console.log(`🚀 ~ error:`, error);
+        this.isShowProgressBar = false;
         this.messageService.add({
           severity: 'error',
           summary: error.error.message,
-          detail: error.statusText,
         });
       }
     );
@@ -202,11 +215,12 @@ export class SignUpComponent {
       });
       return;
     }
-
+    this.isShowProgressBar = true;
     this.authService
       .signUpWithEmail(this.signUpForm.value.password_email!)
       .subscribe(
         (data: any) => {
+          this.isShowProgressBar = false;
           this.visibleEmail = false;
           this.cookieService.set(
             'todo_new_email',
@@ -220,10 +234,10 @@ export class SignUpComponent {
           this.router.navigate(['/auth/login']);
         },
         (error) => {
+          this.isShowProgressBar = false;
           this.messageService.add({
             severity: 'error',
             summary: error.error.message,
-            detail: error.statusText,
           });
         }
       );
