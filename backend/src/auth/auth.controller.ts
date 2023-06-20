@@ -30,9 +30,10 @@ export class AuthController {
   async login(@Body() loginUserDTO: LoginUserDTO, @Res() res: Response) {
     console.log(`🚀 ~ loginUserDTO:`, loginUserDTO);
 
-    await this.authService.login(loginUserDTO);
+    const authTokens = await this.authService.login(loginUserDTO);
     res.status(HttpStatus.OK).json({
       message: 'Login successfully',
+      authTokens,
     });
   }
 

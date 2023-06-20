@@ -8,7 +8,7 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { CookieService } from 'ngx-cookie-service';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -78,13 +78,15 @@ export class LoginComponent {
       })
       .subscribe(
         (data: any) => {
-          this.loading = false;
-          this.cookieService.set('todo_new_username', '');
           this.messageService.add({
             severity: 'success',
             summary: data.message,
           });
-          this.router.navigate([''])
+          console.log(`🚀 ~ data:`, data);
+          this.loading = false;
+          this.cookieService.set('todo_new_username', '');
+
+          this.router.navigate(['']);
         },
         (error) => {
           this.loading = false;

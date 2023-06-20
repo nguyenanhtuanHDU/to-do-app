@@ -32,21 +32,20 @@ export class UserService {
     }
   }
 
-  async getByUsername(username: string): Promise<LoginUserDTO> {
+  async getByUsername(username: string): Promise<UserDTO> {
     const user = await this.userModel.findOne({ username });
+    console.log(`🚀 ~ user:`, user);
+
     if (!user) return null;
-    else
-      return plainToClass(LoginUserDTO, user, {
-        excludeExtraneousValues: true,
-      });
+    return plainToClass(UserDTO, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async getByEmail(email: string): Promise<LoginUserDTO> {
+  async getByEmail(email: string): Promise<UserDTO> {
     const user = await this.userModel.findOne({ email });
-    console.log(`🚀 ~ user:`, user)
-
     if (!user) return null;
-    return plainToClass(LoginUserDTO, user, {
+    return plainToClass(UserDTO, user, {
       excludeExtraneousValues: true,
     });
   }

@@ -18,6 +18,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { RegisterEmail } from './registerEmail.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { JwtService } from '@nestjs/jwt';
+import { authTokens } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +28,7 @@ export class AuthService {
     private registerEmailModel: Model<RegisterEmail>,
     private readonly userService: UserService,
     private readonly mailerService: MailerService,
+    private readonly jwtService: JwtService,
   ) {}
 
   generateRandomNumber() {
@@ -39,32 +42,52 @@ export class AuthService {
     return await this.registerEmailModel.find();
   }
 
-  async login(loginUserDTO: LoginUserDTO): Promise<boolean> {
+  async login(loginUserDTO: LoginUserDTO): Promise<authTokens> {
     const userFindByUsername = await this.userService.getByUsername(
       loginUserDTO.username,
     );
+    console.log(`🚀 ~ userFindByUsername:`, userFindByUsername);
+
     const userFindByEmail = await this.userService.getByEmail(
       loginUserDTO.username,
     );
+    console.log(`🚀 ~ userFindByEmail:`, userFindByEmail);
+
     if (!userFindByUsername && !userFindByEmail) {
       throw new NotFoundException('User not found');
     }
     let comparePassword = false;
     if (userFindByUsername) {
+      console.log(`🚀 ~ userFindByUsername:`, userFindByUsername);
       comparePassword = await bcrypt.compare(
         loginUserDTO.password,
         userFindByUsername.password,
       );
-      console.log(`🚀 ~ comparePassword username:`, comparePassword);
     } else if (userFindByEmail) {
+      console.log(`🚀 ~ userFindByEmail:`, userFindByEmail);
       comparePassword = await bcrypt.compare(
         loginUserDTO.password,
         userFindByEmail.password,
       );
-      console.log(`🚀 ~ comparePassword email:`, comparePassword);
     }
     if (!comparePassword) throw new UnauthorizedException('Invalid password');
-    return true;
+    const accessToken = await this.jwtService.signAsync(
+      {
+        id: userFindByUsername._id,
+        admin: userFindByUsername.admin,
+      },
+      { expiresIn: '3d' },
+    );
+
+    const refreshToken = await this.jwtService.signAsync(
+      {
+        id: userFindByUsername._id,
+        admin: userFindByUsername.admin,
+      },
+      { expiresIn: '2d' },
+    );
+
+    return { accessToken, refreshToken };
   }
 
   async signUp(createUserDTO: CreateUserDTO): Promise<boolean> {
