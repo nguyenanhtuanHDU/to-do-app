@@ -20,13 +20,12 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
     }),
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.gmail.com',
-        // host: 'smtppro.zoho.in',
+        host: process.env.MAILER_HOST,
         port: 465,
         secure: true,
         auth: {
-          user: 'todoapp0204@gmail.com', // bật xác minh 2 bước cho gmail
-          pass: 'iinvtbxrsbdufotp', // mật khẩu ứng dụng
+          user: process.env.MAILER_USER,
+          pass: process.env.MAILER_PASSWORD,
         },
         tls: {
           rejectUnauthorized: false,
