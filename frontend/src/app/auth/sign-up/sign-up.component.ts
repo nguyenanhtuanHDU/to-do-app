@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { MenuItem, MessageService } from 'primeng/api';
@@ -16,8 +17,11 @@ export class SignUpComponent {
     private readonly authService: AuthService,
     private readonly messageService: MessageService,
     private readonly router: Router,
-    private readonly cookieService: CookieService
-  ) {}
+    private readonly cookieService: CookieService,
+    private readonly titleSesrvice: Title
+  ) {
+    this.titleSesrvice.setTitle('To Do App | Sign Up');
+  }
 
   ngOnInit(): void {
     console.log(this.stepIndex);

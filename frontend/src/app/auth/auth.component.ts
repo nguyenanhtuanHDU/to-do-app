@@ -6,14 +6,4 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
 })
-export class AuthComponent {
-  users = [];
-
-  constructor(private readonly authService: AuthService) {}
-
-  refreshToken() {
-    this.authService.getAllUsers().subscribe((data) => {
-      console.log('data', data);
-    });
-  }
-}
+export class AuthComponent {}

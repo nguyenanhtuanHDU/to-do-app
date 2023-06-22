@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -21,8 +22,11 @@ export class LoginComponent {
     private readonly authService: AuthService,
     private readonly messageService: MessageService,
     private readonly cookieService: CookieService,
-    private readonly router: Router
-  ) {}
+    private readonly router: Router,
+    private readonly titleSesrvice: Title
+  ) {
+    this.titleSesrvice.setTitle('To Do App | Home');
+  }
 
   ngOnInit(): void {
     console.log('cookie', this.cookieService.getAll());
@@ -79,10 +83,6 @@ export class LoginComponent {
       .subscribe(
         (data: any) => {
           this.loading = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: data.message,
-          });
           console.log(`🚀 ~ data:`, data);
           this.authService.setToken(data.accessToken);
           this.cookieService.set('todo_new_username', '');
@@ -96,7 +96,6 @@ export class LoginComponent {
             this.messageService.add({
               severity: 'error',
               summary: msg,
-              detail: error.statusText,
             });
           });
         }
