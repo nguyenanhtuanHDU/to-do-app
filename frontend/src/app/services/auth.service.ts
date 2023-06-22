@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import { UserCreate, UserLogin } from '../models/user.model';
 import { CookieService } from 'ngx-cookie-service';
@@ -15,10 +15,40 @@ export class AuthService {
     private readonly cookieService: CookieService
   ) {}
 
-  login(userLogin: UserLogin) {
-    console.log(`🚀 ~ userLogin:`, userLogin)
+  refreshToken() {
+    return this.http.get(environment.apiBackend + 'auth/refresh', {
+      withCredentials: true, // để get cookie
+    });
+  }
 
-    return this.http.post(this.apiAuth + 'login', userLogin);
+  getAllUsers() {
+    return this.http.get(environment.apiBackend + 'users', {
+      headers: this.getHeaders(),
+    });
+  }
+
+  login(userLogin: UserLogin) {
+    console.log(`🚀 ~ userLogin:`, userLogin);
+
+    return this.http.post(this.apiAuth + 'login', userLogin, {
+      headers: this.getHeaders(),
+      withCredentials: true,
+    });
+  }
+
+  getToken(): string {
+    return this.cookieService.get('token');
+  }
+
+  setToken(token: string) {
+    this.cookieService.set('token', token);
+  }
+
+  getHeaders() {
+    const headers = new HttpHeaders({
+      token: `Bearer ${this.getToken()}`,
+    });
+    return headers;
   }
 
   signUp(user: UserCreate) {

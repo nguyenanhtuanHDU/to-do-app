@@ -34,7 +34,6 @@ export class UserService {
 
   async getByUsername(username: string): Promise<UserDTO> {
     const user = await this.userModel.findOne({ username });
-    console.log(`🚀 ~ user:`, user);
 
     if (!user) return null;
     return plainToClass(UserDTO, user, {

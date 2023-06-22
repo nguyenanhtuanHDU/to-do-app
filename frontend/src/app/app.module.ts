@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastModule } from 'primeng/toast';
 import { AuthComponent } from './auth/auth.component';
 import { SignUpComponent } from './auth/sign-up/sign-up.component';
@@ -22,6 +22,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { BlockUIModule } from 'primeng/blockui';
+import { ResponseInterceptor } from './shared/response-interceptor';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,14 @@ import { BlockUIModule } from 'primeng/blockui';
     ProgressBarModule,
     BlockUIModule,
   ],
-  providers: [CookieService],
+  providers: [
+    CookieService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ResponseInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -78,14 +78,15 @@ export class LoginComponent {
       })
       .subscribe(
         (data: any) => {
+          this.loading = false;
           this.messageService.add({
             severity: 'success',
             summary: data.message,
           });
           console.log(`🚀 ~ data:`, data);
-          this.loading = false;
+          this.authService.setToken(data.accessToken);
           this.cookieService.set('todo_new_username', '');
-
+          this.authService.getHeaders();
           this.router.navigate(['']);
         },
         (error) => {

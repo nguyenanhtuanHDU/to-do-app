@@ -6,6 +6,7 @@ import { RegisterEmail, RegisterEmailSchema } from './registerEmail.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
+import { RefreshToken, RefreshTokenSchema } from './refreshToken.schema';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     MongooseModule.forFeature([
       { name: RegisterEmail.name, schema: RegisterEmailSchema },
+      { name: RefreshToken.name, schema: RefreshTokenSchema },
     ]),
   ],
   controllers: [AuthController],

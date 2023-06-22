@@ -8,6 +8,7 @@ import {
   Post,
   Req,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import {
@@ -16,24 +17,61 @@ import {
   LoginUserDTO,
 } from 'src/user/user.dto';
 import { AuthService } from './auth.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   @Get('codes')
   async getAllCode(@Res() res: Response) {
     res.json(await this.authService.getAllCode());
   }
 
-  @Post('login')
-  async login(@Body() loginUserDTO: LoginUserDTO, @Res() res: Response) {
-    console.log(`🚀 ~ loginUserDTO:`, loginUserDTO);
+  @Get('refresh')
+  async refreshToken(@Res() res: Response, @Req() req: Request) {
+    const refreshToken = req.cookies[process.env.REFRESH_TOKEN];
+    console.log(`🚀 ~ refreshToken:`, refreshToken);
 
+    const authTokens = await this.authService.refreshToken(refreshToken);
+    console.log(`🚀 ~ authTokens.newRefreshToken:`, authTokens.newRefreshToken);
+
+    res.cookie(process.env.REFRESH_TOKEN, authTokens.newRefreshToken, {
+      sameSite: 'strict',
+      path: '/',
+      secure: true,
+      httpOnly: true,
+    });
+
+    res.status(HttpStatus.OK).json({
+      accessToken: authTokens.newAccessToken,
+    });
+  }
+
+  @Post('login')
+  async login(
+    @Body() loginUserDTO: LoginUserDTO,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
     const authTokens = await this.authService.login(loginUserDTO);
+    console.log(`🚀 ~ authTokens.refreshToken:`, authTokens.refreshToken);
+
+    res.cookie(process.env.REFRESH_TOKEN, authTokens.refreshToken, {
+      sameSite: 'strict',
+      path: '/',
+      secure: true,
+      httpOnly: true,
+    });
+
+    console.log('req cookie 1', req.cookies);
+
     res.status(HttpStatus.OK).json({
       message: 'Login successfully',
-      authTokens,
+      accessToken: authTokens.accessToken,
     });
   }
 

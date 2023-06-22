@@ -19,13 +19,15 @@ import { RegisterEmail } from './registerEmail.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
-import { authTokens } from './auth.dto';
+import { RefreshToken } from './refreshToken.schema';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(RegisterEmail.name)
     private registerEmailModel: Model<RegisterEmail>,
+    @InjectModel(RefreshToken.name)
+    private refreshTokenlModel: Model<RefreshToken>,
     private readonly userService: UserService,
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
@@ -38,54 +40,110 @@ export class AuthService {
     return paddedNumber;
   }
 
+  async generateToken(payload: any, expiresIn: string) {
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn,
+    });
+    return token;
+  }
+
+  async generateAccessToken(payload: any) {
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: '10s',
+    });
+    return token;
+  }
+
+  async generateRefreshToken(payload: any) {
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: '1d',
+    });
+    return token;
+  }
+
+  async refreshToken(refreshToken: string) {
+    if (!refreshToken) throw new UnauthorizedException('Token empty');
+
+    try {
+      const payload = await this.jwtService.verifyAsync(refreshToken);
+      console.log(`🚀 ~ payload:`, payload);
+
+      if (payload) {
+        const refreshTokenFind = await this.refreshTokenlModel.findOne({
+          userID: payload.id,
+        });
+
+        if (!refreshTokenFind) {
+          throw new UnauthorizedException('Token does not exist');
+        }
+        const checkRefreshToken = await bcrypt.compare(
+          refreshToken,
+          refreshTokenFind.refreshToken,
+        );
+
+        if (!checkRefreshToken) {
+          throw new UnauthorizedException('Token has been logged out');
+        }
+        delete payload.iat;
+        delete payload.exp;
+
+        const newAccessToken = await this.generateAccessToken(payload);
+        const newRefreshToken = await this.generateRefreshToken(payload);
+
+        await this.refreshTokenlModel.deleteMany();
+
+        this.refreshTokenlModel.create({
+          userID: payload.id,
+          refreshToken: await bcrypt.hash(newRefreshToken, 12),
+        });
+        return { newAccessToken, newRefreshToken };
+      }
+    } catch (error) {
+      console.log(`🚀 ~ error 1:`, error);
+      throw new UnauthorizedException('Token has expired');
+    }
+  }
+
   async getAllCode() {
     return await this.registerEmailModel.find();
   }
 
-  async login(loginUserDTO: LoginUserDTO): Promise<authTokens> {
+  async login(loginUserDTO: LoginUserDTO) {
     const userFindByUsername = await this.userService.getByUsername(
       loginUserDTO.username,
     );
-    console.log(`🚀 ~ userFindByUsername:`, userFindByUsername);
-
     const userFindByEmail = await this.userService.getByEmail(
       loginUserDTO.username,
     );
-    console.log(`🚀 ~ userFindByEmail:`, userFindByEmail);
-
     if (!userFindByUsername && !userFindByEmail) {
       throw new NotFoundException('User not found');
     }
     let comparePassword = false;
     if (userFindByUsername) {
-      console.log(`🚀 ~ userFindByUsername:`, userFindByUsername);
       comparePassword = await bcrypt.compare(
         loginUserDTO.password,
         userFindByUsername.password,
       );
     } else if (userFindByEmail) {
-      console.log(`🚀 ~ userFindByEmail:`, userFindByEmail);
       comparePassword = await bcrypt.compare(
         loginUserDTO.password,
         userFindByEmail.password,
       );
     }
     if (!comparePassword) throw new UnauthorizedException('Invalid password');
-    const accessToken = await this.jwtService.signAsync(
-      {
-        id: userFindByUsername._id,
-        admin: userFindByUsername.admin,
-      },
-      { expiresIn: '3d' },
-    );
 
-    const refreshToken = await this.jwtService.signAsync(
-      {
-        id: userFindByUsername._id,
-        admin: userFindByUsername.admin,
-      },
-      { expiresIn: '2d' },
-    );
+    const payload = {
+      id: userFindByUsername._id,
+      admin: userFindByUsername.admin,
+    };
+
+    const accessToken = await this.generateAccessToken(payload);
+    const refreshToken = await this.generateRefreshToken(payload);
+
+    this.refreshTokenlModel.create({
+      userID: userFindByUsername._id,
+      refreshToken: await bcrypt.hash(refreshToken, 12),
+    });
 
     return { accessToken, refreshToken };
   }

@@ -9,16 +9,19 @@ import {
   Post,
   Put,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { UserService } from './user.service';
+import { AuthGuard } from "src/auth/auth.guard";
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(AuthGuard)
   async getAll(@Res() res: Response) {
     const users = await this.userService.getAll();
     res.status(HttpStatus.OK).json(users);
