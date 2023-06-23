@@ -33,9 +33,10 @@
     </div>
     <div class="menu-inner-list d-flex flex-column gap-2">
       <div
-        class="menu-inner-list-item d-flex gap-2 py-2 px-3"
+        class="menu-inner-list-item d-flex py-2 px-3"
         pRipple
         *ngFor="let item of menuItemsBottom"
+        (click)="item?.click()"
       >
         <div class="menu-inner-list-item__icon">
           <fa-icon [icon]="item.icon"></fa-icon>
@@ -45,3 +46,35 @@
     </div>
   </div>
 </div>
+<p-toast
+  [breakpoints]="{
+    '920px': { width: '80%', left: '50%', transform: 'translateX(-50%)' }
+  }"
+></p-toast>
+
+<p-confirmDialog
+  [breakpoints]="{ '920px': '90vw' }"
+  #cd
+  [style]="{ width: '50vw' }"
+  [closable]="false"
+  [dismissableMask]="true"
+>
+  <ng-template>
+    <button
+      type="button"
+      pButton
+      pRipple
+      icon="pi pi-times"
+      label="No"
+      (click)="cd.reject()"
+    ></button>
+    <button
+      type="button"
+      pButton
+      pRipple
+      icon="pi pi-check"
+      label="Yes"
+      (click)="cd.accept()"
+    ></button>
+  </ng-template>
+</p-confirmDialog>

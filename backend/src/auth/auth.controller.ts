@@ -35,10 +35,8 @@ export class AuthController {
   async refreshToken(@Res() res: Response, @Req() req: Request) {
     const refreshToken = req.cookies[process.env.REFRESH_TOKEN];
     console.log(`🚀 ~ refreshToken:`, refreshToken);
-
     const authTokens = await this.authService.refreshToken(refreshToken);
     console.log(`🚀 ~ authTokens.newRefreshToken:`, authTokens.newRefreshToken);
-
     res.cookie(process.env.REFRESH_TOKEN, authTokens.newRefreshToken, {
       sameSite: 'strict',
       path: '/',
@@ -48,6 +46,16 @@ export class AuthController {
 
     res.status(HttpStatus.OK).json({
       accessToken: authTokens.newAccessToken,
+    });
+  }
+
+  @Get('logout')
+  async logOut(@Res() res: Response, @Req() req: Request) {
+    console.log('logout', req.cookies);
+    const userID = req.cookies['userID'];
+    await this.authService.logOut(userID);
+    res.status(HttpStatus.OK).json({
+      message: 'Log out successfully',
     });
   }
 
@@ -61,6 +69,13 @@ export class AuthController {
     console.log(`🚀 ~ authTokens.refreshToken:`, authTokens.refreshToken);
 
     res.cookie(process.env.REFRESH_TOKEN, authTokens.refreshToken, {
+      sameSite: 'strict',
+      path: '/',
+      secure: true,
+      httpOnly: true,
+    });
+
+    res.cookie('userID', authTokens.userID, {
       sameSite: 'strict',
       path: '/',
       secure: true,

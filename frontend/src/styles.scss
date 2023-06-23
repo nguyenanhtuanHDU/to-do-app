@@ -11,6 +11,7 @@ $danger: #f8526e;
 $dark: #393a62;
 $custom-colors: (
   "light": #ebebeb,
+  "gray": #747399,
 );
 
 // Merge the maps
@@ -104,3 +105,9 @@ body {
 // .p-dialog-header {
 //   display: block !important;
 // }
+
+@media screen and (max-width: 992px) {
+  // .p-dialog .p-dialog-footer {
+  //   padding-top: 24px;
+  // }
+}

@@ -145,7 +145,13 @@ export class AuthService {
       refreshToken: await bcrypt.hash(refreshToken, 12),
     });
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, userID: payload.id };
+  }
+
+  async logOut(userID: string) {
+    await this.refreshTokenlModel.findOneAndDelete({
+      userID,
+    });
   }
 
   async signUp(createUserDTO: CreateUserDTO): Promise<boolean> {

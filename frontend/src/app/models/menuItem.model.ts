@@ -4,4 +4,5 @@ export interface menuItem {
   label: string;
   icon: IconDefinition;
   routerLink?: string;
+  click?: () => void;
 }

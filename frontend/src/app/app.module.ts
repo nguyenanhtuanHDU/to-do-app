@@ -27,6 +27,8 @@ import { HomeComponent } from './home/home.component';
 import { MenuComponent } from './menu/menu.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SidebarModule } from 'primeng/sidebar';
+import { ConfirmationService, MessageService } from "primeng/api";
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,8 @@ import { SidebarModule } from 'primeng/sidebar';
     ProgressBarModule,
     BlockUIModule,
     FontAwesomeModule,
-    SidebarModule
+    SidebarModule,
+    ConfirmDialogModule
   ],
   providers: [
     CookieService,
@@ -67,6 +70,8 @@ import { SidebarModule } from 'primeng/sidebar';
       useClass: ResponseInterceptor,
       multi: true,
     },
+    MessageService,
+    ConfirmationService
   ],
   bootstrap: [AppComponent],
 })

@@ -16,7 +16,7 @@ export class AuthService {
   ) {}
 
   refreshToken() {
-    return this.http.get(environment.apiBackend + 'auth/refresh', {
+    return this.http.get(this.apiAuth + 'refresh', {
       withCredentials: true, // để get cookie
     });
   }
@@ -32,6 +32,12 @@ export class AuthService {
 
     return this.http.post(this.apiAuth + 'login', userLogin, {
       headers: this.getHeaders(),
+      withCredentials: true,
+    });
+  }
+
+  logOut() {
+    return this.http.get(this.apiAuth + 'logout', {
       withCredentials: true,
     });
   }
