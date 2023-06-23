@@ -1,0 +1,47 @@
+<div class="menu py-2 py-lg-5 h-100 bg-secondary">
+  <div class="menu-logo">
+    <!-- <img src="../../assets/images/logos/logo.png" alt="" /> -->
+  </div>
+  <div
+    class="menu-inner p-0 py-lg-3 ps-lg-4 d-flex flex-column justify-content-between justify-content-lg-between h-100"
+  >
+    <!-- <p-menu [model]="items"></p-menu> -->
+    <div class="d-flex flex-column gap-5">
+      <div class="menu-inner-user d-flex gap-3 align-items-center">
+        <div class="menu-inner-user__avatar br-round">
+          <img src="../../assets/images/avatars/avatar-default-2.png" alt="" />
+        </div>
+        <div class="menu-inner-user__info d-flex flex-column gap-1">
+          <div class="menu-inner-user__info-name fw-8">Nguyen Anh Tuan</div>
+          <span>tuan@demo.com</span>
+        </div>
+      </div>
+      <div class="menu-inner-list d-flex flex-column gap-2">
+        <div
+          class="menu-inner-list-item d-flex py-2 px-3"
+          pRipple
+          *ngFor="let item of menuItemsTop"
+          routerLink="{{ item.routerLink }}"
+          routerLinkActive="menu-inner-list-item__active"
+        >
+          <div class="menu-inner-list-item__icon">
+            <fa-icon [icon]="item.icon"></fa-icon>
+          </div>
+          <span class="fw-5">{{ item.label }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="menu-inner-list d-flex flex-column gap-2">
+      <div
+        class="menu-inner-list-item d-flex gap-2 py-2 px-3"
+        pRipple
+        *ngFor="let item of menuItemsBottom"
+      >
+        <div class="menu-inner-list-item__icon">
+          <fa-icon [icon]="item.icon"></fa-icon>
+        </div>
+        <span class="fw-5">{{ item.label }}</span>
+      </div>
+    </div>
+  </div>
+</div>

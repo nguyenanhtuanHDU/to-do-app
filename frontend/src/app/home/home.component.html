@@ -1,1 +1,21 @@
-<p>home works!</p>
+<div class="container-fluid">
+  <div class="home">
+    <div class="row home-inner h-100">
+      <div
+        class="home-inner-bars d-block d-lg-none"
+        (click)="sidebarVisible = true"
+      >
+        <i class="pi pi-bars"></i>
+      </div>
+      <div class="d-lg-none d-block">
+        <p-sidebar  [(visible)]="sidebarVisible" styleClass="bg-secondary">
+          <app-menu></app-menu>
+        </p-sidebar>
+      </div>
+      <div class="home-inner-menu d-none d-lg-block col-lg-2 px-0">
+        <app-menu></app-menu>
+      </div>
+      <div class="col-12 col-lg-10"></div>
+    </div>
+  </div>
+</div>

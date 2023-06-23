@@ -25,7 +25,7 @@ export class LoginComponent {
     private readonly router: Router,
     private readonly titleSesrvice: Title
   ) {
-    this.titleSesrvice.setTitle('To Do App | Home');
+    this.titleSesrvice.setTitle('To Do App | Login');
   }
 
   ngOnInit(): void {

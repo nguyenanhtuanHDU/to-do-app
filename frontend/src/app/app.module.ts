@@ -24,6 +24,9 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { BlockUIModule } from 'primeng/blockui';
 import { ResponseInterceptor } from './shared/response-interceptor';
 import { HomeComponent } from './home/home.component';
+import { MenuComponent } from './menu/menu.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,7 @@ import { HomeComponent } from './home/home.component';
     SignUpComponent,
     PageNotFoundComponent,
     HomeComponent,
+    MenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,6 +57,8 @@ import { HomeComponent } from './home/home.component';
     InputNumberModule,
     ProgressBarModule,
     BlockUIModule,
+    FontAwesomeModule,
+    SidebarModule
   ],
   providers: [
     CookieService,
