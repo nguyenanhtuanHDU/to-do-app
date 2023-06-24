@@ -38,6 +38,9 @@
       &-item {
         color: #747399;
         cursor: pointer;
+        & * {
+          user-select: none;
+        }
         &__icon {
           width: 32px;
           cursor: pointer;

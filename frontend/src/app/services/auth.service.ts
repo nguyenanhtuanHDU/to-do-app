@@ -37,6 +37,7 @@ export class AuthService {
   }
 
   logOut() {
+    this.cookieService.set('token', '');
     return this.http.get(this.apiAuth + 'logout', {
       withCredentials: true,
     });
