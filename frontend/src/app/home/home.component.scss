@@ -8,5 +8,84 @@
     }
     &-menu {
     }
+    &-main {
+      padding-top: 50px;
+      &-weather {
+        &-chart {
+          background-color: #ededf6;
+        }
+        h2 {
+          font-size: 20px;
+        }
+        &-cards {
+          &-card {
+            position: relative;
+            &-item {
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              user-select: none;
+              &__time {
+                font-size: 17px;
+              }
+              &__tempc {
+                font-size: 24px;
+              }
+              &__text {
+                font-size: 15px;
+              }
+            }
+            &__btn {
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              z-index: 2;
+              border-radius: 50px;
+              box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+              width: 30px;
+              height: 30px;
+              &-left {
+                left: -5px;
+              }
+              &-right {
+                right: -5px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.chart-container {
+  display: block;
+  width: auto;
+  min-height: 254px;
+}
+
+#MyChart {
+  min-height: 456px;
+}
+
+@media screen and (max-width: 992px) {
+  #MyChart {
+    min-height: 300px;
+  }
+  .home {
+    &-inner {
+      &-main {
+        padding-top: 90px;
+        &-weather {
+          &-cards {
+            &-card {
+              &-item {
+                &__tempc {
+                  font-size: 20px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

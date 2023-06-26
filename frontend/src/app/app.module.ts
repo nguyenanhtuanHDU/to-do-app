@@ -29,6 +29,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SidebarModule } from 'primeng/sidebar';
 import { ConfirmationService, MessageService } from "primeng/api";
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TitleComponent } from './title/title.component';
+import { SwiperModule } from 'swiper/angular';
+import { NgChartsModule } from 'ng2-charts';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 @NgModule({
   declarations: [
@@ -39,6 +43,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     PageNotFoundComponent,
     HomeComponent,
     MenuComponent,
+    TitleComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +66,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     BlockUIModule,
     FontAwesomeModule,
     SidebarModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    SwiperModule,
+    NgChartsModule,
+    SpeedDialModule
   ],
   providers: [
     CookieService,

@@ -2,20 +2,115 @@
   <div class="home">
     <div class="row home-inner h-100">
       <div
-        class="home-inner-bars d-block d-lg-none"
+        class="home-inner-bars d-block d-lg-none pt-lg-0 pt-2"
         (click)="sidebarVisible = true"
       >
-        <i class="pi pi-bars"></i>
+        <p-speedDial
+          [model]="menuItems"
+          direction="down"
+          showIcon="pi pi-bars"
+          hideIcon="pi pi-times"
+        ></p-speedDial>
       </div>
       <div class="d-lg-none d-block">
-        <p-sidebar  [(visible)]="sidebarVisible" styleClass="bg-secondary">
+        <!-- <p-sidebar [(visible)]="sidebarVisible" styleClass="bg-light">
           <app-menu></app-menu>
-        </p-sidebar>
+        </p-sidebar> -->
       </div>
       <div class="home-inner-menu d-none d-lg-block col-lg-2 px-0">
         <app-menu></app-menu>
       </div>
-      <div class="col-12 col-lg-10"></div>
+      <div class="col-12 col-lg-10 home-inner-main px-lg-5 px-3">
+        <app-title>Overview</app-title>
+        <div class="home-inner-main-weather row mt-4">
+          <div class="col-lg-7 pe-lg-5 mb-5 mb-lg-0">
+            <h2 class="fw-6 ms-3 ms-lg-0">Weather in 7 days</h2>
+            <div class="home-inner-main-weather-chart br-20 w-100 p-2 mt-3">
+              <div class="chart-container">
+                <canvas id="MyChart">{{ chart }}</canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5 ps-lg-4 ps-lg-2 mt-4 mt-lg-0">
+            <h2 class="fw-6 ms-3 ms-lg-0">Today</h2>
+            <div class="home-inner-main-weather-cards d-flex flex-column gap-3">
+              <div class="home-inner-main-weather-cards-card" *ngIf="weather">
+                <swiper
+                  [loop]="true"
+                  [autoHeight]="false"
+                  [allowTouchMove]="true"
+                  [autoplay]="{ delay: 3000, disableOnInteraction: false }"
+                  [slidesPerView]="3"
+                  [spaceBetween]="20"
+                  [autoHeight]="true"
+                  class="p-2"
+                >
+                  >
+                  <ng-template
+                    swiperSlide
+                    *ngFor="
+                      let hour of weather.forecast.forecastday[0].hour;
+                      odd as odd;
+                      even as even
+                    "
+                  >
+                    <div
+                      [ngClass]="{
+                        'bg-white': odd,
+                        'bg-linear text-white': even
+                      }"
+                      class="home-inner-main-weather-cards-card-item p-2 br-12 d-flex gap-2 flex-column text-center"
+                    >
+                      <span
+                        class="home-inner-main-weather-cards-card-item__time fw-6"
+                        >{{ hour.time | date : "shortTime" }}</span
+                      >
+                      <div
+                        class="home-inner-main-weather-cards-card-item__img my-3"
+                      >
+                        <img [src]="hour.condition.icon" alt="" />
+                      </div>
+                      <span
+                        class="home-inner-main-weather-cards-card-item__tempc fw-7"
+                        >{{ hour.temp_c }} °C</span
+                      >
+                    </div>
+                  </ng-template>
+                </swiper>
+
+                <button
+                  class="btn flex-center bg-white home-inner-main-weather-cards-card__btn home-inner-main-weather-cards-card__btn-left"
+                  (click)="swipePrev()"
+                >
+                  <fa-icon [icon]="faAngleLeft"></fa-icon>
+                </button>
+                <button
+                  class="btn flex-center bg-white home-inner-main-weather-cards-card__btn home-inner-main-weather-cards-card__btn-right"
+                  (click)="swipeNext()"
+                >
+                  <fa-icon [icon]="faAngleRight"></fa-icon>
+                </button>
+              </div>
+              <div class="home-inner-main-weather-cards-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- <div
+  class="home-inner-main-weather-cards-card br-12 p-3"
+  style="background-color: #f6f6fb"
+>
+  <fa-icon [icon]="fatem"></fa-icon>
+  <div>{{ weather?.current?.temp_c }} C</div>
+</div>
+<div
+  class="home-inner-main-weather-cards-card br-12 p-3"
+  style="background-color: #f6f6fb"
+>
+  <fa-icon [icon]="fatem"></fa-icon>
+  <div>{{ weather?.current?.temp_f }} F</div>
+</div> -->

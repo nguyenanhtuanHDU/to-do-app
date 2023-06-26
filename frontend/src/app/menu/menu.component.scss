@@ -36,8 +36,8 @@
     }
     &-list {
       &-item {
-        color: #747399;
         cursor: pointer;
+
         & * {
           user-select: none;
         }
@@ -47,17 +47,25 @@
         }
         &__active {
           position: relative;
-          color: var(--bs-dark) !important;
+          color: var(--bs-primary) !important;
+          background-color: var(--bs-white);
+          border-top-left-radius: 12px;
+          border-bottom-left-radius: 12px;
+          list-style: none;
+          z-index: 1;
+
           &::before {
             content: "";
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 100%;
-            width: 6px;
-            left: 0;
-            border-radius: 20px;
-            background: var(--bs-primary);
+            right: 0;
+            top: -50px;
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            border-radius: 50%;
+            box-shadow: 35px 35px 0 10px var(--bs-white);
+            pointer-events: none;
+            z-index: 2;
           }
         }
       }
