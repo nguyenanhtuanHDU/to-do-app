@@ -9,10 +9,38 @@
     &-menu {
     }
     &-main {
-      padding-top: 50px;
+      padding-top: 30px;
+      &-head {
+        &-text {
+          h1 {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 40px;
+          }
+          span {
+            font-size: 14px;
+            line-height: 19px;
+          }
+        }
+        &-user {
+          &-info {
+            strong {
+            }
+            span {
+              font-size: 14px;
+            }
+          }
+          // fa-icon {
+          //   font-size: 24px;
+          // }
+          img {
+            border: 3px solid var(--bs-primary);
+          }
+        }
+      }
       &-weather {
         &-chart {
-          background-color: #ededf6;
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         }
         h2 {
           font-size: 20px;
@@ -20,8 +48,14 @@
         &-cards {
           &-card {
             position: relative;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
             &-item {
-              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+              backdrop-filter: blur(5px);
+              -webkit-backdrop-filter: blur(5px);
+              border: 1px solid rgba(255, 255, 255, 0.3);
               user-select: none;
               &__time {
                 font-size: 17px;
@@ -43,10 +77,12 @@
               width: 30px;
               height: 30px;
               &-left {
-                left: -5px;
+                left: 0;
+                transform: translateX(-50%);
               }
               &-right {
-                right: -5px;
+                right: 0;
+                transform: translateX(50%);
               }
             }
           }
@@ -80,6 +116,9 @@
               &-item {
                 &__tempc {
                   font-size: 20px;
+                }
+                &__time {
+                  font-size: 15px;
                 }
               }
             }

@@ -8,7 +8,12 @@ import {
 } from 'primeng/api';
 import { WeatherService } from '../services/weather.service';
 import { SwiperComponent } from 'swiper/angular';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleLeft,
+  faAngleRight,
+  faBell,
+  faMagnifyingGlass,
+} from '@fortawesome/free-solid-svg-icons';
 import { Chart } from 'chart.js';
 
 @Component({
@@ -85,6 +90,8 @@ export class HomeComponent {
 
   faAngleLeft = faAngleLeft;
   faAngleRight = faAngleRight;
+  faMagnifyingGlass = faMagnifyingGlass;
+  faBell = faBell;
 
   sidebarVisible: boolean = false;
   weather: any;
@@ -135,7 +142,7 @@ export class HomeComponent {
 
   confirmGetLocation() {
     this.confirmationService.confirm({
-      message: 'Do you want to get weather?',
+      message: 'Please allow location to get weather?',
       accept: () => {
         this.getLocation();
       },

@@ -1,17 +1,15 @@
 <div class="menu py-2 py-lg-5 h-100 bg-primary text-white">
   <div
-    class="menu-inner p-0 pt-lg-3 d-flex flex-column justify-content-between justify-content-lg-between h-100"
+    class="menu-inner p-0 d-flex flex-column justify-content-between gap-1 h-100 pt-lg-3"
   >
     <!-- <p-menu [model]="items"></p-menu> -->
+
     <div class="d-flex flex-column gap-5">
-      <div class="menu-inner-user d-flex gap-3 align-items-center ps-4">
-        <div class="menu-inner-user__avatar br-round">
-          <img src="../../assets/images/avatars/avatar-default-2.png" alt="" />
-        </div>
-        <div class="menu-inner-user__info d-flex flex-column gap-1">
-          <div class="menu-inner-user__info-name fw-8">Nguyen Anh Tuan</div>
-          <span>tuan@demo.com</span>
-        </div>
+      <div
+        class="ps-4 p-2 menu-inner-logo d-flex gap-2 align-items-center mx-4"
+      >
+        <img src="../../assets/images/logos/logo.svg" alt="" />
+        <span class="text-capitalize">to do app</span>
       </div>
       <ul class="menu-inner-list d-flex flex-column gap-2 ps-4">
         <li
@@ -21,6 +19,7 @@
           routerLink="{{ item.routerLink }}"
           routerLinkActive="menu-inner-list-item__active"
         >
+        <div class="dot"></div>
           <div class="menu-inner-list-item__icon">
             <fa-icon [icon]="item.icon"></fa-icon>
           </div>
