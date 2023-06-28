@@ -5,11 +5,15 @@ import {
   faCalendarDays,
   faGear,
   faArrowRightFromBracket,
-  faListCheck
+  faListCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { menuItem } from '../models/menuItem.model';
 import { AuthService } from '../services/auth.service';
-import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
+import {
+  ConfirmEventType,
+  ConfirmationService,
+  MessageService,
+} from 'primeng/api';
 import { Router } from '@angular/router';
 
 @Component({
@@ -65,7 +69,10 @@ export class MenuComponent {
       message: 'Are you sure that you want to log out?',
       accept: () => {
         this.authService.logOut().subscribe((data: any) => {
-          this.router.navigate(['auth/login']);
+          // this.router.navigate(['auth/login']);
+          this.router.navigate(['auth/login']).then(() => {
+            window.location.reload();
+          });
         });
       },
       reject: (type: ConfirmEventType) => {

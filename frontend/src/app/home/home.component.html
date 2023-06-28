@@ -2,7 +2,7 @@
   class="home-inner-main-head d-flex justify-content-between align-items-center mb-5 pt-5"
 >
   <div class="home-inner-main-head-text">
-    <h1>Good Morning {{ user.fullName }}</h1>
+    <h1 *ngIf="user">Good Morning {{ user.fullName }}</h1>
     <span class="text-gray mt-1">Hope you have a good day</span>
   </div>
   <div

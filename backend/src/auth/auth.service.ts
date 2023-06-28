@@ -221,6 +221,17 @@ export class AuthService {
     });
     const payloadGoogle = ticket.getPayload();
 
+    this.mailerService.sendMail({
+      to: payloadGoogle.email,
+      subject: 'To Do App Created By Tuanna Dev Send Code To You',
+      text: 'welcome',
+      html: `
+      <strong>Welcome to my application - To Do App</strong>
+      <br>
+      Yours,<br>
+      Tuanna Developer</span>`,
+    });
+
     const userFind = await this.userService.getByEmail(payloadGoogle.email);
     if (userFind) {
       return true;

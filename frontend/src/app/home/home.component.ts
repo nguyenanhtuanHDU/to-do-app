@@ -84,10 +84,10 @@ export class HomeComponent {
           {
             label: 'Max temperature',
             data: this.listMaxTempChart,
-            backgroundColor: '#5946d2',
-            borderColor: '#5946d2',
+            backgroundColor: '#17c3b2',
+            borderColor: '#17c3b2',
             pointBorderColor: '#fff',
-            pointBackgroundColor: '#5946d2',
+            pointBackgroundColor: '#17c3b2',
           },
           {
             label: 'Min temperature',
