@@ -15,6 +15,10 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 import { Chart } from 'chart.js';
+import { CookieService } from 'ngx-cookie-service';
+import { UserService } from '../services/user.service';
+import { User } from '../models/user.model';
+import { AuthService } from "../services/auth.service";
 
 @Component({
   selector: 'app-home',
@@ -28,12 +32,24 @@ export class HomeComponent {
     private readonly titleSesrvice: Title,
     private readonly confirmationService: ConfirmationService,
     private readonly messageService: MessageService,
-    private readonly weatherService: WeatherService
+    private readonly weatherService: WeatherService,
+    private readonly cookieService: CookieService,
+    private readonly userService: UserService,
+    private readonly authService: AuthService
   ) {
     this.titleSesrvice.setTitle('To Do App | Home');
   }
 
   ngOnInit(): void {
+    console.log('cookie', this.cookieService.getAll());
+    console.log('auth: ', this.authService.getToken());
+
+    this.userAvatar = this.cookieService.get('userAvatar');
+    this.userService.getUserSession().subscribe((data) => {
+      console.log(`🚀 ~ data:`, data);
+      this.user = data;
+    });
+
     if (this.weatherService.getIsAgreeLocation() === '') {
       this.weatherService.setIsAgreeLocation(false);
     }
@@ -48,6 +64,9 @@ export class HomeComponent {
       this.getLocation();
     }
   }
+
+  user!: User;
+  userAvatar: string = '';
 
   swipePrev() {
     this.swiper.swiperRef.slidePrev();
@@ -98,47 +117,6 @@ export class HomeComponent {
   listDaysChart: string[] = [];
   listMaxTempChart: string[] = [];
   listMinTempChart: string[] = [];
-  menuItems: MenuItem[] = [
-    {
-      icon: 'pi pi-pencil',
-      command: () => {
-        this.messageService.add({
-          severity: 'info',
-          summary: 'Add',
-          detail: 'Data Added',
-        });
-      },
-    },
-    {
-      icon: 'pi pi-refresh',
-      command: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Update',
-          detail: 'Data Updated',
-        });
-      },
-    },
-    {
-      icon: 'pi pi-trash',
-      command: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Delete',
-          detail: 'Data Deleted',
-        });
-      },
-    },
-    {
-      icon: 'pi pi-upload',
-      routerLink: ['/fileupload'],
-    },
-    {
-      icon: 'pi pi-external-link',
-      target: '_blank',
-      url: 'http://angular.io',
-    },
-  ];
 
   confirmGetLocation() {
     this.confirmationService.confirm({

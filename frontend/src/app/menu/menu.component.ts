@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import {
   faHome,
-  faChartSimple,
   faFolderOpen,
   faCalendarDays,
   faGear,
   faArrowRightFromBracket,
+  faListCheck
 } from '@fortawesome/free-solid-svg-icons';
 import { menuItem } from '../models/menuItem.model';
 import { AuthService } from '../services/auth.service';
@@ -32,9 +32,9 @@ export class MenuComponent {
       routerLink: '',
     },
     {
-      label: 'Stats',
-      icon: faChartSimple,
-      routerLink: 'stat',
+      label: 'Tasks',
+      icon: faListCheck,
+      routerLink: 'tasks',
     },
     {
       label: 'Projects',

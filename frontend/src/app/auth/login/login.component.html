@@ -19,7 +19,7 @@
         id="username"
         formControlName="username"
       />
-      <label htmlFor="username">Username Or Email</label>
+      <label htmlFor="username">Username</label>
       <input id="username" class="d-none" />
     </span>
   </form>
@@ -37,29 +37,51 @@
     </span>
   </form>
 
-  <a href="" class="ms-auto mb-3">Forgot password ?</a>
   <button
     pButton
     pRipple
     label="Login Now"
-    class="btn btn-primary login-right-form-submit"
+    class="btn btn-primary login-right-form-submit mt-4"
     [loading]="loading"
     type="button"
     (click)="handleLogin()"
   ></button>
 
-  <button
+  <div class="d-flex flex-column">
+    <span class="mb-2">Or login with</span>
+    <div
+      id="g_id_onload"
+      data-client_id="57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com"
+      data-context="signin"
+      data-ux_mode="popup"
+      data-login_uri="http://localhost:8000/v1/api/auth/login-google"
+      data-itp_support="true"
+    ></div>
+    <div
+      class="g_id_signin mx-auto"
+      data-type="icon"
+      data-shape="circle"
+      data-theme="outline"
+      data-text="signup_with"
+      data-size="large"
+    ></div>
+  </div>
+  <div class="d-flex gap-2 mx-auto">
+    <span>Don't have account ?</span>
+    <!-- <a routerLink="/auth/sign-up">Create now</a> -->
+    <a href="/auth/sign-up">Create now</a>
+  </div>
+  <!-- <button
     routerLink="/auth/sign-up"
     pButton
     pRipple
     label="Or Sign Up"
     class="p-button"
     type="button"
-  ></button>
+  ></button> -->
 </form>
 <p-toast
   [breakpoints]="{
     '920px': { width: '80%', left: '50%', transform: 'translateX(-50%)' }
   }"
 ></p-toast>
-

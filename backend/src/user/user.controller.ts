@@ -14,7 +14,7 @@ import {
 import { Response } from 'express';
 import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { UserService } from './user.service';
-import { AuthGuard } from "src/auth/auth.guard";
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -31,6 +31,12 @@ export class UserController {
   async getByID(@Param('id') id: string, @Res() res: Response) {
     const user = await this.userService.getByID(id);
     if (!user) throw new NotFoundException('User not found');
+    res.status(HttpStatus.OK).json(user);
+  }
+
+  @Get('user/session')
+  async getUserSession(@Res() res: Response) {
+    const user = await this.userService.getUserSession();
     res.status(HttpStatus.OK).json(user);
   }
 

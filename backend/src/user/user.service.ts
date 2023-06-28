@@ -1,20 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   CreateUserDTO,
   CreateUserWithEmailDTO,
   LoginUserDTO,
   UpdateUserDTO,
   UserDTO,
+  UserSecureDTO,
 } from './user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.schema';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   async getAll() {
     return await this.userModel.find();
@@ -47,6 +57,13 @@ export class UserService {
     return plainToClass(UserDTO, user, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async getUserSession(): Promise<UserSecureDTO> {
+    // const user = await this.cacheService.getUserSession();
+    const user = await this.cacheManager.get('userSession');
+    if (!user) throw new NotFoundException('User not found');
+    return user;
   }
 
   async create(userInfo: CreateUserDTO): Promise<CreateUserDTO> {

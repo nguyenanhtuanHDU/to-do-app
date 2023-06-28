@@ -1,6 +1,6 @@
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { UserModule } from 'src/user/user.module';
 import { RegisterEmail, RegisterEmailSchema } from './registerEmail.schema';
 import { MongooseModule } from '@nestjs/mongoose';

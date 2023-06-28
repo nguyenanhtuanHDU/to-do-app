@@ -4,6 +4,11 @@ export interface UserLogin {
   password: string;
 }
 
-export interface UserCreate extends UserLogin{
-  gender: string
+export interface UserCreate extends UserLogin {
+  gender: string;
+}
+
+export interface User extends Omit<UserLogin, 'password'> {
+  fullName: string;
+  admin: boolean;
 }

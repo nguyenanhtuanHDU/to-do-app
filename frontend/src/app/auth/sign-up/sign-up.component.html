@@ -77,95 +77,46 @@
     class="btn btn-primary login-right-form-submit"
     [loading]="loading"
     type="button"
-    (click)="handleSignUp()"
   ></button>
+  <span class="mx-auto">Or sign up with</span>
+  <!-- <div
+    id="g_id_onload"
+    data-client_id="57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com"
+    data-context="signup"
+    data-ux_mode="popup"
+    data-login_uri="http://localhost:8000/v1/api/auth/sign-up-google"
+    data-auto_select="true"
+    data-itp_support="true"
+  ></div>
 
-  <span class="text-primary fw-5">Or Sign Up With Email</span>
   <div
-    class="login-right-form-gmail br-round p-2"
-    (click)="openDialogSignUpEmail()"
-  >
-    <img src="../../../assets/images/icons/gnmail.png" alt="" />
-  </div>
-  <p-dialog
-    header="Header"
-    [(visible)]="visibleEmail"
-    [style]="{ width: '50vw' }"
-    [modal]="true"
-    [breakpoints]="{ '960px': '95vw' }"
-    class="login-right-form-dialog mb-4"
-  >
-    <ng-template pTemplate="header" class="d-block">
-      <strong class="text-capitalize">sign up with email</strong>
-    </ng-template>
-    <div class="body mt-2">
-      <p-steps
-        class="mt-2"
-        [model]="items"
-        [readonly]="false"
-        [activeIndex]="stepIndex"
-      ></p-steps>
-      <div *ngIf="stepIndex === 0">
-        <span class="p-float-label mt-5 mb-3">
-          <input
-            pAutoFocus
-            [autofocus]="isFocusStepEmail"
-            formControlName="email"
-            pInputText
-            id="email"
-          />
-          <label htmlFor="email">Your email</label>
-        </span>
-        <p-button
-          icon="pi pi-check"
-          (click)="verifyEmail()"
-          label="Password"
-        ></p-button>
-      </div>
-      <div *ngIf="stepIndex === 1">
-        <span class="p-float-label mt-5 mb-3">
-          <input
-            pAutoFocus
-            [autofocus]="isFocusStepCode"
-            formControlName="code"
-            pInputText
-            id="code"
-          />
-          <label htmlFor="code">Your verify code</label>
-        </span>
-        <p-button
-          icon="pi pi-check"
-          (click)="verifyCode()"
-          label="Verify code"
-        ></p-button>
-      </div>
-      <div *ngIf="stepIndex === 2">
-        <span class="p-float-label mt-5 mb-3">
-          <input
-            pAutoFocus
-            formControlName="password_email"
-            pInputText
-            [autofocus]="isFocusStepPassword"
-            id="password_email"
-          />
-          <label htmlFor="password_email">Your password</label>
-        </span>
-        <p-button
-          icon="pi pi-check"
-          (click)="signUpWithEmail()"
-          label="Password"
-        ></p-button>
-      </div>
-    </div>
+    class="g_id_signup"
+    data-type="icon"
+    data-shape="circle"
+    data-theme="outline"
+    data-text="signup_with"
+    data-size="large"
+  ></div> -->
 
-    <ng-template pTemplate="footer">
-      <p-progressBar
-        mode="indeterminate"
-        [style]="{ height: '6px' }"
-        *ngIf="isShowProgressBar"
-      ></p-progressBar>
-    </ng-template>
-  </p-dialog>
+  <div
+    id="g_id_onload"
+    data-client_id="57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com"
+    data-context="signup"
+    data-ux_mode="popup"
+    data-login_uri="http://localhost:8000/v1/api/auth/sign-up-google"
+    data-nonce=""
+    data-auto_select="true"
+    data-itp_support="true"
+  ></div>
+
+  <div
+    class="g_id_signin mx-auto"
+    data-type="icon"
+    data-shape="circle"
+    data-theme="outline"
+    data-text="signup_with"
+    data-size="large"
+  ></div>
 </form>
 <p-toast
   [breakpoints]="{

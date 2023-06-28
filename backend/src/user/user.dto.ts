@@ -11,6 +11,9 @@ export class UserDTO {
   username: string;
 
   @Expose()
+  fullName: string;
+
+  @Expose()
   @IsEmail()
   email: string;
 
@@ -18,10 +21,6 @@ export class UserDTO {
   @Expose()
   @Length(6)
   password: string;
-
-  @Expose()
-  @IsIn(['Male', 'Female'])
-  gender: string;
 
   @Expose()
   @IsBooleanString()
@@ -36,11 +35,8 @@ export class CreateUserDTO extends OmitType(UserDTO, [
 
 export class CreateUserWithEmailDTO extends PickType(UserDTO, [
   'email',
-] as const) {
-  @Expose()
-  @Length(6)
-  password: string;
-}
+  'fullName',
+] as const) {}
 
 export class UpdateUserDTO extends CreateUserDTO {}
 
@@ -51,3 +47,5 @@ export class LoginUserDTO extends PartialType(
   @Length(6)
   password: string;
 }
+
+export class UserSecureDTO extends OmitType(UserDTO, ['password'] as const) {}

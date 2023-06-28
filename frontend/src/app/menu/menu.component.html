@@ -18,8 +18,9 @@
           *ngFor="let item of menuItemsTop"
           routerLink="{{ item.routerLink }}"
           routerLinkActive="menu-inner-list-item__active"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <div class="dot"></div>
+          <div class="dot"></div>
           <div class="menu-inner-list-item__icon">
             <fa-icon [icon]="item.icon"></fa-icon>
           </div>

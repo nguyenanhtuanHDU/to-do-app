@@ -51,9 +51,7 @@ export class AuthController {
 
   @Get('logout')
   async logOut(@Res() res: Response, @Req() req: Request) {
-    console.log('logout', req.cookies);
-    const userID = req.cookies['userID'];
-    await this.authService.logOut(userID);
+    await this.authService.logOut();
     res.status(HttpStatus.OK).json({
       message: 'Log out successfully',
     });
@@ -66,8 +64,6 @@ export class AuthController {
     @Req() req: Request,
   ) {
     const authTokens = await this.authService.login(loginUserDTO);
-    console.log(`🚀 ~ authTokens.refreshToken:`, authTokens.refreshToken);
-
     res.cookie(process.env.REFRESH_TOKEN, authTokens.refreshToken, {
       sameSite: 'strict',
       path: '/',
@@ -90,6 +86,20 @@ export class AuthController {
     });
   }
 
+  @Post('login-google')
+  async loginGoogle(@Req() req: Request, @Res() res: Response) {
+    const authTokens = await this.authService.loginGoogle(req.body.credential);
+    res.cookie(process.env.REFRESH_TOKEN, authTokens.refreshToken, {
+      sameSite: 'strict',
+      path: '/',
+      secure: true,
+      httpOnly: true,
+    });
+    res.cookie('token', authTokens.accessToken);
+    res.cookie('userAvatar', authTokens.userAvatar);
+    res.redirect(process.env.FRONTEND_URL);
+  }
+
   @Post('sign-up')
   async signUp(@Body() createUserDTO: CreateUserDTO, @Res() res: Response) {
     console.log(`🚀 ~ createUserDTO:`, createUserDTO);
@@ -100,18 +110,10 @@ export class AuthController {
     });
   }
 
-  @Post('sign-up/email')
-  async signUpWithEmail(
-    @Body() userInfo: CreateUserWithEmailDTO,
-    @Res() res: Response,
-  ) {
-    const user = await this.authService.signUpWithEmail(userInfo);
-    if (!user) {
-      throw new BadRequestException();
-    }
-    res.status(HttpStatus.OK).json({
-      message: 'Sign Up successfully',
-    });
+  @Post('sign-up-google')
+  async signUpGoogle(@Req() req: Request, @Res() res: Response) {
+    await this.authService.signUpGoogle(req.body.credential);
+    res.redirect(process.env.FRONTEND_URL + 'auth/login');
   }
 
   @Post('sign-up/verify-code')

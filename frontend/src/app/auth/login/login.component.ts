@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -23,13 +24,16 @@ export class LoginComponent {
     private readonly messageService: MessageService,
     private readonly cookieService: CookieService,
     private readonly router: Router,
-    private readonly titleSesrvice: Title
+    private readonly titleSesrvice: Title,
+    private readonly http: HttpClient
   ) {
     this.titleSesrvice.setTitle('To Do App | Login');
   }
 
   ngOnInit(): void {
-    console.log('cookie', this.cookieService.getAll());
+    this.token = this.authService.getToken();
+    console.log(`🚀 ~ this.token:`, !this.token);
+
     if (
       !this.cookieService.get('todo_new_email') &&
       !this.cookieService.get('todo_new_username')
@@ -52,8 +56,8 @@ export class LoginComponent {
   });
   isAutoFocusUsername: boolean = false;
   isAutoFocusPassword: boolean = false;
-
   loading: boolean = false;
+  token!: string;
 
   handleLogin() {
     const username = this.loginForm.value.username!;
@@ -98,6 +102,19 @@ export class LoginComponent {
               summary: msg,
             });
           });
+        }
+      );
+  }
+
+  loginWithGoogle() {
+    this.http
+      .post<any>('http://localhost:8000/v1/api/auth/login-google', {})
+      .subscribe(
+        (response) => {
+          console.log('Đăng nhập Google thành công!', response);
+        },
+        (error) => {
+          console.error('Lỗi khi đăng nhập Google:', error);
         }
       );
   }

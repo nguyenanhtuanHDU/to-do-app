@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   logOut() {
-    this.cookieService.set('token', '');
+    this.cookieService.deleteAll();
     return this.http.get(this.apiAuth + 'logout', {
       withCredentials: true,
     });
@@ -60,25 +60,5 @@ export class AuthService {
 
   signUp(user: UserCreate) {
     return this.http.post(this.apiAuth + 'sign-up', user);
-  }
-
-  verifyEmail(email: string) {
-    this.cookieService.set('todo_new_email', email);
-    return this.http.post(this.apiAuth + 'sign-up/verify-email', { email });
-  }
-
-  verifyCode(code: string) {
-    return this.http.post(this.apiAuth + 'sign-up/verify-code', {
-      code,
-      email: this.cookieService.get('todo_new_email'),
-    });
-  }
-
-  signUpWithEmail(password: string) {
-    return this.http.post(this.apiAuth + 'sign-up/email', {
-      email: this.cookieService.get('todo_new_email'),
-      password,
-      abc: 'abc',
-    });
   }
 }

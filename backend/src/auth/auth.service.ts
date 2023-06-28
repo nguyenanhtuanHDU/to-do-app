@@ -1,7 +1,9 @@
 import {
   BadRequestException,
+  CACHE_MANAGER,
   ConflictException,
   HttpException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -10,6 +12,8 @@ import {
   CreateUserDTO,
   CreateUserWithEmailDTO,
   LoginUserDTO,
+  UserDTO,
+  UserSecureDTO,
 } from 'src/user/user.dto';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
@@ -20,6 +24,8 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshToken } from './refreshToken.schema';
+import { OAuth2Client } from 'google-auth-library';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +34,7 @@ export class AuthService {
     private registerEmailModel: Model<RegisterEmail>,
     @InjectModel(RefreshToken.name)
     private refreshTokenlModel: Model<RefreshToken>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly userService: UserService,
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
@@ -36,7 +43,6 @@ export class AuthService {
   generateRandomNumber() {
     const randomNumber = Math.floor(Math.random() * 10000);
     const paddedNumber = randomNumber.toString().padStart(4, '0');
-    console.log(`🚀 ~ paddedNumber:`, paddedNumber);
     return paddedNumber;
   }
 
@@ -66,8 +72,6 @@ export class AuthService {
 
     try {
       const payload = await this.jwtService.verifyAsync(refreshToken);
-      console.log(`🚀 ~ payload:`, payload);
-
       if (payload) {
         const refreshTokenFind = await this.refreshTokenlModel.findOne({
           userID: payload.id,
@@ -99,7 +103,6 @@ export class AuthService {
         return { newAccessToken, newRefreshToken };
       }
     } catch (error) {
-      console.log(`🚀 ~ error 1:`, error);
       throw new UnauthorizedException('Token has expired');
     }
   }
@@ -148,15 +151,55 @@ export class AuthService {
     return { accessToken, refreshToken, userID: payload.id };
   }
 
-  async logOut(userID: string) {
+  async loginGoogle(accessTokenGoogle: string) {
+    const client = new OAuth2Client(
+      '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
+    );
+    const ticket = await client.verifyIdToken({
+      idToken: accessTokenGoogle,
+      audience:
+        '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
+    });
+    const payloadGoogle = ticket.getPayload();
+
+    const user = await this.userService.getByEmail(payloadGoogle.email);
+    if (!user) {
+      throw new NotFoundException('Email not found');
+    }
+    // this.cacheService.setUserSession(user);
+    await this.cacheManager.set(
+      'userSession',
+      plainToClass(UserSecureDTO, user),
+      Number.MAX_SAFE_INTEGER,
+    );
+    const payload = {
+      id: user._id,
+      admin: user.admin,
+    };
+
+    const accessToken = await this.generateAccessToken(payload);
+    const refreshToken = await this.generateRefreshToken(payload);
+
+    this.refreshTokenlModel.create({
+      userID: user._id,
+      refreshToken: await bcrypt.hash(refreshToken, 12),
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+      userAvatar: payloadGoogle.picture,
+    };
+  }
+
+  async logOut() {
+    const user = await this.cacheManager.get('userSession');
     await this.refreshTokenlModel.findOneAndDelete({
-      userID,
+      userID: user._id,
     });
   }
 
   async signUp(createUserDTO: CreateUserDTO): Promise<boolean> {
-    console.log(`🚀 ~ createUserDTO 1:`, createUserDTO);
-
     const userFind = await this.userService.getByUsername(
       createUserDTO.username,
     );
@@ -166,27 +209,37 @@ export class AuthService {
     return true;
   }
 
-  async signUpWithEmail(userInfo: CreateUserWithEmailDTO) {
-    userInfo.password = await bcrypt.hash(userInfo.password, 10);
-
-    const user = await this.userService.createWithEmail(
-      plainToClass(CreateUserWithEmailDTO, userInfo, {
-        excludeExtraneousValues: true,
-      }),
+  async signUpGoogle(accessTokenGoogle: string): Promise<boolean> {
+    const client = new OAuth2Client(
+      '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
     );
 
-    return user;
+    const ticket = await client.verifyIdToken({
+      idToken: accessTokenGoogle,
+      audience:
+        '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
+    });
+    const payloadGoogle = ticket.getPayload();
+
+    const userFind = await this.userService.getByEmail(payloadGoogle.email);
+    if (userFind) {
+      return true;
+    }
+    const user = await this.userService.createWithEmail({
+      fullName: payloadGoogle.name,
+      email: payloadGoogle.email,
+    });
+    if (!user) throw new BadRequestException();
+    return true;
   }
 
   async verifyCode(data: any) {
-    console.log(`🚀 ~ data:`, data);
     const registerEmail = await this.registerEmailModel
       .findOne({ email: data.email })
       .sort({ createdAt: -1 });
     if (!registerEmail) {
       return false;
     }
-    console.log(`🚀 ~ registerEmail:`, registerEmail);
     if (registerEmail.codeConfirm === data.code.toString()) {
       return true;
     } else {
@@ -217,6 +270,5 @@ export class AuthService {
       email,
       codeConfirm: codeConfirm,
     });
-    console.log(`🚀 ~ code:`, code);
   }
 }

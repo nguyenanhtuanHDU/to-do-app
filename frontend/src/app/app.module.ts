@@ -27,12 +27,13 @@ import { HomeComponent } from './home/home.component';
 import { MenuComponent } from './menu/menu.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SidebarModule } from 'primeng/sidebar';
-import { ConfirmationService, MessageService } from "primeng/api";
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TitleComponent } from './title/title.component';
 import { SwiperModule } from 'swiper/angular';
 import { NgChartsModule } from 'ng2-charts';
 import { SpeedDialModule } from 'primeng/speeddial';
+import { TasksComponent } from './tasks/tasks.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { SpeedDialModule } from 'primeng/speeddial';
     HomeComponent,
     MenuComponent,
     TitleComponent,
+    TasksComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +71,7 @@ import { SpeedDialModule } from 'primeng/speeddial';
     ConfirmDialogModule,
     SwiperModule,
     NgChartsModule,
-    SpeedDialModule
+    SpeedDialModule,
   ],
   providers: [
     CookieService,
@@ -79,7 +81,7 @@ import { SpeedDialModule } from 'primeng/speeddial';
       multi: true,
     },
     MessageService,
-    ConfirmationService
+    ConfirmationService,
   ],
   bootstrap: [AppComponent],
 })

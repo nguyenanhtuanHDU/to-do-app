@@ -2,7 +2,7 @@
   position: relative;
 
   &-inner {
-    &-logo{
+    &-logo {
       background: rgba(255, 255, 255, 0.2);
       border-radius: 16px;
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -13,7 +13,8 @@
     &-list {
       &-item {
         cursor: pointer;
-
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
         & * {
           user-select: none;
         }
@@ -25,11 +26,9 @@
           position: relative;
           color: var(--bs-primary) !important;
           background-color: var(--bs-white);
-          border-top-left-radius: 12px;
-          border-bottom-left-radius: 12px;
           list-style: none;
           z-index: 1;
-          .dot{
+          .dot {
             content: "";
             position: absolute;
             right: 0;

@@ -1,0 +1,20 @@
+.task {
+  height: 100vh;
+  overflow: hidden;
+  &-head {
+  }
+  &-body {
+  }
+  &-footer {
+    bottom: 20px;
+    left: 0;
+    &-btn {
+      &__icon {
+        padding: 8;
+        border-radius: 50px;
+        background-color: white;
+        color: var(--bs-primary);
+      }
+    }
+  }
+}

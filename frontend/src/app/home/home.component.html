@@ -1,143 +1,90 @@
-<div class="container-fluid">
-  <div class="home">
-    <div class="row home-inner h-100">
+<div
+  class="home-inner-main-head d-flex justify-content-between align-items-center mb-5 pt-5"
+>
+  <div class="home-inner-main-head-text">
+    <h1>Good Morning {{ user.fullName }}</h1>
+    <span class="text-gray mt-1">Hope you have a good day</span>
+  </div>
+  <div
+    class="home-inner-main-head-user d-flex gap-3 align-items-center d-none d-lg-flex"
+  >
+    <div
+      *ngIf="user"
+      class="home-inner-main-head-user-info d-flex flex-column gap-1"
+    >
+      <strong class="ms-auto">{{ user.fullName }}</strong>
+      <span class="text-gray">{{ user.email }}</span>
+    </div>
+    <img width="45" [src]="userAvatar" alt="" class="br-round" />
+  </div>
+</div>
+
+<div class="home-inner-main-weather row mt-5">
+  <div class="col-lg-7 pe-lg-5 mb-5 mb-lg-0">
+    <h2 class="fw-6 ms-3 ms-lg-0">Weather in 7 days</h2>
+    <div class="home-inner-main-weather-chart br-20 w-100 p-2 mt-3 bg-white">
+      <div class="chart-container">
+        <canvas id="MyChart">{{ chart }}</canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5 ps-lg-4 ps-lg-2 mt-4 mt-lg-0">
+    <h2 class="fw-6 ms-3 ms-lg-0 mb-3">Today</h2>
+    <div class="home-inner-main-weather-cards d-flex flex-column gap-3">
       <div
-        class="home-inner-bars d-flex justify-content-between align-items-center d-lg-none pt-lg-0 pt-2"
-        (click)="sidebarVisible = true"
+        class="home-inner-main-weather-cards-card bg-primary br-12 position-relative"
+        *ngIf="weather"
       >
-        <p-speedDial
-          [model]="menuItems"
-          direction="down"
-          showIcon="pi pi-bars"
-          hideIcon="pi pi-times"
-        ></p-speedDial>
-        <div
-          class="home-inner-main-head-user d-flex gap-3 align-items-center pt-5"
+        <swiper
+          [loop]="true"
+          [autoHeight]="false"
+          [allowTouchMove]="true"
+          [autoplay]="{ delay: 3000, disableOnInteraction: false }"
+          [slidesPerView]="3"
+          [spaceBetween]="20"
+          [autoHeight]="true"
+          class="p-3"
         >
-          <!-- <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
-            <fa-icon [icon]="faBell"></fa-icon> -->
-          <div class="home-inner-main-head-user-info d-flex flex-column gap-1">
-            <strong>Nguyen Anh Tuan</strong>
-            <span class="text-gray">demo@gmail.com</span>
-          </div>
-          <img
-            width="45"
-            src="../../assets/images/avatars/tuan.jpg"
-            alt=""
-            class="br-round"
-          />
-        </div>
-      </div>
-      <div class="d-lg-none d-block">
-        <!-- <p-sidebar [(visible)]="sidebarVisible" styleClass="bg-light">
-          <app-menu></app-menu>
-        </p-sidebar> -->
-      </div>
-      <div class="home-inner-menu d-none d-lg-block col-lg-2 px-0">
-        <app-menu></app-menu>
-      </div>
-      <div class="col-12 col-lg-10 home-inner-main px-lg-5 px-3">
-        <div
-          class="home-inner-main-head d-flex justify-content-between align-items-center mb-5"
-        >
-          <div class="home-inner-main-head-text">
-            <h1>Good Morning Anima</h1>
-            <span class="text-gray mt-1">Hope you have a good day</span>
-          </div>
-          <div
-            class="home-inner-main-head-user d-flex gap-3 align-items-center d-none d-lg-flex"
           >
-            <!-- <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
-            <fa-icon [icon]="faBell"></fa-icon> -->
+          <ng-template
+            swiperSlide
+            *ngFor="
+              let hour of weather.forecast.forecastday[0].hour;
+              odd as odd;
+              even as even
+            "
+          >
             <div
-              class="home-inner-main-head-user-info d-flex flex-column gap-1"
+              class="home-inner-main-weather-cards-card-item p-2 br-12 d-flex gap-2 flex-column text-center text-white"
             >
-              <strong>Nguyen Anh Tuan</strong>
-              <span class="text-gray">demo@gmail.com</span>
-            </div>
-            <img
-              width="45"
-              src="../../assets/images/avatars/tuan.jpg"
-              alt=""
-              class="br-round"
-            />
-          </div>
-        </div>
-
-        <!-- <app-title>Overview</app-title> -->
-        <div class="home-inner-main-weather row mt-5">
-          <div class="col-lg-7 pe-lg-5 mb-5 mb-lg-0">
-            <h2 class="fw-6 ms-3 ms-lg-0">Weather in 7 days</h2>
-            <div class="home-inner-main-weather-chart br-20 w-100 p-2 mt-3 bg-white">
-              <div class="chart-container">
-                <canvas id="MyChart">{{ chart }}</canvas>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-5 ps-lg-4 ps-lg-2 mt-4 mt-lg-0">
-            <h2 class="fw-6 ms-3 ms-lg-0 mb-3">Today</h2>
-            <div class="home-inner-main-weather-cards d-flex flex-column gap-3">
-              <div
-                class="home-inner-main-weather-cards-card bg-primary br-12 position-relative"
-                *ngIf="weather"
+              <span
+                class="home-inner-main-weather-cards-card-item__time fw-6"
+                >{{ hour.time | date : "shortTime" }}</span
               >
-                <swiper
-                  [loop]="true"
-                  [autoHeight]="false"
-                  [allowTouchMove]="true"
-                  [autoplay]="{ delay: 3000, disableOnInteraction: false }"
-                  [slidesPerView]="3"
-                  [spaceBetween]="20"
-                  [autoHeight]="true"
-                  class="p-3"
-                >
-                  >
-                  <ng-template
-                    swiperSlide
-                    *ngFor="
-                      let hour of weather.forecast.forecastday[0].hour;
-                      odd as odd;
-                      even as even
-                    "
-                  >
-                    <div
-                      class="home-inner-main-weather-cards-card-item p-2 br-12 d-flex gap-2 flex-column text-center text-white"
-                    >
-                      <span
-                        class="home-inner-main-weather-cards-card-item__time fw-6"
-                        >{{ hour.time | date : "shortTime" }}</span
-                      >
-                      <div
-                        class="home-inner-main-weather-cards-card-item__img my-3"
-                      >
-                        <img [src]="hour.condition.icon" alt="" />
-                      </div>
-                      <span
-                        class="home-inner-main-weather-cards-card-item__tempc fw-7"
-                        >{{ hour.temp_c }} °C</span
-                      >
-                    </div>
-                  </ng-template>
-                </swiper>
-
-                <button
-                  class="btn flex-center bg-white home-inner-main-weather-cards-card__btn home-inner-main-weather-cards-card__btn-left"
-                  (click)="swipePrev()"
-                >
-                  <fa-icon [icon]="faAngleLeft"></fa-icon>
-                </button>
-                <button
-                  class="btn flex-center bg-white home-inner-main-weather-cards-card__btn home-inner-main-weather-cards-card__btn-right"
-                  (click)="swipeNext()"
-                >
-                  <fa-icon [icon]="faAngleRight"></fa-icon>
-                </button>
+              <div class="home-inner-main-weather-cards-card-item__img my-3">
+                <img [src]="hour.condition.icon" alt="" />
               </div>
-              <div class="home-inner-main-weather-cards-card"></div>
+              <span class="home-inner-main-weather-cards-card-item__tempc fw-7"
+                >{{ hour.temp_c }} °C</span
+              >
             </div>
-          </div>
-        </div>
+          </ng-template>
+        </swiper>
+
+        <button
+          class="btn flex-center bg-white home-inner-main-weather-cards-card__btn home-inner-main-weather-cards-card__btn-left"
+          (click)="swipePrev()"
+        >
+          <fa-icon [icon]="faAngleLeft"></fa-icon>
+        </button>
+        <button
+          class="btn flex-center bg-white home-inner-main-weather-cards-card__btn home-inner-main-weather-cards-card__btn-right"
+          (click)="swipeNext()"
+        >
+          <fa-icon [icon]="faAngleRight"></fa-icon>
+        </button>
       </div>
+      <div class="home-inner-main-weather-cards-card"></div>
     </div>
   </div>
 </div>
