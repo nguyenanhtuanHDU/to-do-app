@@ -113,7 +113,7 @@ export class AuthController {
   @Post('sign-up-google')
   async signUpGoogle(@Req() req: Request, @Res() res: Response) {
     await this.authService.signUpGoogle(req.body.credential);
-    res.redirect(process.env.FRONTEND_URL + 'auth/login');
+    res.redirect(process.env.FRONTEND_URL + '/auth/login');
   }
 
   @Post('sign-up/verify-code')

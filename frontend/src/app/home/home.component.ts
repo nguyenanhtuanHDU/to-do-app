@@ -18,7 +18,9 @@ import { Chart } from 'chart.js';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
-import { AuthService } from "../services/auth.service";
+import { AuthService } from '../services/auth.service';
+import Swiper, { Autoplay, EffectFade, SwiperOptions } from 'swiper';
+Swiper.use([Autoplay, EffectFade]);
 
 @Component({
   selector: 'app-home',
@@ -44,7 +46,6 @@ export class HomeComponent {
     console.log('cookie', this.cookieService.getAll());
     console.log('auth: ', this.authService.getToken());
 
-    this.userAvatar = this.cookieService.get('userAvatar');
     this.userService.getUserSession().subscribe((data) => {
       console.log(`🚀 ~ data:`, data);
       this.user = data;
@@ -64,9 +65,6 @@ export class HomeComponent {
       this.getLocation();
     }
   }
-
-  user!: User;
-  userAvatar: string = '';
 
   swipePrev() {
     this.swiper.swiperRef.slidePrev();
@@ -103,20 +101,35 @@ export class HomeComponent {
         maintainAspectRatio: false, // Loại bỏ tỷ lệ khung cố định
       },
     });
+    this.isChart = true
   }
 
-  public chart: any;
+  config: SwiperOptions = {
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    autoHeight: true,
+    allowTouchMove: true,
+    slidesPerView: 3,
+    spaceBetween: 20,
+  };
+
+  chart: any;
 
   faAngleLeft = faAngleLeft;
   faAngleRight = faAngleRight;
   faMagnifyingGlass = faMagnifyingGlass;
   faBell = faBell;
 
+  user!: User;
   sidebarVisible: boolean = false;
   weather: any;
   listDaysChart: string[] = [];
   listMaxTempChart: string[] = [];
   listMinTempChart: string[] = [];
+  isChart: boolean = false;
 
   confirmGetLocation() {
     this.confirmationService.confirm({

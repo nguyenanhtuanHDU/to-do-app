@@ -15,7 +15,13 @@
       <strong class="ms-auto">{{ user.fullName }}</strong>
       <span class="text-gray">{{ user.email }}</span>
     </div>
-    <img width="45" [src]="userAvatar" alt="" class="br-round" />
+    <img
+      *ngIf="user"
+      width="45"
+      [src]="user.avatar"
+      alt=""
+      class="home-inner-main-head-user-avatar br-round"
+    />
   </div>
 </div>
 
@@ -23,9 +29,13 @@
   <div class="col-lg-7 pe-lg-5 mb-5 mb-lg-0">
     <h2 class="fw-6 ms-3 ms-lg-0">Weather in 7 days</h2>
     <div class="home-inner-main-weather-chart br-20 w-100 p-2 mt-3 bg-white">
-      <div class="chart-container">
+      <div
+        class="chart-container"
+        [ngClass]="{ 'd-none': !isChart, 'd-block': isChart }"
+      >
         <canvas id="MyChart">{{ chart }}</canvas>
       </div>
+      <p-skeleton *ngIf="!isChart" width="100%" height="456px"></p-skeleton>
     </div>
   </div>
   <div class="col-lg-5 ps-lg-4 ps-lg-2 mt-4 mt-lg-0">
@@ -33,18 +43,8 @@
     <div class="home-inner-main-weather-cards d-flex flex-column gap-3">
       <div
         class="home-inner-main-weather-cards-card bg-primary br-12 position-relative"
-        *ngIf="weather"
       >
-        <swiper
-          [loop]="true"
-          [autoHeight]="false"
-          [allowTouchMove]="true"
-          [autoplay]="{ delay: 3000, disableOnInteraction: false }"
-          [slidesPerView]="3"
-          [spaceBetween]="20"
-          [autoHeight]="true"
-          class="p-3"
-        >
+        <swiper *ngIf="weather" [config]="config" class="p-3">
           >
           <ng-template
             swiperSlide
@@ -70,6 +70,7 @@
             </div>
           </ng-template>
         </swiper>
+        <p-skeleton *ngIf="!weather" width="100%" height="223px"></p-skeleton>
 
         <button
           class="btn flex-center bg-white home-inner-main-weather-cards-card__btn home-inner-main-weather-cards-card__btn-left"

@@ -1,13 +1,21 @@
 <form
   [formGroup]="loginForm"
-  class="login-right-form gap-3 br-12 p-3 text-center d-flex flex-column m-auto"
+  class="login-right-form gap-3 br-12 px-lg-3 px-0 pt-4 mt-5 text-center d-flex flex-column m-auto"
 >
-  <h2 class="text-uppercase fw-7 mb-5">to do app login</h2>
-  <div class="login-right-form-avatar mx-auto mb-3">
-    <img src="../../assets/images/avatars/avatar.svg" alt="" />
+  <div
+    class="login-right-form-avatar mx-auto mb-4 animate__animated animate__bounceInDown"
+  >
+    <!-- <img src="../../assets/images/avatars/avatar.svg" alt="" /> -->
+    <img src="../../../assets/images/logos/logo.svg" alt="" />
   </div>
+  <h2
+    class="text-uppercase fw-7 mt-lg-5 mt-2 text-primary animate__animated animate__slideInUp"
+  >
+    login
+  </h2>
+
   <form
-    class="login-right-form-item flex-center-x my-3"
+    class="login-right-form-item flex-center-x my-3 animate__animated animate__slideInUp"
     [formGroup]="loginForm"
   >
     <span class="p-float-label p-input-icon-right">
@@ -24,7 +32,10 @@
     </span>
   </form>
 
-  <form class="login-right-form-item flex-center-x" [formGroup]="loginForm">
+  <form
+    class="login-right-form-item flex-center-x animate__animated animate__slideInUp"
+    [formGroup]="loginForm"
+  >
     <span class="p-float-label">
       <p-password
         [feedback]="false"
@@ -41,13 +52,13 @@
     pButton
     pRipple
     label="Login Now"
-    class="btn btn-primary login-right-form-submit mt-4"
+    class="btn btn-primary login-right-form-submit mt-4 animate__animated animate__slideInUp"
     [loading]="loading"
     type="button"
     (click)="handleLogin()"
   ></button>
 
-  <div class="d-flex flex-column">
+  <div class="d-flex flex-column animate__animated animate__slideInUp">
     <span class="mb-2">Or login with</span>
     <div
       id="g_id_onload"
@@ -66,7 +77,7 @@
       data-size="large"
     ></div>
   </div>
-  <div class="d-flex gap-2 mx-auto">
+  <div class="d-flex gap-2 mx-auto animate__animated animate__slideInUp">
     <span>Don't have account ?</span>
     <!-- <a routerLink="/auth/sign-up">Create now</a> -->
     <a href="/auth/sign-up">Create now</a>

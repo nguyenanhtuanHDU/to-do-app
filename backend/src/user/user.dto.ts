@@ -48,4 +48,6 @@ export class LoginUserDTO extends PartialType(
   password: string;
 }
 
-export class UserSecureDTO extends OmitType(UserDTO, ['password'] as const) {}
+export class UserSecureDTO extends OmitType(UserDTO, ['password'] as const) {
+  avatar?: string;
+}

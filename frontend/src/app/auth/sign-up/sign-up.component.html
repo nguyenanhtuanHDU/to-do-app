@@ -1,13 +1,21 @@
 <form
   [formGroup]="signUpForm"
-  class="login-right-form gap-3 br-12 p-3 text-center d-flex flex-column m-auto"
+  class="login-right-form gap-3 br-12 py-5 mt-lg-0 mt-5 py-lg-0 px-lg-3 px-0 mt-5 text-center d-flex flex-column m-auto"
 >
-  <h2 class="text-uppercase fw-7 mb-2">to do app sign up</h2>
-  <div class="login-right-form-avatar mx-auto mb-3">
-    <img src="../../assets/images/avatars/avatar.svg" alt="" />
+  <div
+    class="login-right-form-avatar mx-auto mb-4 animate__animated animate__bounceInDown"
+  >
+    <!-- <img src="../../assets/images/avatars/avatar.svg" alt="" /> -->
+    <img src="../../../assets/images/logos/logo.svg" alt="" />
   </div>
+  <h2
+    class="text-uppercase fw-7 mt-2 text-primary animate__animated animate__slideInUp"
+  >
+    sign up
+  </h2>
+
   <form
-    class="login-right-form-item flex-center-x my-3"
+    class="login-right-form-item flex-center-x my-3 animate__animated animate__slideInUp"
     [formGroup]="signUpForm"
   >
     <span class="p-float-label p-input-icon-right">
@@ -23,29 +31,11 @@
       <input id="username" class="d-none" />
     </span>
   </form>
-  <div class="d-flex flex-wrap gap-3 mb-3">
-    <div class="d-flex align-items-center">
-      <p-radioButton
-        name="gender"
-        value="Male"
-        inputId="male"
-        formControlName="gender"
-      ></p-radioButton>
-      <label class="fw-5" for="male" class="ms-2">Male</label>
-    </div>
 
-    <div class="d-flex align-items-center">
-      <p-radioButton
-        name="gender"
-        value="Female"
-        inputId="female"
-        formControlName="gender"
-      ></p-radioButton>
-      <label for="female" class="ms-2">Female</label>
-    </div>
-  </div>
-
-  <form class="login-right-form-item flex-center-x" [formGroup]="signUpForm">
+  <form
+    class="login-right-form-item flex-center-x animate__animated animate__slideInUp"
+    [formGroup]="signUpForm"
+  >
     <span class="p-float-label">
       <p-password
         [feedback]="true"
@@ -57,7 +47,7 @@
   </form>
 
   <form
-    class="login-right-form-item flex-center-x mt-3"
+    class="login-right-form-item flex-center-x mt-3 animate__animated animate__slideInUp"
     [formGroup]="signUpForm"
   >
     <span class="p-float-label">
@@ -70,53 +60,45 @@
     </span>
   </form>
 
-  <button
+  <div class="animate__animated animate__slideInUp d-flex gap-2 flex-column">
+    <button
+      pButton
+      pRipple
+      label="Sign Up Now"
+      class="btn btn-primary login-right-form-submit"
+      [loading]="loading"
+      type="button"
+    ></button>
+    <span class="mx-auto">Or sign up with</span>
+    <div
+      id="g_id_onload"
+      data-client_id="57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com"
+      data-context="signup"
+      data-ux_mode="popup"
+      data-login_uri="http://localhost:8000/v1/api/auth/sign-up-google"
+      data-nonce=""
+      data-auto_select="true"
+      data-itp_support="true"
+    ></div>
+    <div
+      class="g_id_signin mx-auto"
+      data-type="icon"
+      data-shape="circle"
+      data-theme="outline"
+      data-text="signup_with"
+      data-size="large"
+    ></div>
+  </div>
+  <a
+    href="auth/login"
     pButton
     pRipple
-    label="Sign Up Now"
-    class="btn btn-primary login-right-form-submit"
-    [loading]="loading"
+    class="btn btn-primary login-right-form-back flex-center gap-2"
     type="button"
-  ></button>
-  <span class="mx-auto">Or sign up with</span>
-  <!-- <div
-    id="g_id_onload"
-    data-client_id="57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com"
-    data-context="signup"
-    data-ux_mode="popup"
-    data-login_uri="http://localhost:8000/v1/api/auth/sign-up-google"
-    data-auto_select="true"
-    data-itp_support="true"
-  ></div>
-
-  <div
-    class="g_id_signup"
-    data-type="icon"
-    data-shape="circle"
-    data-theme="outline"
-    data-text="signup_with"
-    data-size="large"
-  ></div> -->
-
-  <div
-    id="g_id_onload"
-    data-client_id="57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com"
-    data-context="signup"
-    data-ux_mode="popup"
-    data-login_uri="http://localhost:8000/v1/api/auth/sign-up-google"
-    data-nonce=""
-    data-auto_select="true"
-    data-itp_support="true"
-  ></div>
-
-  <div
-    class="g_id_signin mx-auto"
-    data-type="icon"
-    data-shape="circle"
-    data-theme="outline"
-    data-text="signup_with"
-    data-size="large"
-  ></div>
+  >
+    <i class="pi pi-angle-left br-round flex-center p-1"></i>
+    <span class="fw-7">Back to login</span>
+  </a>
 </form>
 <p-toast
   [breakpoints]="{

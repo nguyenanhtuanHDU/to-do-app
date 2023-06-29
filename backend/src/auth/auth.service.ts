@@ -162,14 +162,17 @@ export class AuthService {
     });
     const payloadGoogle = ticket.getPayload();
 
-    const user = await this.userService.getByEmail(payloadGoogle.email);
+    let user = await this.userService.getByEmail(payloadGoogle.email);
     if (!user) {
-      throw new NotFoundException('Email not found');
+      await this.signUpGoogle(accessTokenGoogle);
+      user = await this.userService.getByEmail(payloadGoogle.email);
     }
-    // this.cacheService.setUserSession(user);
+
+    const userSecure = plainToClass(UserSecureDTO, user);
+    userSecure.avatar = payloadGoogle.picture;
     await this.cacheManager.set(
       'userSession',
-      plainToClass(UserSecureDTO, user),
+      userSecure,
       Number.MAX_SAFE_INTEGER,
     );
     const payload = {

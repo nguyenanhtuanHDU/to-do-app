@@ -21,11 +21,6 @@ export class AuthGuard implements CanActivate {
     private readonly authService: AuthService,
   ) {}
 
-  generateToken(payload: any, expiresIn: string) {
-    const token = this.jwtService.signAsync(payload, { expiresIn });
-    return token;
-  }
-
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
     const res = context.switchToHttp().getResponse();

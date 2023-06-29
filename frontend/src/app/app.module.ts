@@ -34,6 +34,7 @@ import { SwiperModule } from 'swiper/angular';
 import { NgChartsModule } from 'ng2-charts';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { TasksComponent } from './tasks/tasks.component';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { TasksComponent } from './tasks/tasks.component';
     SwiperModule,
     NgChartsModule,
     SpeedDialModule,
+    SkeletonModule
   ],
   providers: [
     CookieService,

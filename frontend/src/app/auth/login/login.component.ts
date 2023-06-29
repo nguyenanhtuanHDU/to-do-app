@@ -11,6 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-login',
@@ -58,6 +59,8 @@ export class LoginComponent {
   isAutoFocusPassword: boolean = false;
   loading: boolean = false;
   token!: string;
+  apiBackend = environment.apiBackend;
+  googleLoginURL = this.apiBackend + 'auth/login-google';
 
   handleLogin() {
     const username = this.loginForm.value.username!;
@@ -102,19 +105,6 @@ export class LoginComponent {
               summary: msg,
             });
           });
-        }
-      );
-  }
-
-  loginWithGoogle() {
-    this.http
-      .post<any>('http://localhost:8000/v1/api/auth/login-google', {})
-      .subscribe(
-        (response) => {
-          console.log('Đăng nhập Google thành công!', response);
-        },
-        (error) => {
-          console.error('Lỗi khi đăng nhập Google:', error);
         }
       );
   }
