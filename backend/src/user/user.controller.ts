@@ -1,5 +1,6 @@
 import {
   Body,
+  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -8,13 +9,16 @@ import {
   Param,
   Post,
   Put,
+  Req,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { UserService } from './user.service';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { IUser } from './user.interface';
 
 @Controller('users')
 export class UserController {
@@ -28,15 +32,20 @@ export class UserController {
   }
 
   @Get(':id')
-  async getByID(@Param('id') id: string, @Res() res: Response) {
+  async getByID(@Param('id') id: string, @Res() res: Response): Promise<IUser> {
     const user = await this.userService.getByID(id);
-    if (!user) throw new NotFoundException('User not found');
-    res.status(HttpStatus.OK).json(user);
+     res.status(HttpStatus.OK).json(user);
+     return user
   }
 
   @Get('user/session')
-  async getUserSession(@Res() res: Response) {
-    const user = await this.userService.getUserSession();
+  async getUserSession(@Res() res: Response, @Req() req: Request) {
+    const userID = req.cookies.userID;
+    console.log(`🚀 ~ getUserSession ~ req.cookies:`, req.cookies)
+
+    console.log(`🚀 ~ getUserSession ~ userID:`, userID)
+
+    const user = await this.userService.getByID(userID);
     res.status(HttpStatus.OK).json(user);
   }
 

@@ -84,9 +84,17 @@ body {
   background: linear-gradient(to right bottom, #009aff, #f6f6fb);
 }
 
-.p-button {
-  width: 100%;
+.bxs-1 {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
+.bxs-2 {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+// .p-button {
+//   width: 100%;
+// }
 
 .p-inputwrapper {
   width: 100%;
@@ -98,6 +106,14 @@ body {
   input {
     width: 100%;
   }
+}
+
+.p-calendar {
+  width: 100%;
+}
+
+.p-dialog-content {
+  overflow-y: inherit !important;
 }
 
 // .p-dialog-header {

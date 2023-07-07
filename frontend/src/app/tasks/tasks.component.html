@@ -1,18 +1,202 @@
-<div class="task position-relative">
-  <div class="task-head">
-    <h1>List tasks</h1>
+<div class="task px-5 position-relative pt-5">
+  <div class="task-head mb-5">
+    <h1 class="fw-bold text-capitalize">List tasks</h1>
+    <span class="text-gray">{{ currentDate | date : "dd/MM/yyyy" }} </span>
   </div>
-  <div class="task-body"></div>
+  <div class="task-body">
+    <div class="task-body-list d-flex flex-column gap-2">
+      <div
+        class="task-body-list-item bg-white text-primary border-primary ps-0 py-3 br-12 d-flex gap-3"
+        *ngFor="let task of tasks; index as i; trackBy: trackByFn"
+      >
+        <div *ngIf="!task.completed" class="d-flex gap-3">
+          <p-checkbox
+            [binary]="true"
+            inputId="binary"
+            (click)="onDoneTask(task._id)"
+          ></p-checkbox>
+          <span>{{ task.title }}</span>
+          <span>{{ task.exprise | TimeAgo }}</span>
+          <span>{{ task.files }}</span>
+          <fa-icon
+            [icon]="faPenToSquare"
+            (click)="showAddTaskDialog('edit', task)"
+          ></fa-icon>
+          <fa-icon
+            [icon]="faTrash"
+            (click)="deleteTaskByID(task._id)"
+          ></fa-icon>
+        </div>
+      </div>
+
+      <div
+        class="task-body-list-item bg-white text-primary border-primary ps-0 py-3 br-12 d-flex gap-3"
+        *ngFor="let task of tasks; index as i; trackBy: trackByFn"
+      >
+        <div *ngIf="task.completed" class="d-flex gap-3">
+          <p-checkbox
+            [binary]="true"
+            inputId="binary"
+            (click)="onUnDoneTask(task._id)"
+            [ngModel]="true"
+          ></p-checkbox>
+          <span>{{ task.title }}</span>
+          <span>{{ task.exprise | TimeAgo }}</span>
+          <fa-icon
+            [icon]="faPenToSquare"
+            (click)="showAddTaskDialog('edit', task)"
+          ></fa-icon>
+          <fa-icon
+            [icon]="faTrash"
+            (click)="deleteTaskByID(task._id)"
+          ></fa-icon>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="task-footer position-absolute w-100 p-2">
-    <button pButton pRipple>
+    <button pButton pRipple (click)="showAddTaskDialog('add', null)">
       <div class="d-flex gap-2 task-footer-btn">
         <fa-icon
           [icon]="faPlus"
           classe="task-footer-btn__icon p-2 br-round bg-white text-primary "
         ></fa-icon>
-        <span class="task-footer-btn__text">Add task</span>
+        <span class="task-footer-btn__text">Add a task</span>
       </div>
     </button>
+
+    <p-dialog
+      header="Header"
+      [(visible)]="isShowAddTaskDialog"
+      [style]="{ width: '50vw' }"
+      [modal]="true"
+      [dismissableMask]="true"
+      class="task-footer-modal"
+    >
+      <ng-template pTemplate="header" class="bg-primary">
+        <h3 class="text-xl font-bold">{{ headingDialog }}</h3>
+      </ng-template>
+      <div class="d-flex gap-3 flex-column task-footer-modal-body">
+        <span class="p-float-label mt-4">
+          <input
+            pInputText
+            pAutoFocus
+            [autofocus]="true"
+            id="taskName"
+            [(ngModel)]="taskName"
+          />
+          <label htmlFor="taskName">Your task name</label>
+        </span>
+        <p-calendar
+          [showButtonBar]="true"
+          [(ngModel)]="taskDate"
+          [showTime]="true"
+          [showSeconds]="true"
+          class="d-block w-100"
+          [showIcon]="true"
+          [keepInvalid]="true"
+          [readonlyInput]="true"
+        ></p-calendar>
+
+        <div class="d-flex gap-3">
+          <p-fileUpload
+            #fileUpload
+            mode="basic"
+            name="file"
+            chooseLabel="Choose files"
+            [multiple]="true"
+            [fileLimit]="3"
+            (onSelect)="selectFileTasks($event)"
+          >
+          </p-fileUpload>
+          <button
+            pButton
+            pRipple
+            label="Reset files"
+            (click)="clearTaskFiles()"
+          ></button>
+        </div>
+
+        <ng-scrollbar class="task-footer-modal-body-scrollbar">
+          <div class="task-footer-modal-body-imgs row">
+            <h2>old file</h2>
+            <div
+              class="col-lg-3 mb-lg-3"
+              *ngFor="let file of oldFilesSelected; index as i"
+            >
+              <div class="task-footer-modal-body-imgs-img">
+                <div
+                  class="task-footer-modal-body-imgs-img-trash p-2 br-round text-white"
+                  (click)="chooseOldFileDeleted(file)"
+                >
+                  <fa-icon [icon]="faTrash"></fa-icon>
+                </div>
+                <img
+                  class="br-8"
+                  alt=""
+                  [src]="apiBackendRoot + 'tasks/' + file"
+                  src-fallback="../../assets/images/files/file.png"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="task-footer-modal-body-imgs row">
+            <h2>new file</h2>
+            <div
+              class="col-lg-3 mb-lg-3"
+              *ngFor="let file of filesSelected; index as i"
+            >
+              <div class="task-footer-modal-body-imgs-img">
+                <div
+                  class="task-footer-modal-body-imgs-img-trash p-2 br-round text-white"
+                  (click)="deleteImgSelected(i)"
+                >
+                  <fa-icon [icon]="faTrash"></fa-icon>
+                </div>
+                <img
+                  class="br-8"
+                  alt=""
+                  [src]="file.objectURL.changingThisBreaksApplicationSecurity"
+                />
+              </div>
+              <div class="flex-center-y justify-content-between">
+                <strong>img_{{ i + 1 }}</strong>
+                <span>
+                  {{ file.size | FileSize }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </ng-scrollbar>
+      </div>
+
+      <ng-template pTemplate="footer" class="task-footer-modal-footer">
+        <div class="d-flex gap-3">
+          <button
+            pButton
+            pRipple
+            class="flex-center gap-2 w-100 p-button-outlined m-0 task-footer-modal-footer-btn"
+            (click)="taskName = ''; taskDate = ''"
+          >
+            <div class="fw-7">Clear</div>
+            <i class="pi pi-times fw-7"></i>
+          </button>
+          <button
+            pButton
+            pRipple
+            class="flex-center gap-2 w-100 m-0 task-footer-modal-footer-btn bg-primary text-white"
+            (click)="handleForm()"
+          >
+            <div class="fw-7">OK</div>
+            <i class="pi pi-check fw-7"></i>
+          </button>
+        </div>
+      </ng-template>
+    </p-dialog>
   </div>
 </div>
-
+<p-toast
+  [breakpoints]="{
+    '920px': { width: '80%', left: '50%', transform: 'translateX(-50%)' }
+  }"
+></p-toast>

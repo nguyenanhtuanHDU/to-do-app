@@ -22,20 +22,20 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req = context.switchToHttp().getRequest();
-    const res = context.switchToHttp().getResponse();
-    const accessToken = req.headers.token.split(' ')[1];
-    console.log(`🚀 ~ accessToken:`, accessToken);
+    // const req = context.switchToHttp().getRequest();
+    // const res = context.switchToHttp().getResponse();
+    // const accessToken = req.headers.token.split(' ')[1];
+    // console.log(`🚀 ~ accessToken:`, accessToken);
 
-    if (!accessToken) {
-      throw new UnauthorizedException('Access token is missing.');
-    }
-    try {
-      this.jwtService.verify(accessToken);
-    } catch (error) {
-      console.log(`🚀 ~ error:`, error);
-      throw new UnauthorizedException('Access token is expired');
-    }
+    // if (!accessToken) {
+    //   throw new UnauthorizedException('Access token is missing.');
+    // }
+    // try {
+    //   this.jwtService.verify(accessToken);
+    // } catch (error) {
+    //   console.log(`🚀 ~ error:`, error);
+    //   throw new UnauthorizedException('Access token is expired');
+    // }
     return true;
   }
 }

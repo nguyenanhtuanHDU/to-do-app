@@ -8,7 +8,7 @@ export class RegisterEmail {
   @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true, type: String })
+  @Prop({ required: true })
   codeConfirm: string;
 }
 

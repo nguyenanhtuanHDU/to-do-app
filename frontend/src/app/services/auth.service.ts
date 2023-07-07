@@ -28,7 +28,6 @@ export class AuthService {
   }
 
   login(userLogin: UserLogin) {
-    console.log(`🚀 ~ userLogin:`, userLogin);
 
     return this.http.post(this.apiAuth + 'login', userLogin, {
       headers: this.getHeaders(),

@@ -17,6 +17,9 @@ export class UserDTO {
   @IsEmail()
   email: string;
 
+  @Expose()
+  tasks: string[];
+
   // avatar: string
   @Expose()
   @Length(6)

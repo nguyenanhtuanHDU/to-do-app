@@ -16,7 +16,7 @@
       <span class="text-gray">{{ user.email }}</span>
     </div>
     <img
-      *ngIf="user"
+      *ngIf="user && user.avatar"
       width="45"
       [src]="user.avatar"
       alt=""

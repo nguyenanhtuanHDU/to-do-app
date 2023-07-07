@@ -12,12 +12,10 @@ import {
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([
-      { name: RefreshToken.name, schema: RefreshTokenSchema },
-    ]),
-    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
       { name: RegisterEmail.name, schema: RegisterEmailSchema },
+      { name: RefreshToken.name, schema: RefreshTokenSchema },
     ]),
   ],
   controllers: [UserController],

@@ -1,9 +1,21 @@
 .task {
   height: 100vh;
-  overflow: hidden;
+  // overflow: hidden;
   &-head {
+    h1 {
+      font-size: 28px;
+      line-height: 21px;
+    }
+    span {
+      font-size: 14px;
+    }
   }
   &-body {
+    &-list {
+      &-item {
+        // border: 2px solid var(--bs-primary);
+      }
+    }
   }
   &-footer {
     bottom: 20px;
@@ -14,6 +26,42 @@
         border-radius: 50px;
         background-color: white;
         color: var(--bs-primary);
+      }
+    }
+    &-modal {
+      &-body {
+        &-scrollbar {
+          height: 146px;
+        }
+
+        &-imgs {
+          &-img {
+            position: relative;
+            &-trash {
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+              backdrop-filter: blur(5px);
+              -webkit-backdrop-filter: blur(5px);
+              border: 1px solid rgba(255, 255, 255, 0.3);
+              position: absolute;
+              top: 5px;
+              right: 5px;
+            }
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+      }
+      &-footer {
+        &-btn {
+          i {
+            font-size: 12px;
+          }
+        }
       }
     }
   }

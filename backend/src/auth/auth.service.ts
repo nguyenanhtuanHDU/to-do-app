@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  CACHE_MANAGER,
   ConflictException,
   HttpException,
   Inject,
@@ -25,7 +24,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshToken } from './refreshToken.schema';
 import { OAuth2Client } from 'google-auth-library';
-import { Cache } from 'cache-manager';
+import { User } from 'src/user/user.schema';
+import { IPayloadGoogle } from './payloadGoogle.interface';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +34,7 @@ export class AuthService {
     private registerEmailModel: Model<RegisterEmail>,
     @InjectModel(RefreshToken.name)
     private refreshTokenlModel: Model<RefreshToken>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @InjectModel(User.name) private userModel: Model<User>,
     private readonly userService: UserService,
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
@@ -46,11 +46,29 @@ export class AuthService {
     return paddedNumber;
   }
 
-  async generateToken(payload: any, expiresIn: string) {
-    const token = await this.jwtService.signAsync(payload, {
-      expiresIn,
+  sendMail(email: string, htmlBody?: string) {
+    this.mailerService.sendMail({
+      to: email,
+      subject: 'To Do App Created By Tuanna - Welcome',
+      text: 'welcome',
+      html: `
+      <strong>Welcome to my application - To Do App</strong>
+      <br>
+      Yours,<br>
+      Tuanna Developer</span>`,
     });
-    return token;
+  }
+
+  async getPayloadGoogle(accessTokenGoogle: string): Promise<IPayloadGoogle> {
+    const client = new OAuth2Client(
+      '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
+    );
+    const ticket = await client.verifyIdToken({
+      idToken: accessTokenGoogle,
+      audience:
+        '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
+    });
+    return ticket.getPayload();
   }
 
   async generateAccessToken(payload: any) {
@@ -151,40 +169,33 @@ export class AuthService {
     return { accessToken, refreshToken, userID: payload.id };
   }
 
-  async loginGoogle(accessTokenGoogle: string) {
-    const client = new OAuth2Client(
-      '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
-    );
-    const ticket = await client.verifyIdToken({
-      idToken: accessTokenGoogle,
-      audience:
-        '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
-    });
-    const payloadGoogle = ticket.getPayload();
+  async loginByGoogle(accessTokenGoogle: string) {
+    const payloadGoogle = await this.getPayloadGoogle(accessTokenGoogle);
+    const user = await this.userService.getByEmail(payloadGoogle.email);
 
-    let user = await this.userService.getByEmail(payloadGoogle.email);
+    let payload;
+
     if (!user) {
-      await this.signUpGoogle(accessTokenGoogle);
-      user = await this.userService.getByEmail(payloadGoogle.email);
+      const userCreate = await this.userService.createWithEmail({
+        fullName: payloadGoogle.name,
+        email: payloadGoogle.email,
+        avatar: payloadGoogle.picture,
+      });
+      payload = {
+        id: userCreate._id,
+        admin: userCreate.admin,
+      };
+    } else {
+      payload = {
+        id: user._id,
+        admin: user.admin,
+      };
     }
-
-    const userSecure = plainToClass(UserSecureDTO, user);
-    userSecure.avatar = payloadGoogle.picture;
-    await this.cacheManager.set(
-      'userSession',
-      userSecure,
-      Number.MAX_SAFE_INTEGER,
-    );
-    const payload = {
-      id: user._id,
-      admin: user.admin,
-    };
-
     const accessToken = await this.generateAccessToken(payload);
     const refreshToken = await this.generateRefreshToken(payload);
 
     this.refreshTokenlModel.create({
-      userID: user._id,
+      userID: payload.id,
       refreshToken: await bcrypt.hash(refreshToken, 12),
     });
 
@@ -192,13 +203,15 @@ export class AuthService {
       accessToken,
       refreshToken,
       userAvatar: payloadGoogle.picture,
+      userID: payload.id,
     };
   }
 
-  async logOut() {
-    const user = await this.cacheManager.get('userSession');
+  async logOut(userID: string) {
+    console.log('userID: ', userID);
+
     await this.refreshTokenlModel.findOneAndDelete({
-      userID: user._id,
+      userID,
     });
   }
 
@@ -212,77 +225,74 @@ export class AuthService {
     return true;
   }
 
-  async signUpGoogle(accessTokenGoogle: string): Promise<boolean> {
-    const client = new OAuth2Client(
-      '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
-    );
+  // async signUpGoogle(accessTokenGoogle: string): Promise<boolean> {
+  //   const client = new OAuth2Client(
+  //     '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
+  //   );
 
-    const ticket = await client.verifyIdToken({
-      idToken: accessTokenGoogle,
-      audience:
-        '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
-    });
-    const payloadGoogle = ticket.getPayload();
+  //   const ticket = await client.verifyIdToken({
+  //     idToken: accessTokenGoogle,
+  //     audience:
+  //       '57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com',
+  //   });
+  //   const payloadGoogle = ticket.getPayload();
+  //   const userFind = await this.userService.getByEmail(payloadGoogle.email);
+  //   console.log('userFind: ', userFind);
 
-    this.mailerService.sendMail({
-      to: payloadGoogle.email,
-      subject: 'To Do App Created By Tuanna Dev Send Code To You',
-      text: 'welcome',
-      html: `
-      <strong>Welcome to my application - To Do App</strong>
-      <br>
-      Yours,<br>
-      Tuanna Developer</span>`,
-    });
+  //   if (userFind) {
+  //     console.log('>>> user da duoc dang ki');
 
-    const userFind = await this.userService.getByEmail(payloadGoogle.email);
-    if (userFind) {
-      return true;
-    }
-    const user = await this.userService.createWithEmail({
-      fullName: payloadGoogle.name,
-      email: payloadGoogle.email,
-    });
-    if (!user) throw new BadRequestException();
-    return true;
-  }
+  //     return true;
+  //   }
 
-  async verifyCode(data: any) {
-    const registerEmail = await this.registerEmailModel
-      .findOne({ email: data.email })
-      .sort({ createdAt: -1 });
-    if (!registerEmail) {
-      return false;
-    }
-    if (registerEmail.codeConfirm === data.code.toString()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  //   console.log('>>> user chua duoc dang ki');
 
-  async sendCodeToEmail(email: string) {
-    const userFindByEmail = await this.userService.getByEmail(email);
-    if (userFindByEmail) throw new ConflictException('Email already exists');
-    const codeConfirm = this.generateRandomNumber();
-    this.mailerService.sendMail({
-      to: email,
-      subject: 'To Do App Created By Tuanna Send Code To You',
-      text: 'welcome',
-      html: `<span>Your code is: <b>${codeConfirm}</b>. <br>Use it to access your account 
-      <br>
-      You have 1 minute to use it before it expires
-      <br>
-      If you didn't request this, simply ignore this message.
-      <br>
-      Yours,<br>
-      Tuanna Developer</span>`,
-    });
-    console.log('codeConfirm: ', codeConfirm);
+  //   await this.userService.createWithEmail({
+  //     fullName: payloadGoogle.name,
+  //     email: payloadGoogle.email,
+  //   });
 
-    const code = await this.registerEmailModel.create({
-      email,
-      codeConfirm: codeConfirm,
-    });
-  }
+  //   // console.log('>>> user sau khi duoc dk: ', user);
+
+  //   return true;
+  // }
+
+  // async verifyCode(data: any) {
+  //   const registerEmail = await this.registerEmailModel
+  //     .findOne({ email: data.email })
+  //     .sort({ createdAt: -1 });
+  //   if (!registerEmail) {
+  //     return false;
+  //   }
+  //   if (registerEmail.codeConfirm === data.code.toString()) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  // async sendCodeToEmail(email: string) {
+  //   const userFindByEmail = await this.userService.getByEmail(email);
+  //   if (userFindByEmail) throw new ConflictException('Email already exists');
+  //   const codeConfirm = this.generateRandomNumber();
+  //   this.mailerService.sendMail({
+  //     to: email,
+  //     subject: 'To Do App Created By Tuanna Send Code To You',
+  //     text: 'welcome',
+  //     html: `<span>Your code is: <b>${codeConfirm}</b>. <br>Use it to access your account
+  //     <br>
+  //     You have 1 minute to use it before it expires
+  //     <br>
+  //     If you didn't request this, simply ignore this message.
+  //     <br>
+  //     Yours,<br>
+  //     Tuanna Developer</span>`,
+  //   });
+  //   console.log('codeConfirm: ', codeConfirm);
+
+  //   const code = await this.registerEmailModel.create({
+  //     email,
+  //     codeConfirm: codeConfirm,
+  //   });
+  // }
 }

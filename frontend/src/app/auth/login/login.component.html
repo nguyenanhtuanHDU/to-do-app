@@ -5,7 +5,6 @@
   <div
     class="login-right-form-avatar mx-auto mb-4 animate__animated animate__bounceInDown"
   >
-    <!-- <img src="../../assets/images/avatars/avatar.svg" alt="" /> -->
     <img src="../../../assets/images/logos/logo.svg" alt="" />
   </div>
   <h2
@@ -63,33 +62,27 @@
     <div
       id="g_id_onload"
       data-client_id="57178918226-rk75u2a5tl255sv4l0jtv857nqhfulob.apps.googleusercontent.com"
-      data-context="signin"
+      data-context="use"
       data-ux_mode="popup"
       data-login_uri="http://localhost:8000/v1/api/auth/login-google"
+      data-nonce=""
+      data-auto_select="true"
       data-itp_support="true"
     ></div>
+
     <div
       class="g_id_signin mx-auto"
       data-type="icon"
       data-shape="circle"
       data-theme="outline"
-      data-text="signup_with"
+      data-text="signin_with"
       data-size="large"
     ></div>
   </div>
   <div class="d-flex gap-2 mx-auto animate__animated animate__slideInUp">
     <span>Don't have account ?</span>
-    <!-- <a routerLink="/auth/sign-up">Create now</a> -->
-    <a href="/auth/sign-up">Create now</a>
+    <a routerLink="/auth/sign-up">Create now</a>
   </div>
-  <!-- <button
-    routerLink="/auth/sign-up"
-    pButton
-    pRipple
-    label="Or Sign Up"
-    class="p-button"
-    type="button"
-  ></button> -->
 </form>
 <p-toast
   [breakpoints]="{

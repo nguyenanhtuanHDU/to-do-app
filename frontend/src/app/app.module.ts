@@ -35,6 +35,13 @@ import { NgChartsModule } from 'ng2-charts';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { TasksComponent } from './tasks/tasks.component';
 import { SkeletonModule } from 'primeng/skeleton';
+import { CheckboxModule } from 'primeng/checkbox';
+import { CalendarModule } from 'primeng/calendar';
+import { TimeAgo } from './shared/TimeAgo.pipe';
+import { FileUploadModule } from 'primeng/fileupload';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { FileSize } from './shared/FileSize.pipe';
+import { ImgFallbackModule } from "ngx-img-fallback";
 
 @NgModule({
   declarations: [
@@ -47,6 +54,8 @@ import { SkeletonModule } from 'primeng/skeleton';
     MenuComponent,
     TitleComponent,
     TasksComponent,
+    TimeAgo,
+    FileSize,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +82,12 @@ import { SkeletonModule } from 'primeng/skeleton';
     SwiperModule,
     NgChartsModule,
     SpeedDialModule,
-    SkeletonModule
+    SkeletonModule,
+    CheckboxModule,
+    CalendarModule,
+    FileUploadModule,
+    NgScrollbarModule,
+    ImgFallbackModule
   ],
   providers: [
     CookieService,

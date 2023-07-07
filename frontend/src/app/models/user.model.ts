@@ -9,7 +9,8 @@ export interface UserCreate extends UserLogin {
 }
 
 export interface User extends Omit<UserLogin, 'password'> {
+  _id: string;
   fullName: string;
   admin: boolean;
-  avatar?: string
+  avatar?: string;
 }

@@ -46,10 +46,7 @@ export class HomeComponent {
     console.log('cookie', this.cookieService.getAll());
     console.log('auth: ', this.authService.getToken());
 
-    this.userService.getUserSession().subscribe((data) => {
-      console.log(`🚀 ~ data:`, data);
-      this.user = data;
-    });
+    this.getUserSession();
 
     if (this.weatherService.getIsAgreeLocation() === '') {
       this.weatherService.setIsAgreeLocation(false);
@@ -64,6 +61,39 @@ export class HomeComponent {
     if (isAgreeLocation) {
       this.getLocation();
     }
+  }
+
+  config: SwiperOptions = {
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    autoHeight: true,
+    allowTouchMove: true,
+    slidesPerView: 3,
+    spaceBetween: 20,
+  };
+
+  chart: any;
+
+  faAngleLeft = faAngleLeft;
+  faAngleRight = faAngleRight;
+  faMagnifyingGlass = faMagnifyingGlass;
+  faBell = faBell;
+
+  user!: User;
+  sidebarVisible: boolean = false;
+  weather: any;
+  listDaysChart: string[] = [];
+  listMaxTempChart: string[] = [];
+  listMinTempChart: string[] = [];
+  isChart: boolean = false;
+
+  getUserSession() {
+    this.userService.getUserSession().subscribe((user: User) => {
+      this.user = user;
+    });
   }
 
   swipePrev() {
@@ -101,35 +131,8 @@ export class HomeComponent {
         maintainAspectRatio: false, // Loại bỏ tỷ lệ khung cố định
       },
     });
-    this.isChart = true
+    this.isChart = true;
   }
-
-  config: SwiperOptions = {
-    loop: true,
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    autoHeight: true,
-    allowTouchMove: true,
-    slidesPerView: 3,
-    spaceBetween: 20,
-  };
-
-  chart: any;
-
-  faAngleLeft = faAngleLeft;
-  faAngleRight = faAngleRight;
-  faMagnifyingGlass = faMagnifyingGlass;
-  faBell = faBell;
-
-  user!: User;
-  sidebarVisible: boolean = false;
-  weather: any;
-  listDaysChart: string[] = [];
-  listMaxTempChart: string[] = [];
-  listMinTempChart: string[] = [];
-  isChart: boolean = false;
 
   confirmGetLocation() {
     this.confirmationService.confirm({
@@ -189,16 +192,12 @@ export class HomeComponent {
   getWeatherNextWeek(lat: number, lon: number) {
     this.weatherService.getWeatherNextWeek(lat, lon).subscribe(
       (data: any) => {
-        console.log(`🚀 ~ data:`, data);
         data.forecast.forecastday.map((item: any) => {
           this.listDaysChart.push(item.date);
           this.listMaxTempChart.push(item.day.maxtemp_c);
 
           this.listMinTempChart.push(item.day.mintemp_c);
         });
-        console.log(`🚀 ~ this.listDaysChart:`, this.listDaysChart);
-        console.log(`🚀 ~ this.listMaxTempChart:`, this.listMaxTempChart);
-        console.log(`🚀 ~ this.listMinTempChart:`, this.listMinTempChart);
         this.createChart();
       },
       () => {

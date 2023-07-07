@@ -51,7 +51,11 @@ export class AuthController {
 
   @Get('logout')
   async logOut(@Res() res: Response, @Req() req: Request) {
-    await this.authService.logOut();
+    const userID = req.cookies.userID;
+    console.log('cookie: ', req.cookies);
+
+    // await this.authService.logOut(userID);
+    // res.cookie('userID', '');
     res.status(HttpStatus.OK).json({
       message: 'Log out successfully',
     });
@@ -88,7 +92,9 @@ export class AuthController {
 
   @Post('login-google')
   async loginGoogle(@Req() req: Request, @Res() res: Response) {
-    const authTokens = await this.authService.loginGoogle(req.body.credential);
+    const authTokens = await this.authService.loginByGoogle(
+      req.body.credential,
+    );
     res.cookie(process.env.REFRESH_TOKEN, authTokens.refreshToken, {
       sameSite: 'strict',
       path: '/',
@@ -97,6 +103,8 @@ export class AuthController {
     });
     res.cookie('token', authTokens.accessToken);
     res.cookie('userAvatar', authTokens.userAvatar);
+    res.cookie('userID', authTokens.userID);
+    // res.set('userID', authTokens.userID);
     res.redirect(process.env.FRONTEND_URL);
   }
 
@@ -110,29 +118,29 @@ export class AuthController {
     });
   }
 
-  @Post('sign-up-google')
-  async signUpGoogle(@Req() req: Request, @Res() res: Response) {
-    await this.authService.signUpGoogle(req.body.credential);
-    res.redirect(process.env.FRONTEND_URL + '/auth/login');
-  }
+  // @Post('sign-up-google')
+  // async signUpGoogle(@Req() req: Request, @Res() res: Response) {
+  //   await this.authService.signUpGoogle(req.body.credential);
+  //   res.redirect(process.env.FRONTEND_URL + '/auth/login');
+  // }
 
-  @Post('sign-up/verify-code')
-  async verifyCode(@Body() data, @Res() res: Response, @Req() req: Request) {
-    const checkCode = await this.authService.verifyCode(data);
-    console.log(`🚀 ~ checkCode:`, checkCode);
-    if (!checkCode) {
-      throw new HttpException('Incorrect code', HttpStatus.BAD_REQUEST);
-    } else {
-      res.status(200).json({ message: 'Code verified. Well done!' });
-    }
-  }
+  // @Post('sign-up/verify-code')
+  // async verifyCode(@Body() data, @Res() res: Response, @Req() req: Request) {
+  //   const checkCode = await this.authService.verifyCode(data);
+  //   console.log(`🚀 ~ checkCode:`, checkCode);
+  //   if (!checkCode) {
+  //     throw new HttpException('Incorrect code', HttpStatus.BAD_REQUEST);
+  //   } else {
+  //     res.status(200).json({ message: 'Code verified. Well done!' });
+  //   }
+  // }
 
-  @Post('sign-up/verify-email')
-  async verifyEmail(@Body() { email }, @Res() res: Response) {
-    await this.authService.sendCodeToEmail(email);
-    res.cookie('email_sign_up', email);
-    res.status(HttpStatus.OK).json({
-      message: 'Send code to ' + email + ' successfully',
-    });
-  }
+  // @Post('sign-up/verify-email')
+  // async verifyEmail(@Body() { email }, @Res() res: Response) {
+  //   await this.authService.sendCodeToEmail(email);
+  //   res.cookie('email_sign_up', email);
+  //   res.status(HttpStatus.OK).json({
+  //     message: 'Send code to ' + email + ' successfully',
+  //   });
+  // }
 }

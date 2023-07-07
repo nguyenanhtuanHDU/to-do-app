@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type RefreshTokenlDocument = HydratedDocument<RefreshToken>;
+export type RefreshTokenDocument = HydratedDocument<RefreshToken>;
 
 @Schema({ timestamps: true })
 export class RefreshToken {

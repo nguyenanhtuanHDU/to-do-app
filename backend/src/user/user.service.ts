@@ -1,5 +1,5 @@
 import {
-  CACHE_MANAGER,
+  BadRequestException,
   Inject,
   Injectable,
   NotFoundException,
@@ -17,29 +17,20 @@ import { User } from './user.schema';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
-import { Cache } from 'cache-manager';
+import { IUser } from './user.interface';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async getAll() {
     return await this.userModel.find();
   }
 
-  async getByID(userID: string): Promise<UserDTO> {
-    try {
-      const user = await this.userModel.findByIdAndDelete(userID);
-      console.log(`🚀 ~ user:`, user);
-      if (!user) return null;
-      else
-        return plainToClass(UserDTO, user, { excludeExtraneousValues: true });
-    } catch (error) {
-      console.log(`🚀 ~ error:`, error);
-    }
+  async getByID(userID: string) {
+    const user = await this.userModel.findById(userID);
+    if (!user) throw new NotFoundException('User not found');
+    return user;
   }
 
   async getByUsername(username: string): Promise<UserDTO> {
@@ -51,36 +42,32 @@ export class UserService {
     });
   }
 
-  async getByEmail(email: string): Promise<UserDTO> {
+  async getByEmail(email: string) {
+    console.log('email: ', email);
     const user = await this.userModel.findOne({ email });
     if (!user) return null;
-    return plainToClass(UserDTO, user, {
-      excludeExtraneousValues: true,
-    });
-  }
-
-  async getUserSession(): Promise<UserSecureDTO> {
-    // const user = await this.cacheService.getUserSession();
-    const user = await this.cacheManager.get('userSession');
-    if (!user) throw new NotFoundException('User not found');
     return user;
   }
 
   async create(userInfo: CreateUserDTO): Promise<CreateUserDTO> {
-    console.log(`🚀 ~ createUserDTO:`, userInfo);
-
     const user = await plainToClass(CreateUserDTO, userInfo, {
       excludeExtraneousValues: true,
     });
-    console.log(`🚀 ~ user:`, user);
 
     user.password = await bcrypt.hash(user.password, 10);
     return await this.userModel.create(user);
   }
 
-  async createWithEmail(
-    userInfo: CreateUserWithEmailDTO,
-  ): Promise<CreateUserWithEmailDTO> {
+  // async createWithEmail(
+  //   userInfo: CreateUserWithEmailDTO,
+  // ): Promise<CreateUserWithEmailDTO> {
+  //   const user = await this.userModel.create(userInfo)
+  //   console.log('user create: ', user);
+  //   if (!user) throw new BadRequestException();
+  //   return user;
+  // }
+
+  async createWithEmail(userInfo) {
     console.log(`🚀 ~ userInfo:`, userInfo);
     const user = await this.userModel.create(userInfo);
     return user;
@@ -106,7 +93,6 @@ export class UserService {
   async delete(userID: string) {
     try {
       const user = await this.userModel.findByIdAndRemove(userID);
-      console.log(`🚀 ~ user:`, user);
       if (!user) return false;
       else return user;
     } catch (error) {
