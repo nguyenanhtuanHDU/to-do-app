@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
-import { TaskEdit, Tasks } from '../models/tasks.model';
+import { TaskEdit, Task } from '../models/task.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +16,8 @@ export class TaskService {
 
   apiTask = environment.apiBackend + 'tasks/';
 
-  getTasksByUserID(userID: string): Observable<Tasks[]> {
-    return this.http.get<Tasks[]>(this.apiTask + userID, {
+  getTasksByUserID(userID: string): Observable<Task[]> {
+    return this.http.get<Task[]>(this.apiTask + userID, {
       headers: this.authService.getHeaders(),
     });
   }

@@ -1,19 +1,21 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ViewChildren } from '@angular/core';
 import {
   faPlus,
   faPenToSquare,
   faTrash,
   faClock,
   faFile,
+  faCircleCheck,
 } from '@fortawesome/free-solid-svg-icons';
 // import {} from '@fortawesome/free-regular-svg-icons';
 import { TaskService } from '../services/task.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
-import { Tasks } from '../models/tasks.model';
+import { Task } from '../models/task.model';
 import { FileUpload } from 'primeng/fileupload';
 import { environment } from 'src/environments/environment.development';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-tasks',
@@ -22,6 +24,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class TasksComponent {
   @ViewChild('fileUpload', { static: false }) fileUpload: any;
+  @ViewChildren('deleteIcon') deleteIcon: any;
 
   constructor(
     private readonly taskService: TaskService,
@@ -39,16 +42,17 @@ export class TasksComponent {
   faTrash = faTrash;
   faFile = faFile;
   faClock = faClock;
+  faCircleCheck = faCircleCheck;
 
   apiBackendRoot = environment.apiBackendRoot;
   isShowAddTaskDialog: boolean = false;
-  taskSelected!: Tasks;
+  taskSelected!: Task;
   taskName: string = '';
   taskDate: string = '';
   userSession!: User;
   // tasks: Tasks[] = [];
-  listTaskDone: Tasks[] = [];
-  listTaskUnDone: Tasks[] = [];
+  listTaskDone: Task[] = [];
+  listTaskUnDone: Task[] = [];
   currentDate = new Date();
   headingDialog: string = '';
   filesSelected: any[] = [];
@@ -66,10 +70,27 @@ export class TasksComponent {
     this.filesSelected = [];
   }
 
-  chooseOldFileDeleted(file: string) {
-    if (!this.oldFilesDeleted.includes(file)) {
-      this.oldFilesDeleted.push(file);
-    }
+  chooseOldFileDeleted(fileName: string, index: number) {
+    this.confirmationService.confirm({
+      message: 'Do you want to to delete this image?',
+      icon: 'pi pi-question',
+      accept: () => {
+        if (!this.oldFilesDeleted.includes(fileName)) {
+          this.oldFilesDeleted.push(fileName);
+          this.oldFilesSelected.splice(
+            this.oldFilesSelected.indexOf(fileName),
+            1
+          );
+        }
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Rejected',
+          detail: 'You have rejected',
+        });
+      },
+    });
   }
 
   deleteImgSelected(index: number) {
@@ -77,7 +98,7 @@ export class TasksComponent {
     this.filesSelected.splice(index, 1);
   }
 
-  showAddTaskDialog(type: string, task: Tasks | null) {
+  showAddTaskDialog(type: string, task: Task | null) {
     if (type === 'add') {
       this.isAdd = true;
       this.headingDialog = 'Add a task';
@@ -110,10 +131,10 @@ export class TasksComponent {
   getTasks() {
     this.taskService
       .getTasksByUserID(this.userSession._id)
-      .subscribe((data: Tasks[]) => {
+      .subscribe((data: Task[]) => {
         // this.tasks = data;
-        this.listTaskDone = data.filter((task: Tasks) => task.completed);
-        this.listTaskUnDone = data.filter((task: Tasks) => !task.completed);
+        this.listTaskDone = data.filter((task: Task) => task.completed);
+        this.listTaskUnDone = data.filter((task: Task) => !task.completed);
       });
   }
 
@@ -214,8 +235,8 @@ export class TasksComponent {
 
   deleteTaskByID(taskID: string) {
     this.confirmationService.confirm({
-      message: 'Are you sure that you want to proceed?',
-      icon: 'pi pi-exclamation-triangle',
+      message: 'Do you want to to delete this task?',
+      icon: 'pi pi-question',
       accept: () => {
         this.taskService.deteleTaskByID(taskID).subscribe(
           (data: any) => {

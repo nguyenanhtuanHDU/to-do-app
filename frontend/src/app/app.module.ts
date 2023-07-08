@@ -43,6 +43,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { FileSize } from './shared/FileSize.pipe';
 import { ImgFallbackModule } from "ngx-img-fallback";
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ImageModule } from 'primeng/image';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     FileUploadModule,
     NgScrollbarModule,
     ImgFallbackModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    ImageModule
   ],
   providers: [
     CookieService,

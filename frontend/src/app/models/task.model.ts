@@ -1,6 +1,6 @@
 import { PickType } from 'chart.js/dist/types/utils';
 
-export interface Tasks {
+export interface Task {
   _id: string;
   userID: string;
   title: string;
@@ -11,4 +11,4 @@ export interface Tasks {
   updatedAt: string;
 }
 
-export interface TaskEdit extends Pick<Tasks, 'title' | 'exprise'> {}
+export interface TaskEdit extends Pick<Task, 'title' | 'exprise'> {}
