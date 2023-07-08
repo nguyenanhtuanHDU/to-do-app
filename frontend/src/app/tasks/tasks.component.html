@@ -1,60 +1,133 @@
-<div class="task px-5 position-relative pt-5">
-  <div class="task-head mb-5">
+<div class="task px-lg-5 position-relative pt-5">
+  <div class="task-head mb-5 mt-5 mt-lg-0">
     <h1 class="fw-bold text-capitalize">List tasks</h1>
     <span class="text-gray">{{ currentDate | date : "dd/MM/yyyy" }} </span>
   </div>
-  <div class="task-body">
-    <div class="task-body-list d-flex flex-column gap-2">
-      <div
-        class="task-body-list-item bg-white text-primary border-primary ps-0 py-3 br-12 d-flex gap-3"
-        *ngFor="let task of tasks; index as i; trackBy: trackByFn"
-      >
-        <div *ngIf="!task.completed" class="d-flex gap-3">
-          <p-checkbox
-            [binary]="true"
-            inputId="binary"
-            (click)="onDoneTask(task._id)"
-          ></p-checkbox>
-          <span>{{ task.title }}</span>
-          <span>{{ task.exprise | TimeAgo }}</span>
-          <span>{{ task.files }}</span>
-          <fa-icon
-            [icon]="faPenToSquare"
-            (click)="showAddTaskDialog('edit', task)"
-          ></fa-icon>
-          <fa-icon
-            [icon]="faTrash"
-            (click)="deleteTaskByID(task._id)"
-          ></fa-icon>
+  <ng-scrollbar class="p-3" appearance="compact">
+    <div class="task-body p-lg-3 p-2">
+      <div class="task-body-list d-flex flex-column gap-5">
+        <div class="mb-4 d-flex flex-column gap-3">
+          <div
+            class="task-body-list-item bg-white text-primary border-primary ps-0"
+            *ngFor="let task of listTaskUnDone; index as i; trackBy: trackByFn"
+          >
+            <div
+              *ngIf="!task.completed"
+              class="task-body-list-item__inner d-flex flex-column flex-lg-row gap-3 px-3 justify-content-between px-3 py-2 br-12"
+            >
+              <div
+                class="d-flex align-items-lg-center flex-column flex-lg-row gap-3"
+              >
+                <p-checkbox
+                  class="d-block"
+                  [binary]="true"
+                  inputId="binary"
+                  (click)="onDoneTask(task._id)"
+                ></p-checkbox>
+                <span
+                  class="task-body-list-item__title px-4 py-1 br-round bg-primary text-white text-capitalize"
+                  >{{ task.title }}</span
+                >
+                <strong class="d-none d-lg-block">|</strong>
+                <span
+                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2 w-fit-content"
+                >
+                  <fa-icon [icon]="faClock"></fa-icon>
+                  exprise in {{ task.exprise | TimeAgo }}</span
+                >
+                <strong class="d-none d-lg-block" *ngIf="task.files.length > 0"
+                  >|</strong
+                >
+                <span
+                  *ngIf="task.files.length > 0"
+                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2 w-fit-content"
+                >
+                  <fa-icon [icon]="faFile"></fa-icon>
+                  {{ task.files.length }} files</span
+                >
+              </div>
+              <div class="d-flex gap-3">
+                <div
+                  class="task-body-list-item__btn p-3 br-round flex-center bg-secondary text-white"
+                >
+                  <fa-icon
+                    [icon]="faPenToSquare"
+                    (click)="showAddTaskDialog('edit', task)"
+                  ></fa-icon>
+                </div>
+                <div
+                  class="task-body-list-item__btn p-3 br-round flex-center bg-danger text-white"
+                >
+                  <fa-icon
+                    [icon]="faTrash"
+                    (click)="deleteTaskByID(task._id)"
+                  ></fa-icon>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div
-        class="task-body-list-item bg-white text-primary border-primary ps-0 py-3 br-12 d-flex gap-3"
-        *ngFor="let task of tasks; index as i; trackBy: trackByFn"
-      >
-        <div *ngIf="task.completed" class="d-flex gap-3">
-          <p-checkbox
-            [binary]="true"
-            inputId="binary"
-            (click)="onUnDoneTask(task._id)"
-            [ngModel]="true"
-          ></p-checkbox>
-          <span>{{ task.title }}</span>
-          <span>{{ task.exprise | TimeAgo }}</span>
-          <fa-icon
-            [icon]="faPenToSquare"
-            (click)="showAddTaskDialog('edit', task)"
-          ></fa-icon>
-          <fa-icon
-            [icon]="faTrash"
-            (click)="deleteTaskByID(task._id)"
-          ></fa-icon>
+        <div class="mt-4 d-flex flex-column gap-3">
+          <div
+            class="task-body-list-item bg-white text-primary border-primary ps-0"
+            *ngFor="let task of listTaskDone; index as i; trackBy: trackByFn"
+          >
+            <div
+              *ngIf="task.completed"
+              class="task-body-list-item__inner d-flex gap-3 px-3 justify-content-between px-3 py-2 br-12"
+            >
+              <div class="flex-center-y gap-3">
+                <p-checkbox
+                  [binary]="true"
+                  inputId="binary"
+                  (click)="onUnDoneTask(task._id)"
+                  [ngModel]="true"
+                ></p-checkbox>
+                <span
+                  class="task-body-list-item__title px-4 py-1 br-round bg-primary text-white"
+                  >{{ task.title }}</span
+                >
+                <strong>|</strong>
+                <span
+                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2"
+                >
+                  <fa-icon [icon]="faClock"></fa-icon>
+                  exprise in {{ task.exprise | TimeAgo }}</span
+                >
+                <strong *ngIf="task.files.length > 0">|</strong>
+                <span
+                  *ngIf="task.files.length > 0"
+                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2"
+                >
+                  <fa-icon [icon]="faFile"></fa-icon>
+                  {{ task.files.length }} files</span
+                >
+              </div>
+              <div class="d-flex gap-3">
+                <div
+                  class="task-body-list-item__btn p-3 br-round flex-center bg-secondary text-white"
+                >
+                  <fa-icon
+                    [icon]="faPenToSquare"
+                    (click)="showAddTaskDialog('edit', task)"
+                  ></fa-icon>
+                </div>
+                <div
+                  class="task-body-list-item__btn p-3 br-round flex-center bg-danger text-white"
+                >
+                  <fa-icon
+                    [icon]="faTrash"
+                    (click)="deleteTaskByID(task._id)"
+                  ></fa-icon>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="task-footer position-absolute w-100 p-2">
+  </ng-scrollbar>
+  <div class="task-footer w-100 py-2 mt-2">
     <button pButton pRipple (click)="showAddTaskDialog('add', null)">
       <div class="d-flex gap-2 task-footer-btn">
         <fa-icon
@@ -74,7 +147,7 @@
       class="task-footer-modal"
     >
       <ng-template pTemplate="header" class="bg-primary">
-        <h3 class="text-xl font-bold">{{ headingDialog }}</h3>
+        <h3 class="text-xl font-bold text-capitalize">{{ headingDialog }}</h3>
       </ng-template>
       <div class="d-flex gap-3 flex-column task-footer-modal-body">
         <span class="p-float-label mt-4">
@@ -98,6 +171,29 @@
           [readonlyInput]="true"
         ></p-calendar>
 
+        <div class="task-footer-modal-body-imgs row" *ngIf="!isAdd">
+          <strong class="mb-2">Old file</strong>
+          <div
+            class="col-lg-3 mb-lg-3"
+            *ngFor="let file of oldFilesSelected; index as i"
+          >
+            <div class="task-footer-modal-body-imgs-img">
+              <div
+                class="task-footer-modal-body-imgs-img-trash bg-white p-2 br-round text-dark flex-center"
+                (click)="chooseOldFileDeleted(file)"
+              >
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </div>
+              <img
+                class="br-8"
+                alt=""
+                [src]="apiBackendRoot + 'tasks/' + file"
+                src-fallback="../../assets/images/files/file.png"
+              />
+            </div>
+          </div>
+        </div>
+
         <div class="d-flex gap-3">
           <p-fileUpload
             #fileUpload
@@ -117,38 +213,18 @@
           ></button>
         </div>
 
-        <ng-scrollbar class="task-footer-modal-body-scrollbar">
+        <ng-scrollbar class="task-footer-modal-body-scrollbar" style="height: 30vh;">
           <div class="task-footer-modal-body-imgs row">
-            <h2>old file</h2>
-            <div
-              class="col-lg-3 mb-lg-3"
-              *ngFor="let file of oldFilesSelected; index as i"
+            <strong *ngIf="!isAdd && filesSelected.length > 0" class="mb-2"
+              >New file</strong
             >
-              <div class="task-footer-modal-body-imgs-img">
-                <div
-                  class="task-footer-modal-body-imgs-img-trash p-2 br-round text-white"
-                  (click)="chooseOldFileDeleted(file)"
-                >
-                  <fa-icon [icon]="faTrash"></fa-icon>
-                </div>
-                <img
-                  class="br-8"
-                  alt=""
-                  [src]="apiBackendRoot + 'tasks/' + file"
-                  src-fallback="../../assets/images/files/file.png"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="task-footer-modal-body-imgs row">
-            <h2>new file</h2>
             <div
               class="col-lg-3 mb-lg-3"
               *ngFor="let file of filesSelected; index as i"
             >
               <div class="task-footer-modal-body-imgs-img">
                 <div
-                  class="task-footer-modal-body-imgs-img-trash p-2 br-round text-white"
+                  class="task-footer-modal-body-imgs-img-trash p-2 br-round bg-white flex-center text-dark"
                   (click)="deleteImgSelected(i)"
                 >
                   <fa-icon [icon]="faTrash"></fa-icon>

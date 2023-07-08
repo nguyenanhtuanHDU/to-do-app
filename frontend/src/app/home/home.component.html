@@ -27,16 +27,16 @@
 
 <div class="home-inner-main-weather row mt-5">
   <div class="col-lg-7 pe-lg-5 mb-5 mb-lg-0">
-    <h2 class="fw-6 ms-3 ms-lg-0">Weather in 7 days</h2>
-    <div class="home-inner-main-weather-chart br-20 w-100 p-2 mt-3 bg-white">
-      <div
-        class="chart-container"
-        [ngClass]="{ 'd-none': !isChart, 'd-block': isChart }"
-      >
+    <h2 class="fw-6 ms-3 ms-lg-0 mb-3">Weather in 7 days</h2>
+    <div
+      class="home-inner-main-weather-chart br-20 w-100 p-2 bg-white"
+      [ngClass]="{ 'd-none': !isChart, 'd-block': isChart }"
+    >
+      <div class="chart-container">
         <canvas id="MyChart">{{ chart }}</canvas>
       </div>
-      <p-skeleton *ngIf="!isChart" width="100%" height="456px"></p-skeleton>
     </div>
+    <p-skeleton *ngIf="!isChart" width="100%" height="456px"></p-skeleton>
   </div>
   <div class="col-lg-5 ps-lg-4 ps-lg-2 mt-4 mt-lg-0">
     <h2 class="fw-6 ms-3 ms-lg-0 mb-3">Today</h2>

@@ -42,6 +42,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { FileSize } from './shared/FileSize.pipe';
 import { ImgFallbackModule } from "ngx-img-fallback";
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { ImgFallbackModule } from "ngx-img-fallback";
     CalendarModule,
     FileUploadModule,
     NgScrollbarModule,
-    ImgFallbackModule
+    ImgFallbackModule,
+    ConfirmPopupModule
   ],
   providers: [
     CookieService,

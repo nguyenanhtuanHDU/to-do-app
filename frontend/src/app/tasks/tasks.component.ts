@@ -3,9 +3,12 @@ import {
   faPlus,
   faPenToSquare,
   faTrash,
+  faClock,
+  faFile,
 } from '@fortawesome/free-solid-svg-icons';
+// import {} from '@fortawesome/free-regular-svg-icons';
 import { TaskService } from '../services/task.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Tasks } from '../models/tasks.model';
@@ -23,7 +26,8 @@ export class TasksComponent {
   constructor(
     private readonly taskService: TaskService,
     private readonly messageService: MessageService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +37,8 @@ export class TasksComponent {
   faPlus = faPlus;
   faPenToSquare = faPenToSquare;
   faTrash = faTrash;
+  faFile = faFile;
+  faClock = faClock;
 
   apiBackendRoot = environment.apiBackendRoot;
   isShowAddTaskDialog: boolean = false;
@@ -40,12 +46,15 @@ export class TasksComponent {
   taskName: string = '';
   taskDate: string = '';
   userSession!: User;
-  tasks: Tasks[] = [];
+  // tasks: Tasks[] = [];
+  listTaskDone: Tasks[] = [];
+  listTaskUnDone: Tasks[] = [];
   currentDate = new Date();
   headingDialog: string = '';
   filesSelected: any[] = [];
   oldFilesSelected: string[] = [];
   oldFilesDeleted: string[] = [];
+  isAdd!: boolean;
 
   selectFileTasks(event: any) {
     console.log(`🚀 ~ event:`, event.currentFiles);
@@ -58,11 +67,9 @@ export class TasksComponent {
   }
 
   chooseOldFileDeleted(file: string) {
-    this.oldFilesDeleted.push(file);
-    console.log(
-      `🚀 ~ chooseOldFileDeleted ~ this.oldFilesDeleted:`,
-      this.oldFilesDeleted
-    );
+    if (!this.oldFilesDeleted.includes(file)) {
+      this.oldFilesDeleted.push(file);
+    }
   }
 
   deleteImgSelected(index: number) {
@@ -72,10 +79,11 @@ export class TasksComponent {
 
   showAddTaskDialog(type: string, task: Tasks | null) {
     if (type === 'add') {
-      console.log('add');
+      this.isAdd = true;
       this.headingDialog = 'Add a task';
     } else if (type === 'edit') {
       if (task) {
+        this.isAdd = false;
         this.taskSelected = task;
         this.taskName = task.title;
         this.taskDate = task.exprise;
@@ -103,7 +111,9 @@ export class TasksComponent {
     this.taskService
       .getTasksByUserID(this.userSession._id)
       .subscribe((data: Tasks[]) => {
-        this.tasks = data;
+        // this.tasks = data;
+        this.listTaskDone = data.filter((task: Tasks) => task.completed);
+        this.listTaskUnDone = data.filter((task: Tasks) => !task.completed);
       });
   }
 
@@ -128,7 +138,7 @@ export class TasksComponent {
       .addATask(this.taskName, this.taskDate, this.filesSelected)
       .subscribe((data: any) => {
         this.getTasks();
-        this.filesSelected = []
+        this.clearTaskFiles();
         this.isShowAddTaskDialog = false;
         this.taskName = '';
         this.taskDate = '';
@@ -203,23 +213,36 @@ export class TasksComponent {
   }
 
   deleteTaskByID(taskID: string) {
-    this.taskService.deteleTaskByID(taskID).subscribe(
-      (data: any) => {
-        console.log(`🚀 ~ data:`, data);
-        this.getTasks();
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: data.message,
-        });
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to proceed?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.taskService.deteleTaskByID(taskID).subscribe(
+          (data: any) => {
+            console.log(`🚀 ~ data:`, data);
+            this.getTasks();
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: data.message,
+            });
+          },
+          (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error.message,
+            });
+          }
+        );
       },
-      (error) => {
+      reject: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: error.error.message,
+          summary: 'Rejected',
+          detail: 'You have rejected',
         });
-      }
-    );
+      },
+    });
   }
 }

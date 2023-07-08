@@ -1,6 +1,9 @@
 .task {
   height: 100vh;
-  // overflow: hidden;
+  overflow: hidden;
+  ng-scrollbar {
+    height: 65vh;
+  }
   &-head {
     h1 {
       font-size: 28px;
@@ -13,13 +16,27 @@
   &-body {
     &-list {
       &-item {
-        // border: 2px solid var(--bs-primary);
+        &__inner {
+          box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+            rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        }
+        &__title {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 380px;
+        }
+        &__btn {
+          width: 28px;
+          height: 28px;
+        }
+        &__icon {
+          width: 16px;
+        }
       }
     }
   }
   &-footer {
-    bottom: 20px;
-    left: 0;
     &-btn {
       &__icon {
         padding: 8;
@@ -38,15 +55,14 @@
           &-img {
             position: relative;
             &-trash {
-              background: rgba(255, 255, 255, 0.2);
-              border-radius: 16px;
-              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-              backdrop-filter: blur(5px);
-              -webkit-backdrop-filter: blur(5px);
-              border: 1px solid rgba(255, 255, 255, 0.3);
+              width: 28px;
+              height: 28px;
               position: absolute;
               top: 5px;
               right: 5px;
+              fa-icon {
+                font-size: 12px;
+              }
             }
             img {
               width: 100%;
@@ -64,5 +80,25 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .task {
+    overflow: auto;
+    ng-scrollbar {
+      height: 50vh;
+    }
+    // &-body {
+    //   &-list {
+    //     &-item {
+    //       &__inner {
+    //         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    //           rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
+    //       }
+    //     }
+    //   }
+    // }
   }
 }
