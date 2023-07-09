@@ -16,6 +16,7 @@ import { Task } from '../models/task.model';
 import { FileUpload } from 'primeng/fileupload';
 import { environment } from 'src/environments/environment.development';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { SwiperOptions } from 'swiper';
 
 @Component({
   selector: 'app-tasks',
@@ -45,6 +46,8 @@ export class TasksComponent {
   faCircleCheck = faCircleCheck;
 
   apiBackendRoot = environment.apiBackendRoot;
+  // apiBackend = environment.apiBackend;
+  imgSrc = this.apiBackendRoot + 'tasks/';
   isShowAddTaskDialog: boolean = false;
   taskSelected!: Task;
   taskName: string = '';
@@ -53,12 +56,32 @@ export class TasksComponent {
   // tasks: Tasks[] = [];
   listTaskDone: Task[] = [];
   listTaskUnDone: Task[] = [];
+  listImageViews: string[] = [];
   currentDate = new Date();
   headingDialog: string = '';
   filesSelected: any[] = [];
   oldFilesSelected: string[] = [];
   oldFilesDeleted: string[] = [];
   isAdd!: boolean;
+  config: SwiperOptions = {
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    autoHeight: true,
+    allowTouchMove: true,
+    slidesPerView: 1,
+    spaceBetween: 20,
+  };
+
+  showGalleryImages(images: string[]) {
+    this.listImageViews = images.map((item) => this.imgSrc + item);
+    console.log(
+      `🚀 ~ showGalleryImages ~ this.listImageViews:`,
+      this.listImageViews
+    );
+  }
 
   selectFileTasks(event: any) {
     console.log(`🚀 ~ event:`, event.currentFiles);

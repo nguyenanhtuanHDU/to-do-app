@@ -44,6 +44,8 @@ import { FileSize } from './shared/FileSize.pipe';
 import { ImgFallbackModule } from "ngx-img-fallback";
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ImageModule } from 'primeng/image';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { GalleriaModule } from 'primeng/galleria';
 
 @NgModule({
   declarations: [
@@ -91,7 +93,9 @@ import { ImageModule } from 'primeng/image';
     NgScrollbarModule,
     ImgFallbackModule,
     ConfirmPopupModule,
-    ImageModule
+    ImageModule,
+    OverlayPanelModule,
+    GalleriaModule
   ],
   providers: [
     CookieService,

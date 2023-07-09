@@ -38,13 +38,16 @@
                 <strong class="d-none d-lg-block" *ngIf="task.files.length > 0"
                   >|</strong
                 >
-                <span
+                <button
+                  pButton
+                  pRipple
                   *ngIf="task.files.length > 0"
                   class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2 w-fit-content"
+                  (click)="showGalleryImages(task.files); op.toggle($event)"
                 >
                   <fa-icon [icon]="faFile"></fa-icon>
-                  {{ task.files.length }} files</span
-                >
+                  {{ task.files.length }} files
+                </button>
               </div>
               <div class="d-flex gap-3">
                 <div
@@ -278,3 +281,12 @@
     '920px': { width: '80%', left: '50%', transform: 'translateX(-50%)' }
   }"
 ></p-toast>
+
+<p-overlayPanel #op>
+  <swiper [config]="config" class="p-3" style="width: 300px; height: 200px">
+    >
+    <ng-template swiperSlide *ngFor="let img of listImageViews">
+      <img style="width: 280px; height: 180px; object-fit: cover;" [src]="img" alt="" />
+    </ng-template>
+  </swiper>
+</p-overlayPanel>
