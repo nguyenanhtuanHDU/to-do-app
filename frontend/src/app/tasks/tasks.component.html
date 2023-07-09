@@ -32,7 +32,7 @@
                 <span
                   class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2 w-fit-content"
                 >
-                  <fa-icon [icon]="faClock"></fa-icon>
+                  <app-icon name="faClock"></app-icon>
                   exprise in {{ task.exprise | TimeAgo }}</span
                 >
                 <strong class="d-none d-lg-block" *ngIf="task.files.length > 0"
@@ -45,7 +45,7 @@
                   class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2 w-fit-content"
                   (click)="showGalleryImages(task.files); op.toggle($event)"
                 >
-                  <fa-icon [icon]="faFile"></fa-icon>
+                  <app-icon name="faFile"></app-icon>
                   {{ task.files.length }} files
                 </button>
               </div>
@@ -54,15 +54,13 @@
                   (click)="showAddTaskDialog('edit', task)"
                   class="task-body-list-item__btn p-3 br-round flex-center bg-secondary text-white"
                 >
-                  <fa-icon [icon]="faPenToSquare"></fa-icon>
+                  <app-icon name="faPenToSquare" [size]="13"></app-icon>
                 </div>
                 <div
                   class="task-body-list-item__btn p-3 br-round flex-center bg-danger text-white"
+                  (click)="deleteTaskByID(task._id)"
                 >
-                  <fa-icon
-                    [icon]="faTrash"
-                    (click)="deleteTaskByID(task._id)"
-                  ></fa-icon>
+                  <app-icon name="faTrash" [size]="13"></app-icon>
                 </div>
               </div>
             </div>
@@ -85,41 +83,38 @@
                   [ngModel]="true"
                 ></p-checkbox>
                 <span
-                  class="task-body-list-item__title px-4 py-1 br-round bg-primary text-white"
+                  class="task-body-list-item__title px-4 py-1 br-round bg-primary text-white text-capitalize"
                   >{{ task.title }}</span
                 >
                 <strong>|</strong>
                 <span
                   class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2"
                 >
-                  <fa-icon [icon]="faClock"></fa-icon>
+                  <app-icon name="faClock"></app-icon>
                   exprise in {{ task.exprise | TimeAgo }}</span
                 >
                 <strong *ngIf="task.files.length > 0">|</strong>
-                <span
+                <button
+                  pButton
+                  pRipple
                   *ngIf="task.files.length > 0"
-                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2"
+                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2 w-fit-content"
+                  (click)="showGalleryImages(task.files); op.toggle($event)"
                 >
-                  <fa-icon [icon]="faFile"></fa-icon>
-                  {{ task.files.length }} files</span
-                >
+                  <app-icon name="faFile"></app-icon>
+                  {{ task.files.length }} files
+                </button>
               </div>
               <div class="d-flex gap-3">
                 <div
                   class="task-body-list-item__btn p-3 br-round flex-center bg-secondary text-white"
                 >
-                  <fa-icon
-                    [icon]="faPenToSquare"
-                    (click)="showAddTaskDialog('edit', task)"
-                  ></fa-icon>
+                  <app-icon name="faPenToSquare" [size]="13"></app-icon>
                 </div>
                 <div
                   class="task-body-list-item__btn p-3 br-round flex-center bg-danger text-white"
                 >
-                  <fa-icon
-                    [icon]="faTrash"
-                    (click)="deleteTaskByID(task._id)"
-                  ></fa-icon>
+                  <app-icon name="faTrash" [size]="13"></app-icon>
                 </div>
               </div>
             </div>
@@ -131,10 +126,10 @@
   <div class="task-footer w-100 py-2 mt-2">
     <button pButton pRipple (click)="showAddTaskDialog('add', null)">
       <div class="d-flex gap-2 task-footer-btn">
-        <fa-icon
-          [icon]="faPlus"
-          classe="task-footer-btn__icon p-2 br-round bg-white text-primary "
-        ></fa-icon>
+        <app-icon
+          className="task-footer-btn__icon p-2 br-round bg-white text-primary"
+          name="faPlus"
+        ></app-icon>
         <span class="task-footer-btn__text">Add a task</span>
       </div>
     </button>
@@ -185,12 +180,14 @@
               class="col-lg-3 mb-lg-3"
               *ngFor="let file of oldFilesSelected; index as i"
             >
-              <div class="task-footer-modal-body-imgs-img">
+              <div
+                class="task-footer-modal-body-imgs-img bxs-1 br-8 overflow-hidden"
+              >
                 <div
-                  class="task-footer-modal-body-imgs-img-trash bg-white p-2 br-round text-dark flex-center cursor-pointer"
+                  class="task-footer-modal-body-imgs-img-trash bxs-1 bg-white p-2 br-round text-dark flex-center cursor-pointer"
                   (click)="chooseOldFileDeleted(file, i)"
                 >
-                  <fa-icon #deleteIcon [icon]="faTrash"></fa-icon>
+                  <app-icon name="faTrash" [size]="13"></app-icon>
                 </div>
                 <img
                   class="br-8"
@@ -233,15 +230,17 @@
               class="col-lg-3 mb-lg-3"
               *ngFor="let file of filesSelected; index as i"
             >
-              <div class="task-footer-modal-body-imgs-img">
+              <div
+                class="task-footer-modal-body-imgs-img bxs-1 br-8 overflow-hidden"
+              >
                 <div
-                  class="task-footer-modal-body-imgs-img-trash p-2 br-round bg-white flex-center text-dark"
+                  class="task-footer-modal-body-imgs-img-trash p-2 br-round bxs-1 bg-white flex-center text-dark"
                   (click)="deleteImgSelected(i)"
                 >
-                  <fa-icon [icon]="faTrash"></fa-icon>
+                  <app-icon name="faTrash" [size]="13"></app-icon>
                 </div>
                 <img
-                  class="br-8"
+                  class=""
                   alt=""
                   [src]="file.objectURL.changingThisBreaksApplicationSecurity"
                 />

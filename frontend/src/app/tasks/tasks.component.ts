@@ -1,21 +1,10 @@
-import { Component, ViewChild, ViewChildren } from '@angular/core';
-import {
-  faPlus,
-  faPenToSquare,
-  faTrash,
-  faClock,
-  faFile,
-  faCircleCheck,
-} from '@fortawesome/free-solid-svg-icons';
-// import {} from '@fortawesome/free-regular-svg-icons';
+import { Component, ViewChild } from '@angular/core';
 import { TaskService } from '../services/task.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Task } from '../models/task.model';
-import { FileUpload } from 'primeng/fileupload';
 import { environment } from 'src/environments/environment.development';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { SwiperOptions } from 'swiper';
 
 @Component({
@@ -25,7 +14,6 @@ import { SwiperOptions } from 'swiper';
 })
 export class TasksComponent {
   @ViewChild('fileUpload', { static: false }) fileUpload: any;
-  @ViewChildren('deleteIcon') deleteIcon: any;
 
   constructor(
     private readonly taskService: TaskService,
@@ -37,13 +25,6 @@ export class TasksComponent {
   ngOnInit(): void {
     this.getUserSerssion();
   }
-
-  faPlus = faPlus;
-  faPenToSquare = faPenToSquare;
-  faTrash = faTrash;
-  faFile = faFile;
-  faClock = faClock;
-  faCircleCheck = faCircleCheck;
 
   apiBackendRoot = environment.apiBackendRoot;
   // apiBackend = environment.apiBackend;
@@ -77,14 +58,9 @@ export class TasksComponent {
 
   showGalleryImages(images: string[]) {
     this.listImageViews = images.map((item) => this.imgSrc + item);
-    console.log(
-      `🚀 ~ showGalleryImages ~ this.listImageViews:`,
-      this.listImageViews
-    );
   }
 
   selectFileTasks(event: any) {
-    console.log(`🚀 ~ event:`, event.currentFiles);
     this.filesSelected = event.currentFiles;
   }
 
@@ -117,7 +93,6 @@ export class TasksComponent {
   }
 
   deleteImgSelected(index: number) {
-    console.log(`🚀 ~ index:`, index);
     this.filesSelected.splice(index, 1);
   }
 
@@ -213,24 +188,18 @@ export class TasksComponent {
         data,
         this.taskSelected._id
       )
-      .subscribe((data) => {
-        console.log(`🚀 ~ editTask ~ data:`, data);
-      });
+      .subscribe((data) => {});
   }
 
   handleForm() {
     if (this.headingDialog === 'Add a task') {
       this.addTask();
-      console.log(`🚀 ~ handleForm ~ addTask:`);
     } else if (this.headingDialog === 'Edit a task') {
       this.editTask();
-      console.log(`🚀 ~ handleForm ~ editTask:`);
     }
   }
 
   onDoneTask(taskID: string) {
-    console.log(`🚀 ~ onDoneTask:`);
-
     this.taskService.doneTask(taskID).subscribe(
       () => {
         this.getTasks();
@@ -246,8 +215,6 @@ export class TasksComponent {
   }
 
   onUnDoneTask(taskID: string) {
-    console.log(`🚀 ~ onUnDoneTask:`);
-
     this.taskService.unDoneTask(taskID).subscribe(
       () => {
         this.getTasks();
@@ -269,7 +236,6 @@ export class TasksComponent {
       accept: () => {
         this.taskService.deteleTaskByID(taskID).subscribe(
           (data: any) => {
-            console.log(`🚀 ~ data:`, data);
             this.getTasks();
             this.messageService.add({
               severity: 'success',

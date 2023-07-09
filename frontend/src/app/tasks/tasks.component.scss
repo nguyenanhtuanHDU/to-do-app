@@ -29,6 +29,9 @@
         &__btn {
           width: 28px;
           height: 28px;
+          fa-icon {
+            font-size: 14px;
+          }
         }
         &__icon {
           width: 16px;
@@ -54,6 +57,7 @@
         &-imgs {
           &-img {
             position: relative;
+            height: 92px;
             &-trash {
               width: 28px;
               height: 28px;

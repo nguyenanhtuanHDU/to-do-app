@@ -46,6 +46,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ImageModule } from 'primeng/image';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { GalleriaModule } from 'primeng/galleria';
+import { IconComponent } from './shared/icon/icon.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { GalleriaModule } from 'primeng/galleria';
     TasksComponent,
     TimeAgo,
     FileSize,
+    IconComponent,
   ],
   imports: [
     BrowserModule,

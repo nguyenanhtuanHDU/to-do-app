@@ -1,12 +1,4 @@
 import { Component } from '@angular/core';
-import {
-  faHome,
-  faFolderOpen,
-  faCalendarDays,
-  faGear,
-  faArrowRightFromBracket,
-  faListCheck,
-} from '@fortawesome/free-solid-svg-icons';
 import { menuItem } from '../models/menuItem.model';
 import { AuthService } from '../services/auth.service';
 import {
@@ -32,22 +24,22 @@ export class MenuComponent {
   menuItemsTop: menuItem[] = [
     {
       label: 'Overview',
-      icon: faHome,
+      icon: 'faHome',
       routerLink: '',
     },
     {
       label: 'Tasks',
-      icon: faListCheck,
+      icon: 'faListCheck',
       routerLink: 'tasks',
     },
     {
       label: 'Projects',
-      icon: faFolderOpen,
+      icon: 'faFolderOpen',
       routerLink: 'project',
     },
     {
       label: 'Calendar',
-      icon: faCalendarDays,
+      icon: 'faCalendarDays',
       routerLink: 'calendar',
     },
   ];
@@ -55,11 +47,11 @@ export class MenuComponent {
   menuItemsBottom: menuItem[] = [
     {
       label: 'Settings',
-      icon: faGear,
+      icon: 'faGear',
     },
     {
       label: 'Log out',
-      icon: faArrowRightFromBracket,
+      icon: 'faArrowRightFromBracket',
       click: () => this.handleLogOut(),
     },
   ];

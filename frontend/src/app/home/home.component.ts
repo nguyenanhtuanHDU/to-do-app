@@ -3,17 +3,10 @@ import { Title } from '@angular/platform-browser';
 import {
   ConfirmEventType,
   ConfirmationService,
-  MenuItem,
   MessageService,
 } from 'primeng/api';
 import { WeatherService } from '../services/weather.service';
 import { SwiperComponent } from 'swiper/angular';
-import {
-  faAngleLeft,
-  faAngleRight,
-  faBell,
-  faMagnifyingGlass,
-} from '@fortawesome/free-solid-svg-icons';
 import { Chart } from 'chart.js';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from '../services/user.service';
@@ -76,11 +69,6 @@ export class HomeComponent {
   };
 
   chart: any;
-
-  faAngleLeft = faAngleLeft;
-  faAngleRight = faAngleRight;
-  faMagnifyingGlass = faMagnifyingGlass;
-  faBell = faBell;
 
   user!: User;
   sidebarVisible: boolean = false;
@@ -191,7 +179,7 @@ export class HomeComponent {
   getWeatherNextWeek(lat: number, lon: number) {
     this.weatherService.getWeatherNextWeek(lat, lon).subscribe(
       (data: any) => {
-        console.log(`🚀 ~ getWeatherNextWeek ~ data:`, data)
+        console.log(`🚀 ~ getWeatherNextWeek ~ data:`, data);
 
         data.forecast.forecastday.map((item: any) => {
           this.listDaysChart.push(item.date);

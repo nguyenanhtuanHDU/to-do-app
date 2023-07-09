@@ -21,8 +21,8 @@
           [routerLinkActiveOptions]="{ exact: true }"
         >
           <div class="dot"></div>
-          <div class="menu-inner-list-item__icon">
-            <fa-icon [icon]="item.icon"></fa-icon>
+          <div class="menu-inner-list-item__icon flex-center-y">
+            <app-icon [name]="item.icon"></app-icon>
           </div>
           <span class="fw-5">{{ item.label }}</span>
         </li>
@@ -35,8 +35,8 @@
         *ngFor="let item of menuItemsBottom"
         (click)="item?.click()"
       >
-        <div class="menu-inner-list-item__icon">
-          <fa-icon [icon]="item.icon"></fa-icon>
+        <div class="menu-inner-list-item__icon flex-center-y">
+          <app-icon [name]="item.icon"></app-icon>
         </div>
         <span class="fw-5">{{ item.label }}</span>
       </div>
