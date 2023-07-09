@@ -140,6 +140,12 @@ export class TasksComponent {
     }, 500);
   }
 
+  closeAddTaskDialog() {
+    this.taskName = '';
+    this.taskDate = '';
+    this.oldFilesSelected = [];
+  }
+
   trackByFn(index: number, item: any): any {
     return item.id;
   }

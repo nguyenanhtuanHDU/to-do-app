@@ -177,7 +177,6 @@ export class HomeComponent {
   getWeather(lat: number, lon: number) {
     this.weatherService.getWeather(lat, lon).subscribe(
       (data: any) => {
-        // console.log('data', data);
         this.weather = data;
       },
       () => {
@@ -192,6 +191,8 @@ export class HomeComponent {
   getWeatherNextWeek(lat: number, lon: number) {
     this.weatherService.getWeatherNextWeek(lat, lon).subscribe(
       (data: any) => {
+        console.log(`🚀 ~ getWeatherNextWeek ~ data:`, data)
+
         data.forecast.forecastday.map((item: any) => {
           this.listDaysChart.push(item.date);
           this.listMaxTempChart.push(item.day.maxtemp_c);

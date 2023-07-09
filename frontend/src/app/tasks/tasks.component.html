@@ -145,6 +145,7 @@
       [style]="{ width: '50vw' }"
       [modal]="true"
       [dismissableMask]="true"
+      (onHide)="closeAddTaskDialog()"
       class="task-footer-modal"
     >
       <ng-template pTemplate="header" class="bg-primary">
@@ -172,9 +173,14 @@
           [readonlyInput]="true"
         ></p-calendar>
 
-        <strong class="mb-2">Old file</strong>
-        <ng-scrollbar style="height: 105px">
-          <div class="task-footer-modal-body-imgs row" *ngIf="!isAdd">
+        <strong *ngIf="!isAdd && oldFilesSelected.length > 0" class="mb-2"
+          >Old files</strong
+        >
+        <strong *ngIf="!isAdd && oldFilesSelected.length === 0" class="mb-2"
+          >No files in this task</strong
+        >
+        <ng-scrollbar style="height: 105px" *ngIf="!isAdd">
+          <div class="task-footer-modal-body-imgs row">
             <div
               class="col-lg-3 mb-lg-3"
               *ngFor="let file of oldFilesSelected; index as i"
@@ -216,7 +222,7 @@
           ></button>
         </div>
         <strong *ngIf="!isAdd && filesSelected.length > 0" class="mb-2"
-          >New file</strong
+          >New files</strong
         >
         <ng-scrollbar
           class="task-footer-modal-body-scrollbar"
@@ -286,7 +292,11 @@
   <swiper [config]="config" class="p-3" style="width: 300px; height: 200px">
     >
     <ng-template swiperSlide *ngFor="let img of listImageViews">
-      <img style="width: 280px; height: 180px; object-fit: cover;" [src]="img" alt="" />
+      <img
+        style="width: 280px; height: 180px; object-fit: cover"
+        [src]="img"
+        alt=""
+      />
     </ng-template>
   </swiper>
 </p-overlayPanel>
