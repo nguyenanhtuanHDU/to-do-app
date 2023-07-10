@@ -170,7 +170,8 @@ export class HomeComponent {
       () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'API Weather is error, please reload page',
+          summary: 'Error',
+          detail: 'API Weather is error, please reload page',
         });
       }
     );
@@ -192,7 +193,8 @@ export class HomeComponent {
       () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'API Weather is error, please reload page',
+          summary: 'Error',
+          detail: 'API Weather is error, please reload page',
         });
       }
     );

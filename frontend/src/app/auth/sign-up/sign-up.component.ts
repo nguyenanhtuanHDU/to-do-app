@@ -76,21 +76,24 @@ export class SignUpComponent {
     ) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Please fill all fields',
+        summary: 'Warn',
+        detail: 'Please fill all fields',
       });
       return;
     }
     if (this.signUpForm.get('username')?.hasError('minlength')) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Username must have at least 6 characters',
+        summary: 'Warn',
+        detail: 'Username must have at least 6 characters',
       });
       return;
     }
     if (this.signUpForm.get('password')?.hasError('minlength')) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Password must have at least 6 characters',
+        summary: 'Warn',
+        detail: 'Password must have at least 6 characters',
       });
       return;
     }
@@ -99,7 +102,8 @@ export class SignUpComponent {
     ) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Confirm Password is not the same as password',
+        summary: 'Warn',
+        detail: 'Confirm Password is not the same as password',
       });
       return;
     }
@@ -119,7 +123,8 @@ export class SignUpComponent {
           this.cookieService.set('todo_new_email', '');
           this.messageService.add({
             severity: 'success',
-            summary: data.message,
+            summary: 'Success',
+            detail: data.message,
           });
           this.router.navigate(['/auth/login']);
         },
@@ -128,7 +133,8 @@ export class SignUpComponent {
           error.error.message.map((msg: string) => {
             this.messageService.add({
               severity: 'error',
-              summary: msg,
+              summary: 'Error',
+              detail: msg,
             });
           });
         }

@@ -169,7 +169,8 @@ export class TasksComponent {
         this.taskDate = '';
         this.messageService.add({
           severity: 'success',
-          summary: data.message,
+          summary: 'Success',
+          detail: data.message,
         });
       });
   }

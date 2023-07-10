@@ -69,7 +69,8 @@ export class LoginComponent {
     if (username === '' || password === '') {
       this.messageService.add({
         severity: 'error',
-        summary: 'Username and Password can not be empty',
+        summary: 'Error',
+        detail: 'Username and Password can not be empty',
       });
       return;
     }
@@ -77,7 +78,8 @@ export class LoginComponent {
     if (username.length < 6 || password.length < 6) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Username and Password must be at least 6 characters',
+        summary: 'Error',
+        detail: 'Username and Password must be at least 6 characters',
       });
       return;
     }
@@ -102,7 +104,8 @@ export class LoginComponent {
           error.error.message.map((msg: string) => {
             this.messageService.add({
               severity: 'error',
-              summary: msg,
+              summary: 'Error',
+              detail: msg,
             });
           });
         }
