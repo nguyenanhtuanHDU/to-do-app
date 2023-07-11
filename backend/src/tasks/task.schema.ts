@@ -11,6 +11,9 @@ export class Task {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: true })
+  color: string;
+
   @Prop({ default: false })
   completed: boolean;
 

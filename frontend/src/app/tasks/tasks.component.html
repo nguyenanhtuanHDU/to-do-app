@@ -25,29 +25,36 @@
                   (click)="onDoneTask(task._id)"
                 ></p-checkbox>
                 <span
-                  class="task-body-list-item__title px-4 py-1 br-round bg-primary text-white text-capitalize"
+                  [style.background]="task.color"
+                  class="task-body-list-item__title px-4 py-1 br-round text-white text-capitalize"
                   >{{ task.title }}</span
                 >
-                <strong class="d-none d-lg-block">|</strong>
+                <strong [style.color]="task.color" class="d-none d-lg-block"
+                  >|</strong
+                >
                 <span
-                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2 w-fit-content"
+                  [style.background]="task.color"
+                  class="px-4 py-1 br-round text-white flex-center-y gap-2 w-fit-content"
                 >
                   <app-icon name="faClock"></app-icon>
                   exprise in {{ task.exprise | TimeAgo }}</span
                 >
-                <strong class="d-none d-lg-block" *ngIf="task.files.length > 0"
+                <strong
+                  [style.color]="task.color"
+                  class="d-none d-lg-block"
+                  *ngIf="task.files.length > 0"
                   >|</strong
                 >
-                <button
-                  pButton
+                <span
                   pRipple
+                  [style.background]="task.color"
                   *ngIf="task.files.length > 0"
-                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2 w-fit-content"
+                  class="px-4 py-1 br-round text-white flex-center-y gap-2 w-fit-content"
                   (click)="showGalleryImages(task.files); op.toggle($event)"
                 >
                   <app-icon name="faFile"></app-icon>
                   {{ task.files.length }} files
-                </button>
+                </span>
               </div>
               <div class="d-flex gap-3">
                 <div
@@ -83,36 +90,41 @@
                   [ngModel]="true"
                 ></p-checkbox>
                 <span
-                  class="task-body-list-item__title px-4 py-1 br-round bg-primary text-white text-capitalize"
+                  [style.background]="task.color"
+                  class="task-body-list-item__title px-4 py-1 br-round text-white text-capitalize"
                   >{{ task.title }}</span
                 >
-                <strong>|</strong>
+                <strong [style.color]="task.color">|</strong>
                 <span
-                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2"
+                  [style.background]="task.color"
+                  class="px-4 py-1 br-round text-white flex-center-y gap-2"
                 >
                   <app-icon name="faClock"></app-icon>
                   exprise in {{ task.exprise | TimeAgo }}</span
                 >
-                <strong *ngIf="task.files.length > 0">|</strong>
-                <button
-                  pButton
+                <strong [style.color]="task.color" *ngIf="task.files.length > 0"
+                  >|</strong
+                >
+                <span
                   pRipple
+                  [style.background]="task.color"
                   *ngIf="task.files.length > 0"
-                  class="px-4 py-1 br-round bg-primary text-white flex-center-y gap-2 w-fit-content"
+                  class="px-4 py-1 br-round text-white flex-center-y gap-2 w-fit-content"
                   (click)="showGalleryImages(task.files); op.toggle($event)"
                 >
                   <app-icon name="faFile"></app-icon>
                   {{ task.files.length }} files
-                </button>
+                </span>
               </div>
               <div class="d-flex gap-3">
                 <div
-                  class="task-body-list-item__btn p-3 br-round flex-center bg-secondary text-white"
+                  class="task-body-list-item__btn p-3 br-round flex-center bg-secondary text-white cursor-pointer"
                 >
                   <app-icon name="faPenToSquare" [size]="13"></app-icon>
                 </div>
                 <div
-                  class="task-body-list-item__btn p-3 br-round flex-center bg-danger text-white"
+                  class="task-body-list-item__btn p-3 br-round flex-center bg-danger text-white cursor-pointer"
+                  (click)="deleteTaskByID(task._id)"
                 >
                   <app-icon name="faTrash" [size]="13"></app-icon>
                 </div>
@@ -167,11 +179,27 @@
           [keepInvalid]="true"
           [readonlyInput]="true"
         ></p-calendar>
+        <div class="d-flex justify-content-between">
+          <div class="task-footer-modal-body-colors d-flex gap-3 py-2">
+            <div
+              *ngFor="let color of listTaskColors"
+              [style.background]="color"
+              class="task-footer-modal-body-colors-color br-8 bxs-1"
+              (click)="setTaskColor(color)"
+            ></div>
+          </div>
 
-        <strong *ngIf="!isAdd && oldFilesSelected.length > 0" class="mb-2"
-          >Old files</strong
-        >
-        <strong *ngIf="!isAdd && oldFilesSelected.length === 0" class="mb-2"
+          <div class="flex-center-y gap-3">
+            <strong>Your color</strong>
+            <div
+              [style.background]="taskColor"
+              class="task-footer-modal-body-colors-color br-8 bxs-1"
+            ></div>
+          </div>
+        </div>
+
+        <strong *ngIf="!isAdd && oldFilesSelected.length > 0">Old files</strong>
+        <strong *ngIf="!isAdd && oldFilesSelected.length === 0"
           >No files in this task</strong
         >
         <ng-scrollbar style="height: 105px" *ngIf="!isAdd">
@@ -218,9 +246,7 @@
             (click)="clearTaskFiles()"
           ></button>
         </div>
-        <strong *ngIf="!isAdd && filesSelected.length > 0" class="mb-2"
-          >New files</strong
-        >
+        <strong *ngIf="!isAdd && filesSelected.length > 0">New files</strong>
         <ng-scrollbar
           class="task-footer-modal-body-scrollbar"
           style="height: 95px"
@@ -262,9 +288,9 @@
             pButton
             pRipple
             class="flex-center gap-2 w-100 p-button-outlined m-0 task-footer-modal-footer-btn"
-            (click)="taskName = ''; taskDate = ''"
+            (click)="resetTaskDialog()"
           >
-            <div class="fw-7">Clear</div>
+            <div class="fw-7">Reset</div>
             <i class="pi pi-times fw-7"></i>
           </button>
           <button

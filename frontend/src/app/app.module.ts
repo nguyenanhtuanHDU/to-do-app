@@ -47,6 +47,7 @@ import { ImageModule } from 'primeng/image';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { GalleriaModule } from 'primeng/galleria';
 import { IconComponent } from './shared/icon/icon.component';
+import { ColorPickerModule } from 'primeng/colorpicker';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { IconComponent } from './shared/icon/icon.component';
     ConfirmPopupModule,
     ImageModule,
     OverlayPanelModule,
-    GalleriaModule
+    GalleriaModule,
+    ColorPickerModule
   ],
   providers: [
     CookieService,

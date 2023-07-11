@@ -22,12 +22,12 @@ export class TaskService {
     });
   }
 
-  addATask(title: string, exprise: string, files: any[]) {
+  addATask(title: string, exprise: string, color: string, files: any[]) {
     const formData: FormData = new FormData();
     for (let i = 0; i < files.length; i++) {
       formData.append('file', files[i]);
     }
-    const data = { title, exprise };
+    const data = { title, exprise, color };
     formData.append('data', JSON.stringify(data));
     return this.http.post(this.apiTask, formData, {
       headers: this.authService.getHeaders(),

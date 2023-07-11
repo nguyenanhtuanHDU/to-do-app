@@ -67,6 +67,8 @@ export class TaskController {
     @Req() req: Request,
   ) {
     const taskData = JSON.parse(data);
+    console.log(`🚀 ~ taskData:`, taskData);
+
     taskData.files = uploadedFileNames;
 
     const userID = req.cookies.userID;
@@ -112,11 +114,17 @@ export class TaskController {
     @Res() res: Response,
     @Req() req: Request,
   ) {
-    console.log(`🚀 ~ updateTask ~ data:`, data);
-    console.log('file: ', file);
     const taskData = JSON.parse(data);
     taskData.uploadedFileNames = uploadedFileNames;
     await this.taskService.editTaskByID(taskID, taskData);
+    res.status(HttpStatus.OK).json({
+      message: 'Update Task successfully',
+    });
+  }
+
+  @Put()
+  async updateAll(@Body() data: any) {
+    await this.taskService.updateAllTasks(data);
   }
 
   @Delete(':id')

@@ -64,6 +64,7 @@ export class TaskService {
     console.log(`🚀 ~ editTaskByID ~ taskID:`, taskID);
 
     const task = await this.getTaskByID(taskID);
+    if (!task) throw new NotFoundException('Task not found');
 
     // xóa file cũ
     data.fileDeleted.forEach((file) => {
@@ -77,9 +78,11 @@ export class TaskService {
     });
 
     await task.save();
+    await this.taskModel.findByIdAndUpdate(taskID, data);
+  }
 
-    // const task = await this.taskModel.findByIdAndUpdate(taskID, data);
-    // if (!task) throw new NotFoundException('Task not found');
+  async updateAllTasks(data: any) {
+    this.taskModel.updateMany({}, data);
   }
 
   async deleteTaskByID(taskID: string, userID: string) {

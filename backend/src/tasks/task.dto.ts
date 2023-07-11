@@ -10,6 +10,9 @@ export class TaskDTO {
   title: string;
 
   @Expose()
+  color: string;
+
+  @Expose()
   completed: boolean;
 
   @Expose()
@@ -22,10 +25,11 @@ export class TaskDTO {
 export class CreateTaskDTO extends PickType(TaskDTO, [
   'title',
   'userID',
-  'files'
+  'files',
 ] as const) {}
 
 export class EditTaskDTO extends PickType(TaskDTO, [
   'title',
   'exprise',
+  'color',
 ] as const) {}

@@ -33,11 +33,23 @@ export class TasksComponent {
   taskSelected!: Task;
   taskName: string = '';
   taskDate: string = '';
+  taskColor: string = '#009aff';
   userSession!: User;
   // tasks: Tasks[] = [];
   listTaskDone: Task[] = [];
   listTaskUnDone: Task[] = [];
   listImageViews: string[] = [];
+  listTaskColors: string[] = [
+    '#009aff',
+    '#6386E9',
+    '#8372CD',
+    '#F46493',
+    '#32C192',
+    '#F46493',
+    '#F07033',
+    '#EEE8A9',
+    '#00E2EA',
+  ];
   currentDate = new Date();
   headingDialog: string = '';
   filesSelected: any[] = [];
@@ -56,6 +68,10 @@ export class TasksComponent {
     spaceBetween: 20,
   };
 
+  setTaskColor(color: string) {
+    this.taskColor = color;
+  }
+
   showGalleryImages(images: string[]) {
     this.listImageViews = images.map((item) => this.imgSrc + item);
   }
@@ -67,6 +83,12 @@ export class TasksComponent {
   clearTaskFiles() {
     this.fileUpload.clear();
     this.filesSelected = [];
+  }
+
+  resetTaskDialog() {
+    this.taskName = '';
+    this.taskDate = '';
+    this.taskColor = '#009aff';
   }
 
   chooseOldFileDeleted(fileName: string, index: number) {
@@ -105,6 +127,7 @@ export class TasksComponent {
         this.isAdd = false;
         this.taskSelected = task;
         this.taskName = task.title;
+        this.taskColor = task.color;
         this.taskDate = task.exprise;
         this.oldFilesSelected = task.files;
         this.headingDialog = 'Edit a task';
@@ -118,6 +141,7 @@ export class TasksComponent {
   closeAddTaskDialog() {
     this.taskName = '';
     this.taskDate = '';
+    this.taskColor = '';
     this.oldFilesSelected = [];
   }
 
@@ -160,13 +184,19 @@ export class TasksComponent {
       return;
     }
     this.taskService
-      .addATask(this.taskName, this.taskDate, this.filesSelected)
+      .addATask(
+        this.taskName,
+        this.taskDate,
+        this.taskColor,
+        this.filesSelected
+      )
       .subscribe((data: any) => {
         this.getTasks();
         this.clearTaskFiles();
         this.isShowAddTaskDialog = false;
-        this.taskName = '';
+        this.taskName = '#009aff';
         this.taskDate = '';
+        this.taskColor = '';
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
@@ -176,11 +206,10 @@ export class TasksComponent {
   }
 
   editTask() {
-    console.log('filesSelected: ', this.filesSelected);
-    console.log('this.taskSelected: ', this.taskSelected);
     const data = {
       title: this.taskName,
       exprise: this.taskDate,
+      color: this.taskColor,
     };
     this.taskService
       .editTask(
@@ -189,7 +218,24 @@ export class TasksComponent {
         data,
         this.taskSelected._id
       )
-      .subscribe((data) => {});
+      .subscribe(
+        (data: any) => {
+          this.getTasks();
+          this.isShowAddTaskDialog = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: data.message,
+          });
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message,
+          });
+        }
+      );
   }
 
   handleForm() {
