@@ -46,7 +46,7 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Get(':userID')
-  async getAll(@Param('userID') userID: string, @Res() res: Response) {
+  async getAllByUserID(@Param('userID') userID: string, @Res() res: Response) {
     const tasks = await this.taskService.getTasksByUserID(userID.toString());
     res.status(HttpStatus.OK).json(tasks);
   }

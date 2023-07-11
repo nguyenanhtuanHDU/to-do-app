@@ -1,9 +1,7 @@
 .task {
   height: 100vh;
   overflow: hidden;
-  ng-scrollbar {
-    height: 65vh;
-  }
+
   &-head {
     h1 {
       font-size: 28px;
@@ -94,15 +92,6 @@
         }
       }
     }
-  }
-}
-
-@keyframes exprise {
-  50% {
-    color: red !important;
-  }
-  100% {
-    color: white !important;
   }
 }
 

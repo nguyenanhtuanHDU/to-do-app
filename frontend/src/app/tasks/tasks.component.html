@@ -1,9 +1,9 @@
 <div class="task px-lg-5 position-relative pt-5">
-  <div class="task-head mb-5 mt-5 mt-lg-0">
+  <div class="task-head mb-2 mt-5 mt-lg-0">
     <h1 class="fw-bold text-capitalize">List tasks</h1>
     <span class="text-gray">{{ currentTime | date : "dd/MM/yyyy" }} </span>
   </div>
-  <ng-scrollbar class="p-3" appearance="compact">
+  <ng-scrollbar class="p-3" appearance="compact" style="height: 67vh">
     <div class="task-body p-lg-3 p-2">
       <div class="task-body-list d-flex flex-column gap-5">
         <div class="mb-4 d-flex flex-column gap-3">
@@ -20,7 +20,6 @@
               >
                 <p-checkbox
                   class="d-block"
-                  [binary]="true"
                   inputId="binary"
                   (click)="onDoneTask(task._id)"
                 ></p-checkbox>
@@ -95,7 +94,7 @@
         <div class="mt-4 d-flex flex-column gap-3">
           <div
             class="task-body-list-item bg-white text-primary border-primary ps-0 animate__animated animate__bounceInRight"
-            *ngFor="let task of listTaskDone; index as i; trackBy: trackByFn"
+            *ngFor="let task of listTaskDone; index as i"
           >
             <div
               *ngIf="task.completed"
@@ -115,12 +114,22 @@
                 >
                 <strong [style.color]="task.color">|</strong>
                 <span
-                  [style.background]="task.color"
-                  class="px-4 py-1 br-round text-white flex-center-y gap-2"
-                >
-                  <app-icon name="faClock"></app-icon>
-                  exprise in {{ task.exprise | TimeAgo }}</span
-                >
+                [style.background]="task.color"
+                *ngIf="!checkTaskExprise(task.exprise)"
+                class="px-4 py-1 br-round text-white flex-center-y gap-2 w-fit-content"
+              >
+                <app-icon name="faClock"></app-icon>
+                exprise in {{ task.exprise | TimeAgo }}</span
+              >
+
+              <span
+                [style.background]="task.color"
+                *ngIf="checkTaskExprise(task.exprise)"
+                class="px-4 py-1 br-round text-white flex-center-y gap-2 w-fit-content task-body-list-item__exprise"
+              >
+                <app-icon name="faClock"></app-icon>
+                ended in {{ task.exprise | TimeAgo }}</span
+              >
                 <strong [style.color]="task.color" *ngIf="task.files.length > 0"
                   >|</strong
                 >
@@ -157,7 +166,7 @@
       </div>
     </div>
   </ng-scrollbar>
-  <div class="task-footer w-100 py-2 mt-2">
+  <div class="task-footer w-100 py-2 mt-4">
     <button pButton pRipple (click)="showAddTaskDialog('add', null)">
       <div class="flex-center-y gap-2 task-footer-btn">
         <app-icon
@@ -319,7 +328,7 @@
             pButton
             pRipple
             class="flex-center gap-2 w-100 m-0 task-footer-modal-footer-btn bg-primary text-white"
-            (click)="handleForm()"
+            (click)="handleFormType()"
           >
             <div class="fw-7">OK</div>
             <i class="pi pi-check fw-7"></i>

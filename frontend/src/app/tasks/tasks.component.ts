@@ -144,10 +144,22 @@ export class TasksComponent {
   }
 
   closeAddTaskDialog() {
-    this.taskName = '';
-    this.taskDate = '';
-    this.taskColor = '';
+    this.resetTaskDialog();
     this.oldFilesSelected = [];
+  }
+
+  sortTaskByExprise(listTasks: Task[]) {
+    listTasks.sort((a: Task, b: Task) => {
+      const taskA = Date.parse(a.exprise);
+      const taskB = Date.parse(b.exprise);
+      if (taskA > taskB) {
+        return 1;
+      } else if (taskA < taskB) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
   }
 
   trackByFn(index: number, item: any): any {
@@ -162,13 +174,22 @@ export class TasksComponent {
   }
 
   getTasks() {
-    this.taskService
-      .getTasksByUserID(this.userSession._id)
-      .subscribe((data: Task[]) => {
-        // this.tasks = data;
+    this.taskService.getTasksByUserID(this.userSession._id).subscribe(
+      (data: Task[]) => {
         this.listTaskDone = data.filter((task: Task) => task.completed);
         this.listTaskUnDone = data.filter((task: Task) => !task.completed);
-      });
+        this.sortTaskByExprise(this.listTaskDone);
+        this.sortTaskByExprise(this.listTaskUnDone);
+      },
+      (error) => {
+        console.log(`🚀 ~ getTasks ~ error:`, error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error.message,
+        });
+      }
+    );
   }
 
   addTask() {
@@ -243,7 +264,7 @@ export class TasksComponent {
       );
   }
 
-  handleForm() {
+  handleFormType() {
     if (this.headingDialog === 'Add a task') {
       this.addTask();
     } else if (this.headingDialog === 'Edit a task') {
@@ -257,6 +278,7 @@ export class TasksComponent {
         this.getTasks();
       },
       (error) => {
+        console.log(`🚀 ~ onDoneTask ~ error:`, error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
