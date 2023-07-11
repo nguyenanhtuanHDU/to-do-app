@@ -14,6 +14,7 @@ import {
   faPenToSquare,
   faPlus,
   faTrash,
+  faStopwatch,
 } from '@fortawesome/free-solid-svg-icons';
 
 interface MyObject {
@@ -43,5 +44,6 @@ export class IconComponent {
     faCalendarDays: faCalendarDays,
     faGear: faGear,
     faArrowRightFromBracket: faArrowRightFromBracket,
+    faStopwatch: faStopwatch,
   };
 }

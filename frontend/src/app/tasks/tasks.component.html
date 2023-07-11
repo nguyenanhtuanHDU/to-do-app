@@ -1,14 +1,14 @@
 <div class="task px-lg-5 position-relative pt-5">
   <div class="task-head mb-5 mt-5 mt-lg-0">
     <h1 class="fw-bold text-capitalize">List tasks</h1>
-    <span class="text-gray">{{ currentDate | date : "dd/MM/yyyy" }} </span>
+    <span class="text-gray">{{ currentTime | date : "dd/MM/yyyy" }} </span>
   </div>
   <ng-scrollbar class="p-3" appearance="compact">
     <div class="task-body p-lg-3 p-2">
       <div class="task-body-list d-flex flex-column gap-5">
         <div class="mb-4 d-flex flex-column gap-3">
           <div
-            class="task-body-list-item bg-white text-primary border-primary ps-0"
+            class="task-body-list-item bg-white text-primary border-primary ps-0 animate__animated animate__bounceInRight"
             *ngFor="let task of listTaskUnDone; index as i; trackBy: trackByFn"
           >
             <div
@@ -34,10 +34,20 @@
                 >
                 <span
                   [style.background]="task.color"
+                  *ngIf="!checkTaskExprise(task.exprise)"
                   class="px-4 py-1 br-round text-white flex-center-y gap-2 w-fit-content"
                 >
                   <app-icon name="faClock"></app-icon>
                   exprise in {{ task.exprise | TimeAgo }}</span
+                >
+
+                <span
+                  [style.background]="task.color"
+                  *ngIf="checkTaskExprise(task.exprise)"
+                  class="px-4 py-1 br-round text-white flex-center-y gap-2 w-fit-content task-body-list-item__exprise"
+                >
+                  <app-icon name="faClock"></app-icon>
+                  ended in {{ task.exprise | TimeAgo }}</span
                 >
                 <strong
                   [style.color]="task.color"
@@ -58,13 +68,22 @@
               </div>
               <div class="d-flex gap-3">
                 <div
+                  *ngIf="checkTaskExprise(task.exprise)"
+                  pRipple
+                  class="task-body-list-item__btn p-3 br-round flex-center bg-warning text-white"
+                >
+                  <app-icon name="faStopwatch" [size]="13"></app-icon>
+                </div>
+
+                <div
                   (click)="showAddTaskDialog('edit', task)"
-                  class="task-body-list-item__btn p-3 br-round flex-center bg-secondary text-white"
+                  pRipple
+                  class="task-body-list-item__btn p-3 br-round flex-center bg-secondary text-white cursor-pointer"
                 >
                   <app-icon name="faPenToSquare" [size]="13"></app-icon>
                 </div>
                 <div
-                  class="task-body-list-item__btn p-3 br-round flex-center bg-danger text-white"
+                  class="task-body-list-item__btn p-3 br-round flex-center bg-danger text-white cursor-pointer"
                   (click)="deleteTaskByID(task._id)"
                 >
                   <app-icon name="faTrash" [size]="13"></app-icon>
@@ -75,7 +94,7 @@
         </div>
         <div class="mt-4 d-flex flex-column gap-3">
           <div
-            class="task-body-list-item bg-white text-primary border-primary ps-0"
+            class="task-body-list-item bg-white text-primary border-primary ps-0 animate__animated animate__bounceInRight"
             *ngFor="let task of listTaskDone; index as i; trackBy: trackByFn"
           >
             <div
@@ -118,11 +137,14 @@
               </div>
               <div class="d-flex gap-3">
                 <div
+                  pRipple
+                  (click)="showAddTaskDialog('edit', task)"
                   class="task-body-list-item__btn p-3 br-round flex-center bg-secondary text-white cursor-pointer"
                 >
                   <app-icon name="faPenToSquare" [size]="13"></app-icon>
                 </div>
                 <div
+                  pRipple
                   class="task-body-list-item__btn p-3 br-round flex-center bg-danger text-white cursor-pointer"
                   (click)="deleteTaskByID(task._id)"
                 >
@@ -137,7 +159,7 @@
   </ng-scrollbar>
   <div class="task-footer w-100 py-2 mt-2">
     <button pButton pRipple (click)="showAddTaskDialog('add', null)">
-      <div class="d-flex gap-2 task-footer-btn">
+      <div class="flex-center-y gap-2 task-footer-btn">
         <app-icon
           className="task-footer-btn__icon p-2 br-round bg-white text-primary"
           name="faPlus"

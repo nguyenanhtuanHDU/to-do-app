@@ -26,6 +26,9 @@
           text-overflow: ellipsis;
           max-width: 380px;
         }
+        &__exprise {
+          animation: exprise infinite linear 2s;
+        }
         &__btn {
           width: 28px;
           height: 28px;
@@ -91,6 +94,15 @@
         }
       }
     }
+  }
+}
+
+@keyframes exprise {
+  50% {
+    color: red !important;
+  }
+  100% {
+    color: white !important;
   }
 }
 

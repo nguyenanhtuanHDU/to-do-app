@@ -50,7 +50,6 @@ export class TasksComponent {
     '#EEE8A9',
     '#00E2EA',
   ];
-  currentDate = new Date();
   headingDialog: string = '';
   filesSelected: any[] = [];
   oldFilesSelected: string[] = [];
@@ -67,6 +66,12 @@ export class TasksComponent {
     slidesPerView: 1,
     spaceBetween: 20,
   };
+  currentTime = Date.now();
+
+  checkTaskExprise(exprise: string): Boolean {
+    const taskExprise = Date.parse(exprise);
+    return taskExprise > this.currentTime ? true : false;
+  }
 
   setTaskColor(color: string) {
     this.taskColor = color;
