@@ -1,6 +1,47 @@
 <div class="project py-5">
-  <div class="project-header">
+  <div class="project-header mb-5">
     <h1 class="project-header-heading fw-bold">Projects</h1>
     <span class="text-gray mt-1">Your projects: ... projects</span>
+  </div>
+  <div class="project-body row ms-0">
+    <div
+      class="col-3 project-body-item bg-primary br-12 bxs-1 p-2 d-flex flex-column gap-3"
+    >
+      <div
+        class="project-body-item-head text-white d-flex px-3 justify-content-between align-items-center"
+      >
+        <strong class="text-capitalize">To Do</strong>
+        <div
+          class="flex-center br-round bg-white text-primary"
+          style="width: 30px; height: 30px"
+        >
+          <strong>3</strong>
+        </div>
+      </div>
+      <div class="project-body-item-add w-100 br-8">
+        <div class="w-100 flex-center-x text-white py-2" pRipple>
+          <app-icon name="faPlus"></app-icon>
+        </div>
+      </div>
+      <div class="project-body-item-body">
+        <div class="project-body-item-body-item bg-white p-2 br-12">
+          <span class="project-body-item-body-item-title text-gray">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt,
+            laboriosam.</span
+          >
+          <div class="project-body-item-body-item-btns d-flex gap-2 mt-3">
+            <div class="w-100 bg-info btn flex-center text-white py-2" pRipple>
+              <app-icon name="faPenToSquare" [size]="14"></app-icon>
+            </div>
+            <div
+              class="w-100 bg-danger btn flex-center text-white py-2"
+              pRipple
+            >
+              <app-icon name="faTrash" [size]="14"></app-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
