@@ -7,6 +7,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './services/auth.guard';
 import { TasksComponent } from './tasks/tasks.component';
+import { ProjectComponent } from './project/project.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -24,6 +25,11 @@ const routes: Routes = [
   {
     path: 'tasks',
     component: TasksComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'project',
+    component: ProjectComponent,
     canActivate: [AuthGuard],
   },
   { path: '**', component: PageNotFoundComponent },

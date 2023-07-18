@@ -29,7 +29,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SidebarModule } from 'primeng/sidebar';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { TitleComponent } from './title/title.component';
 import { SwiperModule } from 'swiper/angular';
 import { NgChartsModule } from 'ng2-charts';
 import { SpeedDialModule } from 'primeng/speeddial';
@@ -37,17 +36,18 @@ import { TasksComponent } from './tasks/tasks.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
-import { TimeAgo } from './shared/TimeAgo.pipe';
+import { TimeAgo } from './shared/pipes/TimeAgo.pipe';
 import { FileUploadModule } from 'primeng/fileupload';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { FileSize } from './shared/FileSize.pipe';
-import { ImgFallbackModule } from "ngx-img-fallback";
+import { FileSize } from './shared/pipes/FileSize.pipe';
+import { ImgFallbackModule } from 'ngx-img-fallback';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ImageModule } from 'primeng/image';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { GalleriaModule } from 'primeng/galleria';
 import { IconComponent } from './shared/icon/icon.component';
 import { ColorPickerModule } from 'primeng/colorpicker';
+import { ProjectComponent } from './project/project.component';
 
 @NgModule({
   declarations: [
@@ -58,11 +58,11 @@ import { ColorPickerModule } from 'primeng/colorpicker';
     PageNotFoundComponent,
     HomeComponent,
     MenuComponent,
-    TitleComponent,
     TasksComponent,
     TimeAgo,
     FileSize,
     IconComponent,
+    ProjectComponent,
   ],
   imports: [
     BrowserModule,
@@ -99,7 +99,7 @@ import { ColorPickerModule } from 'primeng/colorpicker';
     ImageModule,
     OverlayPanelModule,
     GalleriaModule,
-    ColorPickerModule
+    ColorPickerModule,
   ],
   providers: [
     CookieService,

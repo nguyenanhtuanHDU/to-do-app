@@ -8,15 +8,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { TaskModule } from './tasks/task.module';
-import mongoose from 'mongoose';
-import { ServeStaticModule } from "@nestjs/serve-static";
-import { join } from "path";
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { ProjectModule } from './projects/project.module';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
     TaskModule,
+    ProjectModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),

@@ -37,11 +37,6 @@ export class MenuComponent {
       icon: 'faFolderOpen',
       routerLink: 'project',
     },
-    {
-      label: 'Calendar',
-      icon: 'faCalendarDays',
-      routerLink: 'calendar',
-    },
   ];
 
   menuItemsBottom: menuItem[] = [
