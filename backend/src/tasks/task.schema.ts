@@ -8,6 +8,9 @@ export class Task {
   @Prop({ required: true })
   userID: string;
 
+  @Prop()
+  projectID: string;
+
   @Prop({ required: true })
   title: string;
 
