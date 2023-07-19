@@ -6,6 +6,7 @@ import { User } from '../models/user.model';
 import { Task } from '../models/task.model';
 import { environment } from 'src/environments/environment.development';
 import { SwiperOptions } from 'swiper';
+import { colors } from '../shared/colors/colors';
 
 @Component({
   selector: 'app-tasks',
@@ -39,17 +40,7 @@ export class TasksComponent {
   listTaskDone: Task[] = [];
   listTaskUnDone: Task[] = [];
   listImageViews: string[] = [];
-  listTaskColors: string[] = [
-    '#009aff',
-    '#6386E9',
-    '#8372CD',
-    '#F46493',
-    '#32C192',
-    '#F46493',
-    '#F07033',
-    '#EEE8A9',
-    '#00E2EA',
-  ];
+  listTaskColors = colors.listMainColors;
   headingDialog: string = '';
   filesSelected: any[] = [];
   oldFilesSelected: string[] = [];

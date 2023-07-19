@@ -104,7 +104,6 @@ export class AuthController {
     res.cookie('token', authTokens.accessToken);
     res.cookie('userAvatar', authTokens.userAvatar);
     res.cookie('userID', authTokens.userID);
-    // res.set('userID', authTokens.userID);
     res.redirect(process.env.FRONTEND_URL);
   }
 

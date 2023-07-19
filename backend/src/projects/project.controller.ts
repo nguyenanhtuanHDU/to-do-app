@@ -35,6 +35,8 @@ export class ProjectController {
     @Body() createProjectDTO: CreateProjectDTO,
     @Res() res: Response,
   ) {
+    console.log(`🚀 ~ createProjectDTO:`, createProjectDTO);
+
     await this.projectService.createProject(createProjectDTO);
     res.status(HttpStatus.OK).json({
       message: 'Create project successfully',

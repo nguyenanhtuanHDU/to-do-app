@@ -21,14 +21,12 @@ export class AuthService {
     });
   }
 
-  getAllUsers() {
-    return this.http.get(environment.apiBackend + 'users', {
-      headers: this.getHeaders(),
-    });
+  getUserID(name: string) {
+    const value = this.cookieService.get(name);
+    return JSON.parse(value.substr(2));
   }
 
   login(userLogin: UserLogin) {
-
     return this.http.post(this.apiAuth + 'login', userLogin, {
       headers: this.getHeaders(),
       withCredentials: true,
