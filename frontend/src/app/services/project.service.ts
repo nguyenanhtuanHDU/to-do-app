@@ -22,4 +22,11 @@ export class ProjectService {
       withCredentials: true,
     });
   }
+
+  getAllProjects(): Observable<Project[]> {
+    return this.http.get<Project[]>(this.apiTask, {
+      headers: this.authService.getHeaders(),
+      withCredentials: true,
+    });
+  }
 }

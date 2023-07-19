@@ -16,8 +16,12 @@
     }
   }
   &-body {
+    width: fit-content;
+    // overflow-x: auto;
     &-item {
+      --scrollbar-thumb-color: var(--bs-primary);
       &-body {
+        // height: 440px;
         &-item {
           &-title {
             font-size: 14px;

@@ -1,5 +1,5 @@
 <div class="project py-5">
-  <div class="project-header mb-5 position-relative">
+  <div class="project-header mb-3 position-relative">
     <h1 class="project-header-heading fw-bold">Projects</h1>
     <span class="text-gray mt-1">Your projects: ... projects</span>
 
@@ -12,38 +12,92 @@
       <app-icon name="faPlus"></app-icon>
     </div>
   </div>
-  <div class="project-body row ms-0">
-    <div
-      class="col-3 project-body-item bg-primary br-12 bxs-1 p-2 d-flex flex-column gap-3"
-    >
-      <div
-        class="project-body-item-head text-white d-flex px-3 justify-content-between align-items-center"
-      >
-        <strong class="text-capitalize">To Do</strong>
+  <div class="overflow-x-auto scrollbar-x">
+    <div class="project-body ms-0 d-flex gap-3 p-2">
+      <div style="width: 330px" class="" *ngFor="let project of projects">
+        <p-skeleton *ngIf="projects?.length === 0"></p-skeleton>
         <div
-          class="flex-center br-round bg-white text-primary"
-          style="width: 30px; height: 30px"
+          *ngIf="projects.length > 0"
+          [style.background]="project.color"
+          class="project-body-item br-12 bxs-0 p-2 d-flex flex-column gap-3"
         >
-          <strong>3</strong>
-        </div>
-      </div>
-      <div class="project-body-item-add w-100 br-8">
-        <div class="w-100 flex-center-x text-white py-2" pRipple>
-          <app-icon name="faPlus"></app-icon>
-        </div>
-      </div>
-      <div class="project-body-item-body">
-        <div class="project-body-item-body-item bg-white p-2 br-12">
-          <span class="project-body-item-body-item-title text-gray">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt,
-            laboriosam.</span
+          <div
+            class="project-body-item-head text-white d-flex px-3 justify-content-between align-items-center"
           >
+            <strong class="text-capitalize">{{ project.title }}</strong>
+            <div
+              class="flex-center br-round bg-white text-primary"
+              style="width: 30px; height: 30px"
+            >
+              <strong>3</strong>
+            </div>
+          </div>
+          <div class="project-body-item-add w-100 br-8">
+            <div class="w-100 flex-center-x text-white py-2" pRipple>
+              <app-icon name="faPlus"></app-icon>
+            </div>
+          </div>
+          <ng-scrollbar style="height: 378px">
+            <div class="project-body-item-body">
+              <div class="project-body-item-body-item bg-white p-2 br-12">
+                <span class="project-body-item-body-item-title text-gray">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Nesciunt, laboriosam. Lorem ipsum dolor sit amet, consectetur
+                  adipisicing elit. Repellendus, facilis voluptatibus. Quo vitae
+                  fugit qui accusamus facilis temporibus impedit, beatae, iure
+                  quos labore ab natus odio eius eligendi esse unde. Error
+                  voluptatum autem dolorem impedit, eligendi repellat. Beatae,
+                  in quas sit voluptatibus aliquid consequuntur, facere fugiat
+                  ipsa, voluptatum eligendi rerum magnam perspiciatis eos
+                  voluptatem incidunt officia cupiditate architecto perferendis
+                  corrupti. Earum, molestias placeat autem atque corporis
+                  quidem! Repellat, illum incidunt voluptatum dignissimos quas
+                  ratione eos possimus accusamus eveniet vel placeat libero rem
+                  voluptates fuga eligendi necessitatibus aliquam quis esse
+                  tempora. Eveniet provident, aperiam, accusamus distinctio
+                  voluptatibus, consequuntur cupiditate obcaecati error cum
+                  ipsum praesentium? Fugit delectus dolore, ipsam repudiandae
+                  magni aliquid tenetur maiores, natus cum eius aliquam et dicta
+                  nihil dolorum. Unde tempora enim culpa quo facilis eveniet
+                  similique repudiandae iusto provident, deserunt praesentium
+                  ducimus odit vel sapiente voluptatum perferendis delectus
+                  consequatur expedita soluta accusamus at, incidunt impedit
+                  ipsum assumenda? Enim? Aliquam fugiat soluta earum sint
+                  exercitationem illo voluptatem blanditiis ipsam error omnis
+                  quod est itaque quam incidunt, aliquid facere architecto
+                  voluptates eaque, reiciendis deleniti nam? Quas, ratione aut.
+                  Obcaecati, autem. Adipisci, asperiores possimus. Voluptate
+                  tempora voluptatum exercitationem id et cum fugit dignissimos
+                  quas culpa facilis iure eveniet aspernatur facere, voluptatem
+                  officia, sint a tempore rerum minima modi provident hic
+                  possimus. Nihil totam ullam dolorum, quis vero nesciunt ipsum
+                  necessitatibus consectetur quasi unde corrupti minus odio
+                  illum nulla? Tenetur mollitia blanditiis libero eos, quae
+                  reiciendis veniam ad minima, modi, sit quasi. Commodi, eaque
+                  ducimus. Veritatis nesciunt sit inventore quibusdam, nulla
+                  beatae natus aliquam necessitatibus temporibus magnam cumque
+                  in ad, rerum repellendus ipsam praesentium, totam velit
+                  asperiores corrupti? Voluptate maiores molestias nesciunt. Id
+                  velit minima aliquid beatae autem voluptate recusandae
+                  sapiente odio magni alias quisquam adipisci, ea vero libero
+                  necessitatibus harum expedita, quo amet ducimus corporis
+                  obcaecati labore accusantium sunt. Quia, praesentium? Aperiam
+                  facilis ullam fuga ducimus soluta, nihil quam placeat ab
+                  deleniti voluptates? Alias dicta corrupti magni explicabo
+                  cumque sit, rerum quia praesentium eius reiciendis quis
+                  perferendis incidunt quod mollitia laboriosam. Qui facere
+                  minima ad aspernatur. Eius alias consequuntur consequatur
+                  corporis enim odio amet beatae recusandae tempore
+                </span>
+              </div>
+            </div>
+          </ng-scrollbar>
           <div class="project-body-item-body-item-btns d-flex gap-2 mt-3">
-            <div class="w-100 bg-info btn flex-center text-white py-2" pRipple>
+            <div class="w-100 bg-white btn flex-center text-info py-2" pRipple>
               <app-icon name="faPenToSquare" [size]="14"></app-icon>
             </div>
             <div
-              class="w-100 bg-danger btn flex-center text-white py-2"
+              class="w-100 bg-white btn flex-center text-danger py-2"
               pRipple
             >
               <app-icon name="faTrash" [size]="14"></app-icon>

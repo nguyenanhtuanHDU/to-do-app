@@ -14,8 +14,10 @@ import { MessageService } from 'primeng/api';
 export class ProjectComponent {
   isShowAddProjectDialog: boolean = false;
   listColors: string[] = colors.listMainColors;
+  projects: Project[] = [];
+  userIdSession: string = '';
   projectCreate: Project = {
-    userID: this.authService.getUserID('userID'),
+    userID: this.userIdSession,
     title: '',
     color: colors.primary,
   };
@@ -26,6 +28,22 @@ export class ProjectComponent {
     private readonly authService: AuthService,
     private readonly messageService: MessageService
   ) {}
+
+  ngOnInit(): void {
+    this.getAllProjects();
+    this.userIdSession = this.authService.getUserID('userID');
+  }
+
+  getAllProjects() {
+    this.projectService
+      .getAllProjects()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((projects: Project[]) => {
+        this.destroy.next(true);
+        this.destroy.complete();
+        this.projects = projects;
+      });
+  }
 
   showAddProjectDialog() {
     this.isShowAddProjectDialog = true;
@@ -59,6 +77,8 @@ export class ProjectComponent {
       .createProject(this.projectCreate)
       .pipe(takeUntil(this.destroy))
       .subscribe((data: any) => {
+        this.destroy.next(true);
+        this.destroy.complete();
         this.isShowAddProjectDialog = false;
         this.messageService.add({
           severity: 'success',
