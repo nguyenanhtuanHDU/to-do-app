@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Project, ProjectCreate } from '../models/project.model';
+import { Project, ProjectCreate, ProjectEdit } from '../models/project.model';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { environment } from 'src/environments/environment.development';
@@ -25,6 +25,15 @@ export class ProjectService {
 
   createProject(project: ProjectCreate) {
     return this.http.post(this.apiProject, project, {
+      headers: this.authService.getHeaders(),
+      withCredentials: true,
+    });
+  }
+
+  editProject(projectID: string, project: ProjectEdit) {
+    console.log(`🚀 ~ project:`, project);
+
+    return this.http.put(this.apiProject + 'project/' + projectID, project, {
       headers: this.authService.getHeaders(),
       withCredentials: true,
     });

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { colors } from '../shared/colors/colors';
-import { Project, ProjectCreate } from '../models/project.model';
+import { Project, ProjectCreate, ProjectEdit } from '../models/project.model';
 import { ProjectService } from '../services/project.service';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../services/auth.service';
@@ -13,14 +13,13 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 })
 export class ProjectComponent {
   isShowAddProjectDialog: boolean = false;
+  isEditProjectDialog: boolean = false;
   listColors: string[] = colors.listMainColors;
   projects: Project[] = [];
-  userIdSession: string = '';
-  projectCreate: ProjectCreate = {
-    userID: this.authService.getUserID('userID'),
-    title: '',
-    color: colors.primary,
-  };
+  projectID: string = '';
+  projectTitle: string = '';
+  projectColor: string = '';
+  userIDSession: string = this.authService.getUserID('userID');
   destroy = new Subject();
 
   constructor(
@@ -32,8 +31,6 @@ export class ProjectComponent {
 
   ngOnInit(): void {
     this.getAllProjects();
-    this.userIdSession = this.authService.getUserID('userID');
-    console.log(`🚀 ~ this.userIdSession:`, this.userIdSession);
   }
 
   getAllProjects() {
@@ -51,18 +48,25 @@ export class ProjectComponent {
     this.isShowAddProjectDialog = true;
   }
 
+  showEditProjectDialog(project: Project) {
+    this.isEditProjectDialog = true;
+    this.projectID = project._id;
+    this.projectTitle = project.title;
+    this.projectColor = project.color;
+    this.isShowAddProjectDialog = true;
+  }
+
+  resetForm() {
+    this.projectTitle = '';
+    this.projectColor = colors.primary;
+  }
+
   changeProjectColor(color: string) {
-    this.projectCreate.color = color;
+    this.projectColor = color;
   }
 
   validateAddProject(): boolean {
-    if (
-      !this.projectCreate.userID ||
-      !this.projectCreate.title ||
-      !this.projectCreate.color
-    ) {
-      console.log(`🚀 ~ this.projectCreate:`, this.projectCreate);
-
+    if (!this.userIDSession || !this.projectTitle || !this.projectColor) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -78,7 +82,11 @@ export class ProjectComponent {
       return;
     }
     this.projectService
-      .createProject(this.projectCreate)
+      .createProject({
+        userID: this.userIDSession,
+        title: this.projectTitle,
+        color: this.projectColor,
+      })
       .pipe(takeUntil(this.destroy))
       .subscribe((data: any) => {
         this.getAllProjects();
@@ -91,6 +99,36 @@ export class ProjectComponent {
           detail: data.message,
         });
       });
+  }
+
+  editProject() {
+    this.projectService
+      .editProject(this.projectID, {
+        title: this.projectTitle,
+        color: this.projectColor,
+      })
+      .pipe(takeUntil(this.destroy))
+      .subscribe(
+        (data: any) => {
+          this.getAllProjects();
+          this.destroy.next(true);
+          this.destroy.complete();
+          this.resetForm();
+          this.isShowAddProjectDialog = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: data.message,
+          });
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message,
+          });
+        }
+      );
   }
 
   deleteProject(projectID: string) {

@@ -6,3 +6,5 @@ export interface Project {
 }
 
 export interface ProjectCreate extends Omit<Project, '_id'> {}
+
+export interface ProjectEdit extends Pick<Project, 'title' | 'color'> {}
