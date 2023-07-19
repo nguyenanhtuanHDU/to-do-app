@@ -22,7 +22,7 @@ export class ProjectService {
   }
 
   async getAllProjects(): Promise<IProject[]> {
-    return await this.projectModel.find();
+    return await this.projectModel.find().sort({ createdAt: -1 });
   }
 
   async createProject(createProjectDTO: CreateProjectDTO) {
