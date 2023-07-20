@@ -1,3 +1,5 @@
+import { ProjectItemService } from './projects/projectItems/projectitem.service';
+import { ProjectItemModule } from './projects/projectItems/projectitem.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { Module } from '@nestjs/common';
@@ -14,6 +16,7 @@ import { ProjectModule } from './projects/project.module';
 
 @Module({
   imports: [
+    ProjectItemModule,
     AuthModule,
     UserModule,
     TaskModule,

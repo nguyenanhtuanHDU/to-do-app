@@ -1,7 +1,7 @@
 export interface Task {
   _id: string;
   userID: string;
-  projectID: string;
+  // projectID: string;
   title: string;
   color: string;
   completed: boolean;

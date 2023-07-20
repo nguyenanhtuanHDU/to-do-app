@@ -7,9 +7,6 @@ export class TaskDTO {
   userID: string;
 
   @Expose()
-  projectID: string;
-
-  @Expose()
   title: string;
 
   @Expose()
